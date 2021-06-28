@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>com.fsoft.nanoleaf.setup</title>
+		<meta name='viewport' content='viewport-fit=cover, width=device-width, initial-scale=1'>
+		<meta charset="UTF-8">
+		<!-- Import style sheets -->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<!-- Import scripts -->
+		<script src="../plugin/js/utils.js"></script>
+		<script src="../plugin/js/nanoleaf.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/authorizeView.js"></script>
+		<script src="js/searchView.js"></script>
+		<script src="js/introView.js"></script>
+		<script src="js/saveView.js"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	</head>
+	<body oncontextmenu="return false;">
+		<!-- Center view horizontally -->
+		<div class="main">
+			<!-- Center view vertically -->
+			<div class="center">
+				<!-- Add a border around the view on big screens -->
+				<div class="border">
+					<!-- Status bar indicating the current view -->
+					<div class="status-bar">
+						<div class="status-row">
+							<div id="status-intro" class="status-cell"></div>
+							<div id="status-search" class="status-cell"></div>
+							<div id="status-authorize" class="status-cell"></div>
+							<div id="status-save" class="status-cell"></div>
+						</div>
+					</div>
+					<!-- General header element -->
+					<div class="header">
+						<h2 id="header"></h2>
+						<h1 id="title"></h1>
+					</div>
+					<!-- Main view element -->
+					<div id="contentHaveIPs"></div>
+					<div id="contentNeedIPs"></div>
+					<div id="content"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

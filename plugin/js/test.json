@@ -1,0 +1,35 @@
+{
+	"event": "didReceiveGlobalSettings",
+	"payload": {
+		"settings": {
+			"nanoControllers": {
+				"S18494C6270": {
+					"nanoIP": "192.168.2.92",
+					"nanoName": "Canvas 9D4E",
+					"nanoSN": "S18494C6270",
+					"nanoToken": "uEdyqkHnTeTcoyTYvnCFDumJ2EwKt6uJ"
+				},
+				"S19104C4441": {
+					"nanoIP": "192.168.2.91",
+					"nanoName": "Canvas 89BE",
+					"nanoSN": "S19104C4441",
+					"nanoToken": "24Y7zfZQ3okPm8NTF6ibgpzAlIXR5Dat"
+				}
+			},
+			"nanoleafs": {
+				"92": {
+					"authToken": "Uh4kBc1hCmSIiduGbxUSmjtcQM52JbKj",
+					"id": 92,
+					"ipAddress": "192.168.2.92"
+				},
+				"S18494C6270": {
+					"nanoIP": "192.168.2.92",
+					"nanoSN": "S18494C6270",
+					"nanoToken": "7A41nRDNSZDyt1kKM1rlF2B8u9hRNz2B"
+				},
+				"undefined": {}
+			}
+		}
+	}
+}
+

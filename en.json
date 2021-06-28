@@ -1,0 +1,79 @@
+{
+	"Name": "Nanoleaf Controller",
+	"Category": "Nanoleaf Aurora/Canvas",
+	"Description": "Control Nanoleaf Aurora & Canvas tiles.",
+	"com.fsoft.nanoleaf.power": {
+		"Name": "On / Off",
+		"Tooltip": "Power tiles On / Off.",
+		"States": [{
+			"Name": "On"
+		},
+		{
+			"Name": "Off"
+		}]
+	},
+	"com.fsoft.nanoleaf.brightness": {
+		"Name": "Brightness",
+		"Tooltip": "Set the brightness of the tiles."
+	},
+	"com.fsoft.nanoleaf.color": {
+		"Name": "Color",
+		"Tooltip": "Set the color of the tiles."
+	},
+	"com.fsoft.nanoleaf.effects": {
+		"Name": "Effects",
+		"Tooltip": "Set an Effect on the tiles."
+	},
+	"Localization": {
+		"PI": {
+			"Controller": "Controller",
+			"NoControllers": "No Controllers",
+			"AddController": "Add New Controller",
+			"Color": "Color",
+			"Colors": "Colors",
+			"Temperature": "Temperature",
+			"Brightness": "Brightness",
+			"Effects": "Effects",
+			"NoEffects": "No Effects",
+			"Scene": "Scene",
+			"NoScenes": "No Scenes"
+		},
+		"Setup": {
+			"Header": "Nanoleaf Aurora, Canvas & Shapes",
+			"Intro": {
+				"Title": "Add New Controller",
+				"Description": "Find the active Nanoleaf controllers on the local network",
+				"NoIPaddress": "Error: Unable to determine the Local IP address",
+				"Continue": "Find Controller IP Addresses",
+				"IPaddress": "Enter your local IP Address",
+				"Or": "Or",
+				"Cancel": "Cancel"
+			},
+			"Search": {
+				"Title": "Searching Controllers...",
+				"TitleNone": "No Controllers Found",
+				"TitleOne": "One Controller Found",
+				"TitleMultiple": "{{ number }} Controllers Found",
+				"ControllersAuth": "Controllers with Auth Token",
+				"ControllersNeedAuth": "Controllers without Auth Token",
+				"DescriptionFound": "Hold the Power button on the controller until the LEDs flash",
+				"DescriptionNone": "Insure the controller is switched on and connected to the local network",
+				"Continue": "Get Authroization Token",
+				"GoBack": "Enter the IP Address",
+				"Cancel": "Cancel",
+				"Retry": "Try Again"
+			},
+			"Authorize": {
+				"Title" : "Authorizing...",
+				"Description": "Getting Authorization Token and controller information",
+				"Cancel": "Cancel",
+				"Retry": "Try Again"
+			},
+			"Save": {
+				"Title": "Controller Saved",
+				"Description": "The Authorization Token has been sucessfully received and saved",
+				"Exit": "Exit Setup"
+			}
+		}
+	}
+}

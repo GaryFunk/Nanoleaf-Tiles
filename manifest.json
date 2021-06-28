@@ -1,0 +1,96 @@
+{
+	"Actions": [{
+		"Icon": "plugin/images/actions/power",
+		"Name": "On / Off",
+		"States": [{
+			"Image": "plugin/images/icons/off",
+			"Name": "Off",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}, {
+			"Image": "plugin/images/icons/on",
+			"Name": "On",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}],
+		"SupportedInMultiActions": true,
+		"Tooltip": "Power tiles on or off.",
+		"UUID": "com.fsoft.nanoleaf.power"
+	}, {
+		"Icon": "plugin/images/actions/brightness",
+		"Name": "Brightness",
+		"States": [{
+				"Image": "plugin/images/icons/brightness",
+				"Name": "Off",
+				"TitleAlignment": "bottom",
+				"FontSize": "12"
+			}, {
+				"Image": "plugin/images/icons/brightness25",
+				"Name": "25",
+				"TitleAlignment": "bottom",
+				"FontSize": "12"
+			}, {
+				"Image": "plugin/images/icons/brightness50",
+				"Name": "50",
+				"TitleAlignment": "bottom",
+				"FontSize": "12"
+			}, {
+				"Image": "plugin/images/icons/brightness75",
+				"Name": "75",
+				"TitleAlignment": "bottom",
+				"FontSize": "12"
+			}, {
+				"Image": "plugin/images/icons/brightness",
+				"Name": "On",
+				"TitleAlignment": "bottom",
+				"FontSize": "12"
+			}],
+		"SupportedInMultiActions": true,
+		"Tooltip": "Set the brightness of the tiles.",
+		"UUID": "com.fsoft.nanoleaf.brightness"
+	}, {
+		"Icon": "plugin/images/actions/color",
+		"Name": "Color",
+		"States": [{
+			"Image": "plugin/images/icons/color",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}],
+		"SupportedInMultiActions": true,
+		"Tooltip": "Set the color of the tiles.",
+		"UUID": "com.fsoft.nanoleaf.color"
+	}, {
+		"Icon": "plugin/images/actions/effects",
+		"Name": "Effects",
+		"States": [{
+			"Image": "plugin/images/icons/effects",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}],
+		"SupportedInMultiActions": true,
+		"Tooltip": "Set an effect on the tiles.",
+		"UUID": "com.fsoft.nanoleaf.effects"
+	}],
+	"Author": "Gary Funk, fSoft, Ltd.",
+	"Category": "Nanoleaf Aurora/Canvas/Shapes",
+	"CategoryIcon": "plugin/images/actions/category",
+	"CodePath": "plugin/index.html",
+	"DefaultWindowSize": [500, 650],
+	"Description": "Control Nanoleaf Aurora, Canvas and Shapes tiles.",
+	"Icon": "plugin/images/icons/plugin",
+	"Name": "Nanoleaf Tiles",
+	"OS": [{
+		"Platform": "mac",
+		"MinimumVersion" : "10.11"
+	}, {
+		"Platform": "windows",
+		"MinimumVersion" : "10"
+	}],
+	"PropertyInspectorPath": "pi/index.html",
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion" : "4.2"
+	},
+	"URL": "https://www.fsoft.com/stream-deck/",
+	"Version": "1.0.0"
+}

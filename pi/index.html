@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>com.fsoft.nanoleaf.pi</title>
+		<meta charset="UTF-8">
+		<!-- Import style sheets -->
+		<link rel="stylesheet" type="text/css" href="css/sdpi.css">
+		<link rel="stylesheet" type="text/css" href="css/colorPI.css">
+		<link rel="stylesheet" type="text/css" href="css/pi.css">
+		<!-- Import scripts -->
+		<script src="../plugin/js/nanoleaf.js"></script>
+		<script src="../plugin/js/utils.js"></script>
+		<script src="js/tooltips.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/pi.js"></script>
+		<script src="js/powerPI.js"></script>
+		<script src="js/brightnessPI.js"></script>
+		<script src="js/colorPI.js"></script>
+		<script src="js/effectsPI.js"></script>
+	</head>
+	<body>
+		<!-- Property Inspector -->
+		<div class="sdpi-wrapper" id="pi">
+			<!-- Controller select -->
+			<div class="sdpi-item">
+				<div class="sdpi-item-label" id="controller-label"></div>
+				<select class="sdpi-item-value select" id="controller-select">
+					<option id="no-controllers" value="no-controllers"></option>
+				   	<option id="add-controller" value="add"></option>
+				</select>
+			</div>
+			<!-- Placeholder for more UI elements -->
+			<div id="placeholder"></div>
+		</div>
+		<!-- Floating tooltips element -->
+		<div class="sdpi-info-label hidden" style="top: -1000px;" value=""></div>
+	</body>
+</html>

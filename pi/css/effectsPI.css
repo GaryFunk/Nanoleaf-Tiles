@@ -1,0 +1,39 @@
+/**
+//==============================================================================
+@file       effectsPI.css
+@brief      Nanoleaf Plugin
+@copyright  (c) 2021, fSoft, Ltd.
+            This source code is licensed under the MIT-style license found in the LICENSE file.
+//==============================================================================
+**/
+
+#effects-buttons .sdpi-item-value {
+    font-size: 0;
+}
+
+#effects-buttons button {
+    width: 36px;
+    font-weight: 900;
+    display: inline-block;
+    margin: 0 6px 0 2px;
+    padding: 0;
+}
+
+#color-input-container div.sdpi-item-value {
+    font-size: 0;
+}
+
+#color-input-container input[type='color'] {
+    margin: 0 4px 0 0;
+    padding: 0;
+    width: 40px;
+}
+
+#color-input-container span:nth-child(5n) input {
+    margin-right: 0;
+}
+
+#color-input-container span:nth-child(5n):after {
+    content: ' ';
+    display: block;
+}
