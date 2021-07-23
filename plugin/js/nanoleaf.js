@@ -123,26 +123,22 @@ Nanoleaf.buildcache = async function (callback) {
 		return;
 	}
 	window.controllerCache['status'] = 'building';
-	var keys = Object.keys(nanoCache);
+	var keys = Object.keys(window.nanoCache);
 	// Iterate through all controllers that were discovered
 	for (let index = 0; index < keys.length; index++) {
 		var SN = keys[index];
-		var nanoData = nanoCache[SN];
-		nanoIP = nanoData.nanoIP;
-		nanoToken = nanoData.nanoToken;
-		nanoSN = nanoData.nanoSN;
-		nanoName = nanoData.nanoName;
+		var nanoData = window.nanoCache[SN];
 		// add the IP to the global array
-		nanoCacheIPs.push(nanoIP);
+		window.nanoCacheIPs.push(nanoData.nanoIP);
 		// Get the controller info here
-		var result = await Nanoleaf.getinfo();
-		var NF = await getnanoleaf(result, nanoSN, nanoName);
-		var nanoKey = '"' + nanoSN + '"';
+		var result = await Nanoleaf.getinfo(nanoData.nanoIP, nanoData.nanoToken);
+		var NF = await getnanoleaf(result, nanoData.nanoIP, nanoData.nanoToken, nanoData.nanoSN, nanoData.nanoName);
+		var nanoKey = '"' + nanoData.nanoSN + '"';
 		window.controllerCache[nanoKey] = NF;
 	}
 	window.controllerCache['status'] = 'done';
 
-	async function getnanoleaf(result, nanoSN, nanoName) {
+	async function getnanoleaf(result, nanoIP, nanoToken, nanoSN, nanoName) {
 		return new Promise(function (resolve, reject) {
 			if (result[0]) {
 				nanoInfo = result[1];
@@ -162,12 +158,8 @@ Nanoleaf.findhost = function (callback) {
 	var thehost = 0;
 	while (host < hosts) {
 		host++;
-//console.//log('line 172 host, hosts = ', host, hosts);
 		(function (host) {
-//console.//log('line 174 host = ', host);
-//console.//log('line 175 array = ', window.controllerCache[nanoSN]);
 			if (settings.nanoController in window.controllerCache) {
-//console.//log('line 177 controller = ', settings.nanoController in window.controllerCache);
 			}
 		})(host);
 		if (host >= hosts) {
@@ -177,7 +169,7 @@ Nanoleaf.findhost = function (callback) {
 }
 
 // Static function to get authorization from a controller
-Nanoleaf.getauth = function (callback) {
+Nanoleaf.getauth = function (nanoIP, callback) {
 	if (nanoIP) {
 		var URL = "http://" + nanoIP + ":16021/api/v1/new";
 		var XHR = new XMLHttpRequest();
@@ -224,17 +216,17 @@ Nanoleaf.getauth = function (callback) {
 /*
 // Private function to build a cache
 Nanoleaf.getcontroller = async function (callback) {
-	var keys = Object.keys(nanoCache);
+	var keys = Object.keys(window.nanoCache);
 	// Iterate through all controllers that were discovered
 	for (let index = 0; index < keys.length; index++) {
 		var SN = keys[index];
-		var ary =  nanoCache[SN];
+		var ary =  window.nanoCache[SN];
 		nanoIP = ary.nanoIP;
 		nanoToken = ary.nanoToken;
 		nanoSN ======== '"' + ary.nanoSN + '"';
 		nanoName = ary.nanoName;
 		// add the IP to the global array
-		nanoCacheIPs.push(nanoIP);
+		window.nanoCacheIPs.push(nanoIP);
 		// Get the controller info here
 		var result = await Nanoleaf.getinfo();
 		var NF = await getnanoleaf(result, nanoSN, nanoName);
@@ -256,7 +248,7 @@ Nanoleaf.getcontroller = async function (callback) {
 */
 
 // Static function to retrieve the name
-Nanoleaf.getinfo = async function () {
+Nanoleaf.getinfo = async function (nanoIP, nanoToken) {
 	var XHR = new XMLHttpRequest();
 	return new Promise(function (resolve, reject) {
 		var URL = "http://" + nanoIP + ":16021/api/v1/" + nanoToken + "/";
@@ -290,10 +282,10 @@ Nanoleaf.getinfo = async function () {
 			reject([false, 'Connection to the controller timed out.']);
 		};
 
-		//var obj = {};
-		//obj.devicetype = 'stream_deck';
-		//var data = JSON.stringify(obj);
-		XHR.send();
+		var obj = {};
+		obj.devicetype = 'stream_deck';
+		var data = JSON.stringify(obj);
+		XHR.send(data);
 	});
 };
 
@@ -302,14 +294,15 @@ Nanoleaf.search = function (callback) {
 	// scanning a single Class-C. Need to search the subnet mask to determin if the network consists of more than one Class-C.
 	var _networkIP = localIP.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)./);
 	var networkIP = _networkIP[0];
-	var nanoHaveIPs = [];
-	var nanoNeedIPs = [];
+	var haveIPs = [];
+	var needIPs = [];
 	var XHR = [];
 	var host = 0;
 	while (host < 254) {
 		host++;
 		var URL = "http://" + networkIP + host + ":16021/api/v1/";
 		(function (host) {
+			var ip = "";
 			XHR[host] = new XMLHttpRequest();
 			XHR[host].timeout = 1000;
 			XHR[host].open('GET', URL, true);
@@ -317,18 +310,18 @@ Nanoleaf.search = function (callback) {
 
 			XHR[host].onreadystatechange = function () {
 				if (XHR[host].readyState === 4 && XHR[host].status === 401) {
-					var ip = (networkIP + host).toString();
-					if (nanoCacheIPs.indexOf(ip) < 0) {
-						nanoNeedIPs.push(ip);
+					ip = (networkIP + host).toString();
+					if (window.nanoCacheIPs.indexOf(ip) < 0) {
+						needIPs.push(ip);
 					} else {
-						nanoHaveIPs.push(ip);
+						haveIPs.push(ip);
 					}
 				}
 			}
 			XHR[host].send();
 		})(host);
 		if (host >= 254) {
-			callback(true, nanoNeedIPs, nanoHaveIPs);
+			callback(true, needIPs, haveIPs);
 		}
 	}
 }

@@ -35,40 +35,38 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		}
 		// Localize the controller select
 		document.getElementById('controller-label').innerHTML = instance.localization['Controller'];
-		document.getElementById('no-controllers').innerHTML = instance.localization['NoControllers'];
-		document.getElementById('add-controller').innerHTML = instance.localization['AddController'];
+		document.getElementById('add-controller').innerHTML = "- - " + instance.localization['AddController'] + " - -";
 	};
 
 	// Show all authorized controllers
 	this.loadControllers = async function () {
-		// If at least one controller is configured build the controllerCache
-		if (Object.keys(window.nanoCache).length > 0) {
-			// Refresh the cache
-		}
 		await Nanoleaf.buildcache();
 		// Remove previously shown controllers
-		nanoControllers = document.getElementsByClassName('nanoControllers');
-		while (nanoControllers.length > 0) {
-			nanoControllers[0].parentNode.removeChild(nanoControllers[0]);
+		window.globalSettings.nanoControllers = document.getElementsByClassName('nanoControllers');
+		while (window.globalSettings.nanoControllers.length > 0) {
+			window.globalSettings.nanoControllers[0].parentNode.removeChild(window.globalSettings.nanoControllers[0]);
 		}
 		// Check for active controllers
-		if (Object.keys(nanoCache).length > 0) {
-			// Hide the 'No Controllers' option
-			document.getElementById('no-controllers').style.display = 'none';
+		if (Object.keys(window.nanoCache).length > 0) {
+			document.getElementById('blank-controller').innerHTML =  "- - " + instance.localization['SelectController'] + " - -";
 			// Sort the controllers alphabetically
-			var controllerIDsSorted = Object.keys(nanoCache).sort(function (a, b) {
-				return nanoCache[a].nanoName.localeCompare(nanoCache[b].nanoName);
+			var controllerIDsSorted = Object.keys(window.nanoCache).sort(function (a, b) {
+				return window.nanoCache[a].nanoName.localeCompare(window.nanoCache[b].nanoName);
 			});
+
 			// Add the controllers
 			controllerIDsSorted.forEach(function (inControllerID) {
 				// Add the controller name to the option
-				var option = "<option value='" + inControllerID + "' class='nanoControllers'>" + nanoCache[inControllerID].nanoName + "</option>";
-				document.getElementById('no-controllers').insertAdjacentHTML('beforebegin', option);
+				var option = "<option value='" + inControllerID + "' class='nanoControllers'>" + window.nanoCache[inControllerID].nanoName + "</option>";
+				document.getElementById('controller-select').insertAdjacentHTML('beforeend', option);
 			});
+
 			// Check if the controller is configured
-			if (settings.nanoController !== undefined) {
+			if (window.settings.nanoController === undefined) {
+				document.getElementById('controller-select').value = 'blank-controller';
+			} else {
 				// Select the currently configured controller
-				document.getElementById('controller-select').value = settings.nanoController;
+				document.getElementById('controller-select').value = window.settings.nanoController;
 			}
 			if (instance instanceof PowerPI) {
 
@@ -77,14 +75,14 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			} else if (instance instanceof ColorPI) {
 
 			} else if (instance instanceof EffectsPI) {
-				var nanoKey = '"' + settings.nanoController + '"';
-				var nanoSN = settings.nanoController;
+				var nanoKey = '"' + window.settings.nanoController + '"';
+				var nanoSN = window.settings.nanoController;
 				var NF = window.controllerCache[nanoKey];
 				try {
 					if (NF == undefined) {
-						document.getElementById('controller-select').value = 'no-controllers';
-						sleep(500).then(() => {
-							document.getElementById('controller-select').value = settings.nanoController;
+						document.getElementById('controller-select').value = 'no-controller';
+						sleep(250).then(() => {
+							document.getElementById('controller-select').value = window.settings.nanoController;
 							instance.loadControllers();
 						})
 					}
@@ -109,7 +107,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			}
 		} else {
 			// Show the 'No Controllers' option
-			document.getElementById('no-controllers').style.display = 'block';
+			document.getElementById('blank-controller').innerHTML =  "- - " + instance.localization['NoController'] + " - -";
 		}
 		// Show PI
 		document.getElementById('pi').style.display = 'block';
@@ -117,7 +115,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 
 	// Public function to save the settings
 	this.saveSettings = function () {
-		saveSettings(getAction(), inContext, settings);
+		saveSettings(getAction(), inContext, window.settings);
 	}
 
 	// Public function to send data to the plugin
@@ -125,39 +123,21 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		sendToPlugin(getAction(), inContext, inData);
 	}
 
-	// Function called on successful controller authorization
-	function saveNanoControllerCallback(inEvent) {
-		// Set controller to the newly added controller
-		settings.nanoController = inEvent.detail.id;
-		instance.saveSettings();
-		// Check if global settings need to be initialized
-		if (window.globalSettings.nanoControllers === undefined) {
-			window.globalSettings.nanoControllers = {};
-		}
-		// Add new controller to the global settings
-		window.globalSettings.nanoControllers[inEvent.detail.nanoSN] = { 'nanoIP': inEvent.detail.nanoIP, 'nanoName': inEvent.detail.nanoName, 'nanoSN': inEvent.detail.nanoSN,  'nanoToken': inEvent.detail.nanoToken };
-		saveGlobalSettings(inContext);
-	}
-
 	// Controller select changed
 	function controllerChanged(inEvent) {
-		if (inEvent.target.value === 'add') {
-			// Open setup window
-			window.open('../setup/index.html?language=' + inLanguage + '&nanoCacheIPs=' + JSON.stringify(nanoCacheIPs));
+		if (inEvent.target.value === 'add-controller') {
 			// Select the first in case user cancels the setup
-			document.getElementById('controller-select').selectedIndex = 0;
-		} else if (inEvent.target.value === 'no-controllers') {
+			document.getElementById('controller-select').value = 'add-controller';
+			// Open setup window
+			setupWindow = window.open('../setup/index.html?language=' + inLanguage + '&nanoCacheIPs=' + JSON.stringify(window.nanoCacheIPs));
+		} else if (inEvent.target.value === 'blank-controller') {
 			// If no controller was selected, do nothing
-			document.getElementById('controller-select').value = settings.nanoController;
+			document.getElementById('controller-select').value = 'blank-controller';
 		} else {
-			settings.nanoController = inEvent.target.value;
+			window.settings.nanoController = inEvent.target.value;
 			instance.saveSettings();
 			instance.loadControllers();
 		}
-	}
-
-	const sleep = (milliseconds) => {
-		return new Promise(resolve => setTimeout(resolve, milliseconds))
 	}
 
 	// Private function to return the action identifier
@@ -174,5 +154,26 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			action = 'com.fsoft.nanoleaf.effects';
 		}
 		return action;
+	}
+
+	// Function called on successful controller authorization
+	function saveNanoControllerCallback(inEvent) {
+		// Check if global settings need to be initialized
+		if (window.globalSettings.nanoControllers === undefined) {
+			window.globalSettings.nanoControllers = {};
+		}
+		// Add new controller to the global settings
+		window.globalSettings.nanoControllers[inEvent.detail.nanoSN] = { 'nanoIP': inEvent.detail.nanoIP, 'nanoName': inEvent.detail.nanoName, 'nanoSN': inEvent.detail.nanoSN,  'nanoToken': inEvent.detail.nanoToken };
+		saveGlobalSettings(inContext);
+
+		window.nanoCache = window.globalSettings.nanoControllers;
+		// Set controller to the newly added controller
+		window.settings.nanoController = inEvent.detail.id;
+		instance.saveSettings();
+		instance.loadControllers();
+	}
+
+	const sleep = (milliseconds) => {
+		return new Promise(resolve => setTimeout(resolve, milliseconds))
 	}
 }

@@ -40,7 +40,6 @@ function ColorAction(inContext, inSettings) {
 		if (inUserDesiredState !== undefined) {
 			targetState = inUserDesiredState;
 		}
-
 		// Set state
 		NF.setColor(targetState, function (success, error) {
 			if (success) {

@@ -9,6 +9,11 @@
 
 // Load the Search View
 function loadSearchView() {
+	var theHaveIPs = "";
+	var theNeedIPs = "";
+	var contentHaveIPs;
+	var contentNeedIPs;
+
 	// Delay the result for 30 seconds
 	var resultDelay = 2000;
 	// Set the status bar
@@ -25,96 +30,92 @@ function loadSearchView() {
 
 	// Search for controllers
 	function autoSearch() {
-	try {
-		Nanoleaf.search(function (status, needAuth, haveAuth) {
-			if (status) {
-				// Nanoleaf Search request was successful
-				nanoHaveIPs = haveAuth;
-				nanoNeedIPs = needAuth;
+		try {
+			Nanoleaf.search(function (status, needAuth, haveAuth) {
+				if (status) {
+					// Nanoleaf Search request was successful
+					nanoHaveIPs = haveAuth;
+					nanoNeedIPs = needAuth;
 
-				// Delay displaying the result
-				setTimeout(function () {
-					if (nanoNeedIPs.length === 0) { // No new controller found
-						// Fill the title
-						document.getElementById('title').innerHTML = localization['Search']['TitleNone'];
-						// Fill the content area
-						var content = "<p>" + localization['Search']['DescriptionNone'] + "</p><div class='button button-blue' id='retry'>" + localization['Search']['Retry'] + "</div><div class='button button-red' id='cancel'>" + localization['Search']['Cancel'] + "</div>";
-						document.getElementById('content').innerHTML = content;
-						// Add event listener retry
-						document.getElementById('retry').addEventListener('click', retry);
-						document.addEventListener('enterPressed', retry);
-						// Add event listener cancel
-						document.getElementById('cancel').addEventListener('click', cancel);
-						document.addEventListener('escPressed', cancel);
-					} else { // Controller found
-						var theHaveIPs = "";
-						var theNeedIPs = "";
-						var content = "";
-						if (nanoNeedIPs.length === 1) { // One new controller found
+					// Delay displaying the result
+					setTimeout(function () {
+						if (nanoNeedIPs.length === 0) { // No new controller found
 							// Fill the title
-							document.getElementById('title').innerHTML = localization['Search']['TitleOne'];
-						} else { // More than one controller found
-							// Fill the title
-							document.getElementById('title').innerHTML = localization['Search']['TitleMultiple'].replace('{{ number }}', nanoNeedIPs.length);
+							document.getElementById('title').innerHTML = localization['Search']['TitleNone'];
+							// Fill the content area
+							content = "<p>" + localization['Search']['DescriptionNone'] + "</p><div class='button button-blue' id='retry'>" + localization['Search']['Retry'] + "</div><div class='button button-red' id='exit'>" + localization['Search']['Exit'] + "</div>";
+							document.getElementById('content').innerHTML = content;
+							// Add event listener retry
+							document.getElementById('retry').addEventListener('click', retry);
+							document.addEventListener('enterPressed', retry);
+							// Add event listener exit
+							document.getElementById('exit').addEventListener('click', exit);
+							document.addEventListener('escPressed', exit);
+						} else { // Controller found
+							if (nanoNeedIPs.length === 1) { // One new controller found
+								// Fill the title
+								document.getElementById('title').innerHTML = localization['Search']['TitleOne'];
+							} else { // More than one controller found
+								// Fill the title
+								document.getElementById('title').innerHTML = localization['Search']['TitleMultiple'].replace('{{ number }}', nanoNeedIPs.length);
+							}
+							nanoHaveIPs.sort((a, b) => {
+								const num1 = Number(a.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
+								const num2 = Number(b.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
+								return num1-num2;
+							});
+							nanoNeedIPs.sort((a, b) => {
+								const num1 = Number(a.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
+								const num2 = Number(b.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
+								return num1-num2;
+							});
+							nanoHaveIPs.forEach(function (item) {
+								theHaveIPs += item + " &nbsp; ";
+							});
+							nanoNeedIPs.forEach(function (item) {
+								theNeedIPs += item + " &nbsp; ";
+							});
+							// Fill the content area
+							content = "<p>" + content + "</p><br><br><p style='color: yellow;'>" + localization['Search']['DescriptionFound'] + "</p>";
+							content += "<div class='button button-green' id='continue'>" + localization['Search']['Continue'] + "</div><div class='button button-blue' id='retry'>" + localization['Search']['Retry'] + "</div><div class='button button-red' id='exit'>" + localization['Search']['Exit'] + "</div>";
+							if (nanoHaveIPs.length > 0) {
+								contentHaveIPs = "<p>" + localization['Search']['ControllersAuth'] + "<br>" + theHaveIPs +"</p>";
+							} else {
+								contentHaveIPs = "<p>" + localization['Search']['ControllersAuth'] + "<br>None Found</p>";
+							}
+							if (nanoNeedIPs.length > 0) {
+								contentNeedIPs = "<p>" + localization['Search']['ControllersNeedAuth'] + "<br>" + theNeedIPs +"</p>";
+							} else {
+								contentNeedIPs = "<p>" + localization['Search']['ControllersNeedAuth'] + "<br>None Found</p>";
+							}
+							document.getElementById('contentHaveIPs').innerHTML = contentHaveIPs;
+							document.getElementById('contentNeedIPs').innerHTML = contentNeedIPs;
+							document.getElementById('content').innerHTML = content;
+							// Add event listener continueAuthorize
+							document.getElementById('continue').addEventListener('click', continueAuthorize);
+							document.addEventListener('enterPressed', continueAuthorize);
+							// Add event listener exit
+							document.getElementById('exit').addEventListener('click', exit);
+							document.addEventListener('escPressed', exit);
+							// Add event listener retry
+							document.getElementById('retry').addEventListener('click', retry);
 						}
-						nanoHaveIPs.sort((a, b) => {
-							const num1 = Number(a.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
-							const num2 = Number(b.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
-							return num1-num2;
-						});
-						nanoNeedIPs.sort((a, b) => {
-							const num1 = Number(a.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
-							const num2 = Number(b.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
-							return num1-num2;
-						});
-						nanoHaveIPs.forEach(function (item) {
-							theHaveIPs += item + " &nbsp; ";
-						});
-						nanoNeedIPs.forEach(function (item) {
-							theNeedIPs += item + " &nbsp; ";
-						});
-						// Fill the content area
-						content = "<p>" + content + "</p><br><br><p style='color: yellow;'>" + localization['Search']['DescriptionFound'] + "</p>";
-						content += "<div class='button button-green' id='continue'>" + localization['Search']['Continue'] + "</div><div class='button button-blue' id='retry'>" + localization['Search']['Retry'] + "</div><div class='button button-red' id='cancel'>" + localization['Search']['Cancel'] + "</div>";
-						if (nanoHaveIPs.length > 0) {
-							contentHaveIPs = "<p>" + localization['Search']['ControllersAuth'] + "<br>" + theHaveIPs +"</p>";
-						} else {
-							contentHaveIPs = "<p>" + localization['Search']['ControllersAuth'] + "<br>None Found</p>";
-						}
-						if (nanoNeedIPs.length > 0) {
-							contentNeedIPs = "<p>" + localization['Search']['ControllersNeedAuth'] + "<br>" + theNeedIPs +"</p>";
-						} else {
-							contentNeedIPs = "<p>" + localization['Search']['ControllersNeedAuth'] + "<br>None Found</p>";
-						}
-						document.getElementById('contentHaveIPs').innerHTML = contentHaveIPs;
-						document.getElementById('contentNeedIPs').innerHTML = contentNeedIPs;
-						document.getElementById('content').innerHTML = content;
-						// Add event listener continueAuthorize
-						document.getElementById('continue').addEventListener('click', continueAuthorize);
-						document.addEventListener('enterPressed', continueAuthorize);
-						// Add event listener cancel
-						document.getElementById('cancel').addEventListener('click', cancel);
-						document.addEventListener('escPressed', cancel);
-						// Add event listener retry
-						document.getElementById('retry').addEventListener('click', retry);
-					}
-				}, resultDelay);
-			} else {
-				// An error occurred while contacting the Nanoleaf Search service
-				document.getElementById('content').innerHTML = '<p>' + data + '</p>';
-			}
-		});
-	} catch(e) {
-		// An error occurred while contacting the Nanoleaf Search service
-		content = "<p style='color: yellow;'>An error occured while searcing with IP:<br>" + localIP + "<br><br>" + e + "</p><div class='button button-blue' id='goback'>" + localization['Search']['GoBack'] + "</div><div class='button button-red' id='cancel'>" + localization['Search']['Cancel'] + "</div>";
-		document.getElementById('content').innerHTML = content;
-		// Add event listener retry
-		document.getElementById('goback').addEventListener('click', goback);
-		document.addEventListener('enterPressed', goback);
-		// Add event listener cancel
-		document.getElementById('cancel').addEventListener('click', cancel);
-
-	}
+					}, resultDelay);
+				} else {
+					// An error occurred while contacting the Nanoleaf Search service
+					document.getElementById('content').innerHTML = '<p>' + data + '</p>';
+				}
+			});
+		} catch(e) {
+			// An error occurred while contacting the Nanoleaf Search service
+			content = "<p style='color: yellow;'>An error occured while searching with IP:<br>" + localIP + "<br><br>" + e + "</p><div class='button button-blue' id='goback'>" + localization['Search']['GoBack'] + "</div><div class='button button-red' id='exit'>" + localization['Search']['Exit'] + "</div>";
+			document.getElementById('content').innerHTML = content;
+			// Add event listener retry
+			document.getElementById('goback').addEventListener('click', goback);
+			document.addEventListener('enterPressed', goback);
+			// Add event listener exit
+			document.getElementById('exit').addEventListener('click', exit);
+		}
 	}
 
 	function sortAlphaNum(a, b) {
@@ -147,15 +148,17 @@ function loadSearchView() {
 		loadIntroView();
 	}
 
-	// cancel the window
-	function cancel() {
-		window.close();
+	// exit the window
+	function exit() {
+		exitSetup();
 	}
 
 	// Unload view
 	function unloadSearchView() {
 		// Remove event listener
 		document.removeEventListener('enterPressed', continueAuthorize);
-		document.removeEventListener('escPressed', cancel);
+		document.removeEventListener('escPressed', exit);
+		document.getElementById('contentHaveIPs').innerHTML = '';
+		document.getElementById('contentNeedIPs').innerHTML = '';
 	}
 }

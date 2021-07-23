@@ -89,8 +89,8 @@
 	"PropertyInspectorPath": "pi/index.html",
 	"SDKVersion": 2,
 	"Software": {
-		"MinimumVersion" : "4.2"
+		"MinimumVersion" : "4.8"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
-	"Version": "1.0.0"
+	"Version": "1.1"
 }

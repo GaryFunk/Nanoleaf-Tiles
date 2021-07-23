@@ -16,6 +16,9 @@ window.nanoIP = null;
 window.nanoToken = null;
 window.nanoCache = {};
 window.nanoCacheIPs = [];
+window.name = "PI";
+
+var setupWindow;
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
@@ -30,32 +33,24 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	var language = info['application']['language'];
 	// Retrieve action identifier
 	var action = actionInfo['action'];
-	// Open the web socket to Stream Deck
-	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
-	websocket = new WebSocket('ws://127.0.0.1:' + inPort);
 
-	// WebSocket is connected, send message
-	websocket.onopen = function () {
-		// Register property inspector to Stream Deck
-		registerPluginOrPI(inRegisterEvent, inUUID);
-		// Request the global settings of the plugin
-		requestGlobalSettings(inUUID);
+	// Open the websocket to Stream Deck
+	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
+	window.websocket = new WebSocket('ws://127.0.0.1:' + inPort);
+
+	// Websocket is closed
+	window.websocket.onclose = function (evt) {
+		var reason = WebsocketError(evt);
+		console.warn('Websocket closed: ', reason);
 	};
 
-	// Create actions
-	var pi;
-	if (action === 'com.fsoft.nanoleaf.power') {
-		pi = new PowerPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.brightness') {
-		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.color') {
-		pi = new ColorPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.effects') {
-		pi = new EffectsPI(inUUID, language, streamDeckVersion, pluginVersion);
-	}
+	// Websocket received a message
+	window.websocket.onerror = function (evt) {
+		console.warn('Websocket error', evt, evt.data);
+	};
 
-	// Web socked received a message
-	websocket.onmessage = function (inEvent) {
+	// Websocket received a message
+	window.websocket.onmessage = function (inEvent) {
 		// Received message from Stream Deck
 		var jsonObj = JSON.parse(inEvent.data);
 		var event = jsonObj['event'];
@@ -63,11 +58,11 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 		var settings;
 		if (event === 'didReceiveGlobalSettings') {
 			// Set global settings
-			globalSettings = jsonPayload['settings'];
-			if (globalSettings.nanoControllers !== undefined) {
-				nanoCache = jsonPayload['settings']['nanoControllers'];
+			window.globalSettings = jsonPayload['settings'];
+			if (window.globalSettings.nanoControllers !== undefined) {
+				window.nanoCache = jsonPayload['settings']['nanoControllers'];
 				// If at least one controller is configured build the controllerCache
-				if (Object.keys(nanoCache).length > 0 && window.controllerCache['status'] == "") {
+				if (Object.keys(window.nanoCache).length > 0 && window.controllerCache['status'] == "") {
 					// Refresh the cache
 					Nanoleaf.buildcache()
 				}
@@ -94,4 +89,24 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 			}
 		}
 	};
+
+	// WebSocket is connected, send message
+	window.websocket.onopen = function () {
+		// Register property inspector to Stream Deck
+		registerPluginOrPI(inRegisterEvent, inUUID);
+		// Request the global settings of the plugin
+		requestGlobalSettings(inUUID);
+	};
+
+	// Create actions
+	var pi;
+	if (action === 'com.fsoft.nanoleaf.power') {
+		pi = new PowerPI(inUUID, language, streamDeckVersion, pluginVersion);
+	} else if (action === 'com.fsoft.nanoleaf.brightness') {
+		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion);
+	} else if (action === 'com.fsoft.nanoleaf.color') {
+		pi = new ColorPI(inUUID, language, streamDeckVersion, pluginVersion);
+	} else if (action === 'com.fsoft.nanoleaf.effects') {
+		pi = new EffectsPI(inUUID, language, streamDeckVersion, pluginVersion);
+	}
 }

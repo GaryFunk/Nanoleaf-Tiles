@@ -15,6 +15,7 @@ function Action(inContext, inSettings) {
 	var context = inContext;
 	// Private variable containing the settings of the action
 	var settings = inSettings;
+	var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
 
 	// Set the default values
 	setDefaults();
@@ -31,6 +32,19 @@ function Action(inContext, inSettings) {
 		settings = inSettings;
 	};
 
+	/*
+	this.setTitle = function () {
+		var json = {
+			"event": "setTitle",
+			"context": context,
+			"payload": {
+				"title": "" + inSettings.title,
+				"target": DestinationEnum.HARDWARE_AND_SOFTWARE
+			}
+		};
+		window.websocket.send(JSON.stringify(json));
+	};
+*/
 	// Private function to set the defaults
 	function setDefaults(inCallback) {
 		// If at least one controller is authorized
@@ -56,8 +70,8 @@ function Action(inContext, inSettings) {
 		// If the controller is set for this action
 		if (!('nanoController' in settings)) {
 			// Sort the controllers alphabetically
-			var controllerIDsSorted = Object.keys(globalSettings.nanoControllers).sort(function (a, b) {
-				return globalSettings.nanoControllers[a].nanoName.localeCompare(globalSettings.nanoControllers[b].nanoName);
+			var controllerIDsSorted = Object.keys(window.globalSettings.nanoControllers).sort(function (a, b) {
+				return window.globalSettings.nanoControllers[a].nanoName.localeCompare(window.globalSettings.nanoControllers[b].nanoName);
 			});
 			// Save the settings
 			saveSettings(action, inContext, settings);

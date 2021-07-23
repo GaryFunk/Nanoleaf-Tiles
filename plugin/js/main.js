@@ -8,7 +8,7 @@
 //==============================================================================
 
 // Global web socket
- window.websocket = null;
+window.websocket = null;
 // Global Plugin settings
 window.controllerCache = {status: ""};
 window.globalSettings = {};
@@ -21,17 +21,6 @@ window.nanoCacheIPs = [];
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) {
 	// Create array of currently used actions
 	var actions = {};
-	// Open the web socket to Stream Deck
-	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
-	websocket = new WebSocket('ws://127.0.0.1:' + inPort);
-
-	// Web socket is connected
-	websocket.onopen = function () {
-		// Register plugin to Stream Deck
-		registerPluginOrPI(inRegisterEvent, inUUID);
-		// Request the global settings of the plugin
-		requestGlobalSettings(inUUID);
-	}
 
 	// Add event listener
 	document.addEventListener('newCacheAvailable', function () {
@@ -56,8 +45,23 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		});
 	}, false);
 
+	// Open the web socket to Stream Deck
+	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
+	window.websocket = new WebSocket('ws://127.0.0.1:' + inPort);
+
+	// Websocket is closed
+	window.websocket.onclose = function (evt) {
+		var reason = WebsocketError(evt);
+		console.warn('Websocket closed: ', reason);
+	};
+
+	// Websocket received a message
+	window.websocket.onerror = function (evt) {
+		console.warn('Websocket error', evt, evt.data);
+	};
+
 	// Web socked received a message
-	websocket.onmessage = function (inEvent) {
+	window.websocket.onmessage = function (inEvent) {
 		// Parse parameter from string to object
 		var jsonObj = JSON.parse(inEvent.data);
 		var event = jsonObj['event'];
@@ -105,11 +109,11 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 			}
 		} else if (event === 'didReceiveGlobalSettings') {
 			// Set global settings
-			globalSettings = jsonPayload['settings'];
-			if (globalSettings.nanoControllers !== undefined) {
-				nanoCache = jsonPayload['settings']['nanoControllers'];
+			window.globalSettings = jsonPayload['settings'];
+			if (window.globalSettings.nanoControllers !== undefined) {
+				window.nanoCache = jsonPayload['settings']['nanoControllers'];
 				// If at least one controller is configured build the controllerCache
-				if (Object.keys(nanoCache).length > 0 && window.controllerCache['status'] == "") {
+				if (Object.keys(window.nanoCache).length > 0 && window.controllerCache['status'] == "") {
 					// Refresh the cache
 					Nanoleaf.buildcache()
 				}
@@ -129,5 +133,13 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		} else if (event === 'sendToPlugin') {
 			var piEvent = jsonPayload['piEvent'];
 		}
+	};
+
+	// Web socket is connected
+	window.websocket.onopen = function () {
+		// Register plugin to Stream Deck
+		registerPluginOrPI(inRegisterEvent, inUUID);
+		// Request the global settings of the plugin
+		requestGlobalSettings(inUUID);
 	};
 }

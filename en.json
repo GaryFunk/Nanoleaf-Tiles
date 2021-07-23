@@ -27,7 +27,8 @@
 	"Localization": {
 		"PI": {
 			"Controller": "Controller",
-			"NoControllers": "No Controllers",
+			"NoController": "No Controller",
+			"SelectController": "Select Controller",
 			"AddController": "Add New Controller",
 			"Color": "Color",
 			"Colors": "Colors",
@@ -43,11 +44,11 @@
 			"Intro": {
 				"Title": "Add New Controller",
 				"Description": "Find the active Nanoleaf controllers on the local network",
-				"NoIPaddress": "Error: Unable to determine the Local IP address",
-				"Continue": "Find Controller IP Addresses",
-				"IPaddress": "Enter your local IP Address",
+				"NoIPaddress": "Error: Unable to determine the Local IPv4 address",
+				"Continue": "Find Controller IPv4 Addresses",
+				"IPaddress": "Enter your local IPv4 Address",
 				"Or": "Or",
-				"Cancel": "Cancel"
+				"Exit": "Cancel"
 			},
 			"Search": {
 				"Title": "Searching Controllers...",
@@ -60,18 +61,24 @@
 				"DescriptionNone": "Insure the controller is switched on and connected to the local network",
 				"Continue": "Get Authroization Token",
 				"GoBack": "Enter the IP Address",
-				"Cancel": "Cancel",
+				"Exit": "Cancel",
 				"Retry": "Try Again"
 			},
 			"Authorize": {
 				"Title" : "Authorizing...",
 				"Description": "Getting Authorization Token and controller information",
-				"Cancel": "Cancel",
+				"ControllerAuth": "Auth",
+				"ControllerIP": "IP",
+				"ControllerName": "Name",
+				"ControllerSN": "SN",
+				"Continue": "Save Authroization Token",
+				"Exit": "Cancel",
 				"Retry": "Try Again"
 			},
 			"Save": {
 				"Title": "Controller Saved",
 				"Description": "The Authorization Token has been sucessfully received and saved",
+				"Continue": "Save Authroization Token",
 				"Exit": "Exit Setup"
 			}
 		}

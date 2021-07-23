@@ -9,6 +9,9 @@
 
 // Load the Intro View
 function loadIntroView() {
+	// local variables
+	var content = "";
+
 	// Set the status bar
 	setStatusBar('intro');
 	// Fill the header
@@ -16,15 +19,15 @@ function loadIntroView() {
 	// Fill the title
 	document.getElementById('title').innerHTML = localization['Intro']['Title'];
 	// Fill the content area
-	var content = "<p>" + localization['Intro']['Description'] + "</p><br /><br />";
+	content = "<p>" + localization['Intro']['Description'] + "</p><br />";
 	if (localIP == 'error') {
 		content += "<p>" + localization['Intro']['NoIPaddress'] + "</p>";
 	} else {
 		content += "<div class='button button-green' id='continue'>" + localization['Intro']['Continue'] + "</div>";
+		content += "<p>" + localization['Intro']['Or'] + "</p>";
 	}
-	content += "<div class='button button-red' id='cancel'>" + localization['Intro']['Cancel'] + "</div>";
-	content += "<h1>" + localization['Intro']['Or'] + "</h1>";
-	content += "<div class='button button-green' id='localip'>" + localization['Intro']['IPaddress'] + "</div><p><input id='ipaddress' value=''></p>";
+	content += "<div class='button button-green' id='localip'>" + localization['Intro']['IPaddress'] + "</div><p><input id='ipaddress' value=''></p><br />";
+	content += "<div class='button button-red' id='exit'>" + localization['Intro']['Exit'] + "</div>";
 
 	document.getElementById('content').innerHTML = content;
 	// Add event listener continueSearch
@@ -33,12 +36,12 @@ function loadIntroView() {
 		document.addEventListener('enterPressed', continueSearch);
 	}
 	// Add event listener ipaddress
-	document.getElementById("localip").addEventListener("click", function (event){ event.preventDefault(); checkIP(document.getElementById("ipaddress"));});
-	// Add event listener cancel
-	document.getElementById('cancel').addEventListener('click', cancel);
-	document.addEventListener('escPressed', cancel);
+	document.getElementById("localip").addEventListener("click", function (event){event.preventDefault(); checkIP(document.getElementById("ipaddress"));});
+	// Add event listener exit
+	document.getElementById('exit').addEventListener('click', exit);
+	document.addEventListener('escPressed', exit);
 
-	//
+	// Check the validity of the entered IP address
 	function checkIP(theIP) {
         var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         if (theIP.value.match(ipformat)) {
@@ -63,15 +66,15 @@ function loadIntroView() {
 		loadSearchView(localIP);
 	}
 
-	// Close the window
-	function cancel() {
-		window.close();
+	// Close the setupWindow
+	function exit() {
+		exitSetup();
 	}
 
 	// Unload view
 	function unloadIntroView() {
 		// Remove event listener
 		document.removeEventListener('enterPressed', continueSearch);
-		document.removeEventListener('escPressed', cancel);
+		document.removeEventListener('escPressed', exit);
 	}
 }
