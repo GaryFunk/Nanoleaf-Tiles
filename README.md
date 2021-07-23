@@ -1,9 +1,9 @@
 # NanoleafTiles
-A Nanoleaf controller writen in JavaScript for the Elgato Stream Deck devices.
+A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 **Website and contact information:** [https://github.com/GaryFunk](https://github.com/GaryFunk)
 
-## Curent features
+## Current features
 - Power - Toggles power to the controller On / Off
 - Brightness - Set brightness level to 25/50/75/100%
 - Color - Set a static color for all tiles
@@ -11,7 +11,7 @@ A Nanoleaf controller writen in JavaScript for the Elgato Stream Deck devices.
 
 ## v1.1
 - Controller setup rewritten and optimized
-- Properity Inspector main code rewritten
+- Property Inspector main code rewritten
 - Plugin code rewritten
 - Unused code removed
 - Bug fixes and more bug fixes
