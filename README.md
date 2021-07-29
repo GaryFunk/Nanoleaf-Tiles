@@ -1,4 +1,4 @@
-# NanoleafTiles
+# Nanoleaf Tiles
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 **Website and contact information:** [https://github.com/GaryFunk](https://github.com/GaryFunk)
