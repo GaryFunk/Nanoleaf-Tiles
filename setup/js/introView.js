@@ -26,7 +26,7 @@ function loadIntroView() {
 		content += "<div class='button button-green' id='continue'>" + localization['Intro']['Continue'] + "</div>";
 		content += "<p>" + localization['Intro']['Or'] + "</p>";
 	}
-	content += "<div class='button button-green' id='localip'>" + localization['Intro']['IPaddress'] + "</div><p><input id='ipaddress' value=''></p><br />";
+	content += "<p>" + localization['Intro']['EnterIPaddress'] + "</p><p><input id='ipaddress' value=''></p><div class='button button-green' id='localip'>" + localization['Intro']['IPaddress'] + "</div>";
 	content += "<div class='button button-red' id='exit'>" + localization['Intro']['Exit'] + "</div>";
 
 	document.getElementById('content').innerHTML = content;
