@@ -57,7 +57,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			// Add the controllers
 			controllerIDsSorted.forEach(function (inControllerID) {
 				// Add the controller name to the option
-				var option = "<option id='" + inControllerID + "' value='" + inControllerID + "' class='nanoControllers'>" + window.nanoCache[inControllerID].nanoName + "</option>";
+				var option = "<option value='" + inControllerID + "' class='nanoControllers'>" + window.nanoCache[inControllerID].nanoName + "</option>";
 				document.getElementById('controller-select').insertAdjacentHTML('beforeend', option);
 			});
 
@@ -162,7 +162,6 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		if (window.globalSettings.nanoControllers === undefined) {
 			window.globalSettings.nanoControllers = {};
 		}
-/*
 		// Add new controller to the global settings
 		window.globalSettings.nanoControllers[inEvent.detail.nanoSN] = { 'nanoIP': inEvent.detail.nanoIP, 'nanoName': inEvent.detail.nanoName, 'nanoSN': inEvent.detail.nanoSN,  'nanoToken': inEvent.detail.nanoToken };
 		saveGlobalSettings(inContext);
@@ -172,20 +171,6 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		window.settings.nanoController = inEvent.detail.id;
 		instance.saveSettings();
 		instance.loadControllers();
-*/
-		console.log(window.nanoCache);
-		window.nanoCache[inEvent.detail.nanoSN] = { 'nanoIP': inEvent.detail.nanoIP, 'nanoName': inEvent.detail.nanoName, 'nanoSN': inEvent.detail.nanoSN,  'nanoToken': inEvent.detail.nanoToken };
-		console.log(window.nanoCache);
-		console.log('-------------------------------------------');
-		window.globalSettings.nanoControllers = window.nanoCache;
-		saveGlobalSettings(inContext);
-		// Set controller to the newly added controller
-		window.settings.nanoController = inEvent.detail.nanoSN;
-		instance.saveSettings();
-		instance.loadControllers();
-//		window.addEventListener('unload', function (event) {
-//			sendValueToPlugin('propertyInspectorDisconnected', 'reloadGlobalSettings');
-//		});
 	}
 
 	const sleep = (milliseconds) => {

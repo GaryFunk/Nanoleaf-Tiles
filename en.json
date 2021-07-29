@@ -44,10 +44,9 @@
 			"Intro": {
 				"Title": "Add New Controller",
 				"Description": "Find the active Nanoleaf controllers on the local network",
-				"NoIPaddress": "Error: Unable to discover the local IP address",
-				"EnterIPaddress": "Enter an IP address on your local network",
-				"Continue": "Find Controller by discovered address",
-				"IPaddress": "Find Controller by entered address",
+				"NoIPaddress": "Error: Unable to determine the Local IPv4 address",
+				"Continue": "Find Controller IPv4 Addresses",
+				"IPaddress": "Enter your local IPv4 Address",
 				"Or": "Or",
 				"Exit": "Cancel"
 			},
@@ -68,7 +67,6 @@
 			"Authorize": {
 				"Title" : "Authorizing...",
 				"Description": "Getting Authorization Token and controller information",
-				"NoControllerAuth": "No controller found to Authorize<br>Insure the controller is in pairng mode",
 				"ControllerAuth": "Auth",
 				"ControllerIP": "IP",
 				"ControllerName": "Name",
