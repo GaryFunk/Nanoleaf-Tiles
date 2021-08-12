@@ -39,10 +39,12 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	};
 
 	// Public function to retrieve the controller infomation
+
 	this.getInfo = function () {
 		return info;
 	};
 
+<<<<<<< Updated upstream
 	// Public function to set the power status of the controller
 	this.setBrightness = function (brightness, callback) {
 		// Set the brightness value
@@ -50,9 +52,16 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 		// Define state object
 		var state = '{"brightness": {"value": ' + brightness + '}}';
 		// Send new state
+=======
+	// Public function to set the brightness status of the controller
+	this.setBrightness = function (brightness, value, callback) {
+		// Define state object and Send new state
+		var state = '{"brightness": {"value": ' + value + '}}';
+>>>>>>> Stashed changes
 		instance.setState('state', state, callback);
 	};
 
+<<<<<<< Updated upstream
 	// Public function to set the effects of the controller
 	this.setColor = function (color, callback) {
 		// Define color object
@@ -64,8 +73,21 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	// Public function to set the effects of the controller
 	this.setEffects = function (effects, callback) {
 		// Define effects object
+=======
+	// Public function to set the color of the controller
+	this.setColor = function (color, value, callback) {
+		// Define color object
+		var hsv = convertcolor(color);
+		var state = '{"ct": {"value": ' + parseInt(hsv.v) + '}, "hue": {"value": ' + parseInt(hsv.h) + '}, "sat": {"value": ' + parseInt(hsv.s) + '}}';
+		instance.setState('state', state, callback);
+		return JSON.parse(state);
+	};
+
+	// Public function to set the effects of the controller
+	this.setEffects = function (effects, value, callback) {
+		// Define state object and Send new state
+>>>>>>> Stashed changes
 		var effects = '{"select": "' + effects + '"}';
-		// Send new effects
 		instance.setState('effects', effects, callback);
 	};
 
@@ -73,9 +95,8 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	this.setPower = function (power, callback) {
 		// Set the power to true/false
 		var power = (power ? true : false);
-		// Define state object
+		// Define state object and Send new state
 		var state = '{"on": {"value": ' + power + '}}';
-		// Send new state
 		instance.setState('state', state, callback);
 	};
 
@@ -328,11 +349,13 @@ Nanoleaf.search = function (callback) {
 
 function convertcolor(color) {
 	var hsv = hex2hsv(color);
+/*
 	var hue = {"value": parseInt(hsv.h)};
 	var sat = {"value": parseInt(hsv.s)};
 	var ct = {"value": parseInt(hsv.v)};
-	var targetState = {"ct": ct, "hue": hue, "sat": sat};
-	return JSON.stringify(targetState);
+	var targetState = '"ct": ct, "hue": hue, "sat": sat';
+*/
+	return hsv;
 }
 
 // Static function to convert hex to rgb

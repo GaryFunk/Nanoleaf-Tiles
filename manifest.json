@@ -92,5 +92,9 @@
 		"MinimumVersion" : "4.8"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
+<<<<<<< Updated upstream
 	"Version": "1.1"
+=======
+	"Version": "1.1.6"
+>>>>>>> Stashed changes
 }

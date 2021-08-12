@@ -36,12 +36,24 @@ function BrightnessAction(inContext, inSettings) {
 		var nanoKey = '"' + inSettings.nanoController + '"';
 		var nanoSN = inSettings.nanoController;
 		var NF = window.controllerCache[nanoKey];
+<<<<<<< Updated upstream
 		var targetState = inState + 1;
 		if (targetState > 4) {
 			targetState = 1;
 		}
 		if (inUserDesiredState !== undefined) {
 			targetState = inUserDesiredState;
+=======
+		var nanoInfo = NF.getInfo();
+		var targetState = 0;
+		// Set the target value
+		var currentValue = parseInt(nanoInfo.state.brightness.value);
+		var setValue = parseInt(inSettings.brightness);
+		if (currentValue == 100) {
+			targetValue = setValue;
+		} else {
+			targetValue = (currentValue + setValue > 100 ? 100 : currentValue + setValue);
+>>>>>>> Stashed changes
 		}
 
 		// Set state

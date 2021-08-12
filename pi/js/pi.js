@@ -162,6 +162,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		if (window.globalSettings.nanoControllers === undefined) {
 			window.globalSettings.nanoControllers = {};
 		}
+<<<<<<< Updated upstream
 		// Add new controller to the global settings
 		window.globalSettings.nanoControllers[inEvent.detail.nanoSN] = { 'nanoIP': inEvent.detail.nanoIP, 'nanoName': inEvent.detail.nanoName, 'nanoSN': inEvent.detail.nanoSN,  'nanoToken': inEvent.detail.nanoToken };
 		saveGlobalSettings(inContext);
@@ -171,6 +172,16 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		window.settings.nanoController = inEvent.detail.id;
 		instance.saveSettings();
 		instance.loadControllers();
+=======
+		window.nanoCache[inEvent.detail.nanoSN] = { 'nanoIP': inEvent.detail.nanoIP, 'nanoName': inEvent.detail.nanoName, 'nanoSN': inEvent.detail.nanoSN,  'nanoToken': inEvent.detail.nanoToken };
+		window.globalSettings.nanoControllers = window.nanoCache;
+		saveGlobalSettings(inContext);
+		// Set controller to the newly added controller
+		window.settings.nanoController = inEvent.detail.nanoSN;
+		instance.saveSettings();
+		instance.loadControllers();
+		sendToPlugin(getAction(), inContext, { 'piEvent': 'newController' });
+>>>>>>> Stashed changes
 	}
 
 	const sleep = (milliseconds) => {

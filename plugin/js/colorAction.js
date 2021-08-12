@@ -47,7 +47,14 @@ function ColorAction(inContext, inSettings) {
 				var targetValue = (targetState * 25);
 				var nanoKey = '"' + inSettings.nanoController + '"';
 				var nanoSN = inSettings.nanoController;
+<<<<<<< Updated upstream
 				window.controllerCache[nanoKey].getInfo().state.brightness = targetValue;
+=======
+				setActionState(inContext, targetState, targetValue);
+				window.controllerCache[nanoKey].getInfo().state.ct.value = state.ct.value;   //fix this
+				window.controllerCache[nanoKey].getInfo().state.hue.value = state.hue.value;   //fix this
+				window.controllerCache[nanoKey].getInfo().state.sat.value = state.sat.value;   //fix this
+>>>>>>> Stashed changes
 			} else {
 				log(error);
 				setActionState(inContext, inState);

@@ -88,6 +88,14 @@ function loadAuthorizeView() {
 						// Show the save view
 						wait();
 					}
+<<<<<<< Updated upstream
+=======
+				} else {
+					console.warn('failed to get item', index);
+				}
+				if (theCount == window.nanoNeedIPs.length) {
+					autoCycle();
+>>>>>>> Stashed changes
 				}
 			});
 		});

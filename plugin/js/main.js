@@ -16,6 +16,9 @@ window.nanoIP = null;
 window.nanoToken = null;
 window.nanoCache = {};
 window.nanoCacheIPs = [];
+window.dt;
+window.startup;
+window.getGlobal = true;
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) {
@@ -69,6 +72,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		var context = jsonObj['context'];
 		var jsonPayload = jsonObj['payload'];
 		var settings;
+<<<<<<< Updated upstream
 		// Key up event
 		if (event === 'keyUp') {
 			settings = jsonPayload['settings'];
@@ -132,6 +136,128 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 			sendToPropertyInspector(action, context, payLoad);
 		} else if (event === 'sendToPlugin') {
 			var piEvent = jsonPayload['piEvent'];
+=======
+//console.log('main 49 event = ', event);
+//console.log('cache', window.controllerCache);
+//console.log(jsonObj);
+//console.log('----------------------------');
+		// Events
+		switch (event) {
+			case 'keyUp':
+				settings = jsonPayload['settings'];
+				var coordinates = jsonPayload['coordinates'];
+				var userDesiredState = jsonPayload['userDesiredState'];
+				var state = jsonPayload['state'];
+				// Send onKeyUp event to actions
+				if (context in actions) {
+//console.log(actions[context].getSettings().nanoController);
+//console.log('context ', context);
+					var nanoController = actions[context].getSettings().nanoController;
+					for (inContext in actions) {
+						var setIngs = actions[inContext].getSettings();
+						if (setIngs['nanoController'] === nanoController) {
+//console.log(`${context}: ${setIngs['nanoController']}`);
+//console.log(actions[inContext].constructor.name);
+							if (actions[inContext].constructor.name === 'PowerAction' && inContext !== context) {
+								var nanoKey = '"' + nanoController + '"';
+								var nanoSN = nanoController;
+								var NF = window.controllerCache[nanoKey];
+								var nanoInfo = NF.getInfo();
+								nanoInfo.state.on.value = 1;
+								setState(inContext, 1);
+								setTitle(inContext, 'On');
+//console.log(`${inContext}: ${setIngs['nanoController']}`);
+//console.log('action ', actions[inContext]);
+							}
+						}
+					}
+//console.log('----------------------------');
+					actions[context].onKeyUp(context, settings, coordinates, userDesiredState, state);
+				}
+				break;
+			case 'willAppear':
+				settings = jsonPayload['settings'];
+				// Add current instance if not in actions array
+				if (!(context in actions)) {
+					// Add current instance to array
+					if (action === 'com.fsoft.nanoleaf.power') {
+						actions[context] = new PowerAction(context, settings);
+					} else if (action === 'com.fsoft.nanoleaf.brightness') {
+						actions[context] = new BrightnessAction(context, settings);
+					} else if (action === 'com.fsoft.nanoleaf.color') {
+						actions[context] = new ColorAction(context, settings);
+					} else if (action === 'com.fsoft.nanoleaf.effects') {
+						actions[context] = new EffectsAction(context, settings);
+					}
+				}
+				break;
+			case 'willDisappear':
+				// Remove current instance from array
+				if (context in actions) {
+					delete actions[context];
+				}
+				break;
+			case 'didReceiveGlobalSettings':
+				// Set global settings
+				// console.log('didReceiveGlobalSettings');
+				// console.log(jsonPayload);
+				window.globalSettings = jsonPayload['settings'];
+				if (window.globalSettings.nanoControllers !== undefined) {
+					window.nanoCache = jsonPayload['settings']['nanoControllers'];
+					// If at least one controller is configured build the controllerCache
+					if (Object.keys(window.nanoCache).length > 0 && window.controllerCache['status'] == "") {
+						// Refresh the cache
+						Nanoleaf.buildcache()
+					}
+				}
+				break;
+			case 'didReceiveSettings':
+				settings = jsonPayload['settings'];
+				// Set settings
+				if (context in actions) {
+					actions[context].setSettings(settings);
+				}
+				// Refresh the cache
+				break;
+			case 'propertyInspectorDidAppear':
+				// Send cache to PI
+				var payLoad = {};
+				payLoad.settings = globalSettings;
+				sendToPropertyInspector(action, context, payLoad);
+				break;
+			case 'sendToPlugin':
+				var piEvent = jsonPayload['piEvent'];
+				if (piEvent === 'newController') {
+					// console.log('sendToPlugin');
+					window.controllerCache['status'] = "";
+					requestGlobalSettings(inUUID);
+				}
+				break;
+			case 'systemDidWakeUp':
+				// Request the global settings of the plugin
+				// console.log('systemDidWakeUp');
+				requestGlobalSettings(inUUID);
+				break;
+			case 'deviceDidConnect':
+				// Request the global settings of the plugin
+				if (window.getGlobal) {
+					// console.log('deviceDidConnect');
+					requestGlobalSettings(inUUID);
+					window.getGlobal = false;
+				}
+				break;
+			case 'deviceDidDisconnect':
+				// Request the global settings of the plugin
+				if (!window.getGlobal) {
+					// console.log('deviceDidConnect');
+					requestGlobalSettings(inUUID);
+					window.getGlobal = true;
+				}
+				break;
+			default:
+				// console.log('event = ', event);
+				// console.log('-------------------');
+>>>>>>> Stashed changes
 		}
 	};
 
@@ -142,4 +268,8 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		// Request the global settings of the plugin
 		requestGlobalSettings(inUUID);
 	};
+
+	function getKeyByValue(object, value) {
+		return Object.keys(object).find(key => object[key] === value);
+	  }
 }

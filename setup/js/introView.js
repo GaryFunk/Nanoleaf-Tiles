@@ -20,21 +20,29 @@ function loadIntroView() {
 	document.getElementById('title').innerHTML = localization['Intro']['Title'];
 	// Fill the content area
 	content = "<p>" + localization['Intro']['Description'] + "</p><br />";
-	if (localIP == 'error') {
+/*
+	if (local//IP == 'error') {
 		content += "<p>" + localization['Intro']['NoIPaddress'] + "</p>";
 	} else {
 		content += "<div class='button button-green' id='continue'>" + localization['Intro']['Continue'] + "</div>";
 		content += "<p>" + localization['Intro']['Or'] + "</p>";
 	}
+<<<<<<< Updated upstream
 	content += "<div class='button button-green' id='localip'>" + localization['Intro']['IPaddress'] + "</div><p><input id='ipaddress' value=''></p><br />";
+=======
+*/
+	content += "<p>" + localization['Intro']['EnterIPaddress'] + "</p><p><input id='ipaddress' value=''></p><div class='button button-green' id='localip'>" + localization['Intro']['IPaddress'] + "</div>";
+>>>>>>> Stashed changes
 	content += "<div class='button button-red' id='exit'>" + localization['Intro']['Exit'] + "</div>";
 
 	document.getElementById('content').innerHTML = content;
 	// Add event listener continueSearch
-	if (localIP !== 'error') {
+/*
+	if (local//IP !== 'error') {
 		document.getElementById('continue').addEventListener('click', continueSearch);
 		document.addEventListener('enterPressed', continueSearch);
 	}
+*/
 	// Add event listener ipaddress
 	document.getElementById("localip").addEventListener("click", function (event){event.preventDefault(); checkIP(document.getElementById("ipaddress"));});
 	// Add event listener exit
@@ -60,11 +68,13 @@ function loadIntroView() {
 		loadSearchView();
 	}
 
+/*
 	// Load the search view
-	function continueSearchIP(localIP) {
+	function continueSearchIP(local//IP) {
 		unloadIntroView();
-		loadSearchView(localIP);
+		loadSearchView(local//IP);
 	}
+*/
 
 	// Close the setupWindow
 	function exit() {
