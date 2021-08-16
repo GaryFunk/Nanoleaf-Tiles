@@ -21,6 +21,10 @@ setupWindow.nanoNeedIPs = [];
 setupWindow.nanoCacheIPs = [];
 setupWindow.nanoCache = {};
 
+function closeSetup() {
+	setupWindow.close();
+}
+
 function exitSetup() {
 	window.opener.document.getElementById('controller-select').value = 'blank-controller';
 	setupWindow.close();

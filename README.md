@@ -5,7 +5,7 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 ## Current features
 - Power - Toggles power to the controller On / Off
-- Brightness - Set brightness level to current value + Brightness%
+- Brightness - Set brightness level to current value + Brightness%, LongPress to set at full brightness
 - Color - Set a static color for all tiles
 - Effects - Set one of the effects available for the controller
 

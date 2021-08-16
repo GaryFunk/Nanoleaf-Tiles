@@ -11,6 +11,7 @@
 function loadAuthorizeView() {
 	// Time used to automatically authorize controllers
 	var autoCycleCount = 2;
+	var cycleCounter = 0;
 	// Define local timer
 	var timer = null;
 	// Set a global variable
@@ -31,29 +32,28 @@ function loadAuthorizeView() {
 	// For n seconds try to connect to the controller automatically
 	async function autoCycle() {
 		// Define local timer counter
-		var cycleCounter = 0;
-		var timer = null;
 		// Start a new timer to auto connect to the controller
-			if (cycleCounter < autoCycleCount) { // Try to connect for n seconds
-				await getAuthToken();
-				if ('nanoIP' in detail) {
-					autoCycleCount = 0;
-					clearInterval(timer);
-				}
-				cycleCounter++;
-			} else { // If auto connect was not successful for n times, stop auto connecting and show controls
-				// Stop the timer
+		if (cycleCounter < autoCycleCount) { // Try to connect for n seconds
+			await getAuthToken();
+			if ('nanoIP' in detail) {
+				autoCycleCount = 0;
 				clearInterval(timer);
-				// Show manual user controls instead
-				var controls = "<div class='button' id='retry'>" + localization['Authorize']['Retry'] + "</div><div class='button-transparent' id='exit'>" + localization['Authorize']['Exit'] + "</div>";
-				document.getElementById('content').innerHTML = controls;
-				// Add event listener retry
-				document.getElementById('retry').addEventListener('click', retry);
-				document.addEventListener('enterPressed', retry);
-				// Add event listener exit
-				document.getElementById('exit').addEventListener('click', exit);
-				document.addEventListener('escPressed', exit);
 			}
+			cycleCounter++;
+		} else { // If auto connect was not successful for n times, stop auto connecting and show controls
+			// Stop the timer
+			clearInterval(timer);
+			// Show manual user controls instead
+			content = "<br><br><p style='color: yellow;'>" + localization['Authorize']['NoControllerAuth'] + "</p>";
+			content += "<div class='button button-blue' id='retry'>" + localization['Authorize']['Retry'] + "</div><div class='button button-red' id='exit'>" + localization['Authorize']['Exit'] + "</div>";
+			document.getElementById('content').innerHTML = content;
+			// Add event listener retry
+			document.getElementById('retry').addEventListener('click', retry);
+			document.addEventListener('enterPressed', retry);
+			// Add event listener exit
+			document.getElementById('exit').addEventListener('click', exit);
+			document.addEventListener('escPressed', exit);
+		}
 	}
 
 	// Retry authorize by reloading the view
@@ -69,9 +69,11 @@ function loadAuthorizeView() {
 
 	// Try to authorize with all discovered controllers
 	async function getAuthToken() {
+		var theCount = 0;
 		window.nanoNeedIPs.some(function (item, index, object) {
 			var nanoIP = item;
 			Nanoleaf.getauth(nanoIP, async function (status, data) {
+				theCount++;
 				if (status) { // Authorization was successful
 					var nanoToken = data;
 					var result = await Nanoleaf.getinfo(nanoIP, nanoToken);
@@ -88,14 +90,11 @@ function loadAuthorizeView() {
 						// Show the save view
 						wait();
 					}
-<<<<<<< Updated upstream
-=======
 				} else {
 					console.warn('failed to get item', index);
 				}
 				if (theCount == window.nanoNeedIPs.length) {
 					autoCycle();
->>>>>>> Stashed changes
 				}
 			});
 		});

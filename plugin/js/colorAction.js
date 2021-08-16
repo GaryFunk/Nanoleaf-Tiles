@@ -36,35 +36,26 @@ function ColorAction(inContext, inSettings) {
 		var nanoKey = '"' + inSettings.nanoController + '"';
 		var nanoSN = inSettings.nanoController;
 		var NF = window.controllerCache[nanoKey];
+		var nanoInfo = NF.getInfo();
 		var targetState = inSettings.color;
-		if (inUserDesiredState !== undefined) {
-			targetState = inUserDesiredState;
-		}
+		// Set the target value
+		var targetValue = inSettings.color;
 		// Set state
-		NF.setColor(targetState, function (success, error) {
+		var state = NF.setColor(targetState, targetValue, function (success, error) {
 			if (success) {
-				setActionState(inContext, targetState);
-				var targetValue = (targetState * 25);
 				var nanoKey = '"' + inSettings.nanoController + '"';
 				var nanoSN = inSettings.nanoController;
-<<<<<<< Updated upstream
-				window.controllerCache[nanoKey].getInfo().state.brightness = targetValue;
-=======
 				setActionState(inContext, targetState, targetValue);
 				window.controllerCache[nanoKey].getInfo().state.ct.value = state.ct.value;   //fix this
 				window.controllerCache[nanoKey].getInfo().state.hue.value = state.hue.value;   //fix this
 				window.controllerCache[nanoKey].getInfo().state.sat.value = state.sat.value;   //fix this
->>>>>>> Stashed changes
 			} else {
 				log(error);
-				setActionState(inContext, inState);
+				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
 		});
 	};
-
-
-
 
 	// Private function to set the defaults
 	function updateState() {
@@ -84,13 +75,16 @@ function ColorAction(inContext, inSettings) {
 		var NF = window.controllerCache[nanoKey];
 		nanoInfo = NF.getInfo();
 		// Set the target state
-		var targetState = settings.effects;
+		var targetState = settings.color;
+		// Set the target value
+		var targetValue = settings.color;
 		// Set the new action state
-		setActionState(context, targetState);
+		setActionState(context, targetState, targetValue);
 	}
 
 	// Private function to set the state
-	function setActionState(inContext, targetState) {
+	function setActionState(inContext, targetState, targetValue) {
 		setState(inContext, targetState);
+		setTitle(inContext, targetValue);
 	}
 }

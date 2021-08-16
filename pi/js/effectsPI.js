@@ -17,7 +17,8 @@ function EffectsPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) 
 	// Before overwriting parrent method, save a copy of it
 	var piLocalize = this.localize;
 
-	// set options to placeholder
+	// Add options to placeholder
+//	var effectsSelect = "<div class='sdpi-item'><div class='sdpi-item-label' id='effects-label'></div><div id='effects-select'><select class='sdpi-item-value select'><option id='no-effects' value='no-effects'></option></select></div>";
 	var effectsSelect = "<div class='sdpi-item'><div class='sdpi-item-label' id='effects-label'></div id='effects-select'><select class='sdpi-item-value select' id='effects-select'><option id='no-effects' value='no-effects'></option></select></div>";
 	document.getElementById('placeholder').innerHTML = effectsSelect;
 
@@ -35,7 +36,6 @@ function EffectsPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) 
 
 	// Add event listener
 	document.getElementById('effects-select').addEventListener('change', effectsChanged);
-	document.getElementById('controller-select').value = settings.nanoController;
 
 	// Effects changed
 	function effectsChanged(inEvent) {

@@ -36,37 +36,30 @@ function BrightnessAction(inContext, inSettings) {
 		var nanoKey = '"' + inSettings.nanoController + '"';
 		var nanoSN = inSettings.nanoController;
 		var NF = window.controllerCache[nanoKey];
-<<<<<<< Updated upstream
-		var targetState = inState + 1;
-		if (targetState > 4) {
-			targetState = 1;
-		}
-		if (inUserDesiredState !== undefined) {
-			targetState = inUserDesiredState;
-=======
 		var nanoInfo = NF.getInfo();
 		var targetState = 0;
 		// Set the target value
 		var currentValue = parseInt(nanoInfo.state.brightness.value);
 		var setValue = parseInt(inSettings.brightness);
-		if (currentValue == 100) {
+console.log(inUserDesiredState);
+		if (inUserDesiredState !== undefined) {
+			targetValue = inUserDesiredState;
+		} else if (currentValue == 100) {
 			targetValue = setValue;
 		} else {
 			targetValue = (currentValue + setValue > 100 ? 100 : currentValue + setValue);
->>>>>>> Stashed changes
 		}
 
 		// Set state
-		NF.setBrightness(targetState, function (success, error) {
+		NF.setBrightness(targetState, targetValue, function (success, error) {
 			if (success) {
-				setActionState(inContext, targetState);
-				var targetValue = (targetState * 25);
 				var nanoKey = '"' + inSettings.nanoController + '"';
 				var nanoSN = inSettings.nanoController;
-				window.controllerCache[nanoKey].getInfo().state.brightness = targetValue;
+				setActionState(inContext, targetState, targetValue);
+				window.controllerCache[nanoKey].getInfo().state.brightness.value = targetValue;
 			} else {
 				log(error);
-				setActionState(inContext, inState);
+				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
 		});
@@ -88,15 +81,18 @@ function BrightnessAction(inContext, inSettings) {
 		var nanoKey = '"' + inSettings.nanoController + '"';
 		var nanoSN = inSettings.nanoController;
 		var NF = window.controllerCache[nanoKey];
-		nanoInfo = NF.getInfo();
-		// Set the target state
-		var targetState = parseInt(nanoInfo.state.brightness.value / 25);
+		var nanoInfo = NF.getInfo();
+		// Set the target state and value
+		var targetState = 0;
+		// Set the target value
+		var targetValue = parseInt(nanoInfo.state.brightness.value);
 		// Set the new action state
-		setActionState(context, targetState);
+		setActionState(context, targetState, targetValue);
 	}
 
 	// Private function to set the state
-	function setActionState(inContext, targetState) {
+	function setActionState(inContext, targetState, targetValue) {
 		setState(inContext, targetState);
+		setTitle(inContext, targetValue);
 	}
 }

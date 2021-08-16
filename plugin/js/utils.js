@@ -20,7 +20,7 @@ function getLocalization(inLanguage, inCallback) {
 				var localization = data['Localization'];
 				inCallback(true, localization);
 			} catch (e) {
-				console.log(e);
+				console.warn(e);
 				inCallback(false, 'Localizations is not a valid json.');
 			}
 		} else {
@@ -84,7 +84,7 @@ function saveGlobalSettings(inUUID) {
 		const json = {
 			'event': 'setGlobalSettings',
 			'context': inUUID,
-			'payload': globalSettings
+			'payload': window.globalSettings
 		};
 		window.websocket.send(JSON.stringify(json));
 	}
@@ -142,6 +142,21 @@ function setState(inContext, inState) {
 		window.websocket.send(JSON.stringify(json));
 	}
 }
+
+// Set the title of a key
+this.setTitle = function (inContext, inTitle) {
+	if (websocket) {
+		var json = {
+			"event": "setTitle",
+			"context": inContext,
+			"payload": {
+				"title": "" + inTitle,
+				"target": 0
+			}
+		};
+		window.websocket.send(JSON.stringify(json));
+	}
+};
 
 // Show alert icon on the key
 function showAlert(inUUID) {
