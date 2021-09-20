@@ -9,6 +9,11 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 - Color - Set a static color for all tiles
 - Effects - Set one of the effects available for the controller
 
+## v1.2
+- Brightness supports a custom level
+- Long press on Brightness sets it to 100%
+- Fuxed Label on all Effects was set to current Effect
+- 
 ## v1.1
 - Controller setup rewritten and optimized
 - Property Inspector main code rewritten
