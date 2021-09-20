@@ -30,6 +30,6 @@ function loadSaveView(detail) {
 
 	// Close this window
 	function exit() {
-		exitSetup();
+		closeSetup();
 	}
 }

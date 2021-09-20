@@ -36,25 +36,24 @@ function PowerAction(inContext, inSettings) {
 		var nanoKey = '"' + inSettings.nanoController + '"';
 		var nanoSN = inSettings.nanoController;
 		var NF = window.controllerCache[nanoKey];
-		var targetState = inState + 1;
-		if (targetState > 1) {
-			targetState = 0;
+		if (NF == undefined) {
+			return;
 		}
-		if (inUserDesiredState !== undefined) {
-			targetState = inUserDesiredState;
-		}
-
+		var nanoInfo = NF.getInfo();
+		var currentState = (nanoInfo.state.on.value ? 1 : 0);
+		var targetState = (currentState ? 0 : 1);
+		// Set the target value
+		var targetValue = (targetState ? 'On' : 'Off');
 		// Set state
-		NF.setPower(targetState, function (success, error) {
+		NF.setPower(targetState, targetValue, function (success, error) {
 			if (success) {
-				setActionState(inContext, targetState);
-				var targetValue = (targetState * 1);
 				var nanoKey = '"' + inSettings.nanoController + '"';
 				var nanoSN = inSettings.nanoController;
-				window.controllerCache[nanoKey].getInfo().state.on = targetValue;
+				setActionState(inContext, targetState, targetValue);
+				window.controllerCache[nanoKey].getInfo().state.on.value = (targetState ? true : false);
 			} else {
 				log(error);
-				setActionState(inContext, inState);
+				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
 		});
@@ -76,15 +75,21 @@ function PowerAction(inContext, inSettings) {
 		var nanoKey = '"' + inSettings.nanoController + '"';
 		var nanoSN = inSettings.nanoController;
 		var NF = window.controllerCache[nanoKey];
+		if (NF == undefined) {
+			return;
+		}
 		var nanoInfo = NF.getInfo();
 		// Set the target state
 		var targetState = (nanoInfo.state.on.value ? 1 : 0);
+		// Set the target value
+		var targetValue = (nanoInfo.state.on.value ? 'On' : 'Off');
 		// Set the new action state
-		setActionState(context, targetState);
+		setActionState(context, targetState, targetValue);
 	}
 
 	// Private function to set the state
-	function setActionState(inContext, targetState) {
+	function setActionState(inContext, targetState, targetValue) {
 		setState(inContext, targetState);
+		setTitle(inContext, targetValue);
 	}
 }

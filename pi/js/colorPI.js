@@ -21,7 +21,7 @@ function ColorPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		settings.color = '#FFFFFF';
 	}
 
-	// Add full color picker or only temperature slider
+	// Add color picker to placeholder
 	var colorPicker = "<div type='color' class='sdpi-item'><div class='sdpi-item-label' id='color-label'>" + instance.localization['Color'] + "</div><input type='color' class='sdpi-item-value' id='color-inputPicker' value='" + settings.color + "'><input type='text' style='font-size: 10pt' class='sdpi-item-value' id='color-inputText' value='" + settings.color + "'></div>";
 	document.getElementById('placeholder').innerHTML = colorPicker;
 

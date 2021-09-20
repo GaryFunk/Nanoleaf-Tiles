@@ -1,7 +1,7 @@
 {
-	"Name": "Nanoleaf Controller",
-	"Category": "Nanoleaf Aurora/Canvas",
-	"Description": "Control Nanoleaf Aurora & Canvas tiles.",
+	"Name": "Nanoleaf Tiles",
+	"Category": "Nanoleaf Panels/Canvas/Shapes",
+	"Description": "Control Nanoleaf Panels, Canvas and Shapes tiles.",
 	"com.fsoft.nanoleaf.power": {
 		"Name": "On / Off",
 		"Tooltip": "Power tiles On / Off.",
@@ -44,9 +44,10 @@
 			"Intro": {
 				"Title": "Add New Controller",
 				"Description": "Find the active Nanoleaf controllers on the local network",
-				"NoIPaddress": "Error: Unable to determine the Local IPv4 address",
-				"Continue": "Find Controller IPv4 Addresses",
-				"IPaddress": "Enter your local IPv4 Address",
+				"NoIPaddress": "Error: Unable to discover the local IP address",
+				"EnterIPaddress": "Enter an IP address on your local network",
+				"Continue": "Find Controller by discovered address",
+				"IPaddress": "Find Controller by entered address",
 				"Or": "Or",
 				"Exit": "Cancel"
 			},
@@ -67,6 +68,7 @@
 			"Authorize": {
 				"Title" : "Authorizing...",
 				"Description": "Getting Authorization Token and controller information",
+				"NoControllerAuth": "No controller found to Authorize<br>Insure the controller is in pairng mode",
 				"ControllerAuth": "Auth",
 				"ControllerIP": "IP",
 				"ControllerName": "Name",

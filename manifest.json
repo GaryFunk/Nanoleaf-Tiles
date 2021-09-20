@@ -21,27 +21,7 @@
 		"Name": "Brightness",
 		"States": [{
 				"Image": "plugin/images/icons/brightness",
-				"Name": "Off",
-				"TitleAlignment": "bottom",
-				"FontSize": "12"
-			}, {
-				"Image": "plugin/images/icons/brightness25",
-				"Name": "25",
-				"TitleAlignment": "bottom",
-				"FontSize": "12"
-			}, {
-				"Image": "plugin/images/icons/brightness50",
-				"Name": "50",
-				"TitleAlignment": "bottom",
-				"FontSize": "12"
-			}, {
-				"Image": "plugin/images/icons/brightness75",
-				"Name": "75",
-				"TitleAlignment": "bottom",
-				"FontSize": "12"
-			}, {
-				"Image": "plugin/images/icons/brightness",
-				"Name": "On",
+				"Name": "0",
 				"TitleAlignment": "bottom",
 				"FontSize": "12"
 			}],
@@ -54,7 +34,7 @@
 		"States": [{
 			"Image": "plugin/images/icons/color",
 			"TitleAlignment": "bottom",
-			"FontSize": "12"
+			"FontSize": "8"
 		}],
 		"SupportedInMultiActions": true,
 		"Tooltip": "Set the color of the tiles.",
@@ -65,18 +45,18 @@
 		"States": [{
 			"Image": "plugin/images/icons/effects",
 			"TitleAlignment": "bottom",
-			"FontSize": "12"
+			"FontSize": "8"
 		}],
 		"SupportedInMultiActions": true,
 		"Tooltip": "Set an effect on the tiles.",
 		"UUID": "com.fsoft.nanoleaf.effects"
 	}],
 	"Author": "Gary Funk, fSoft, Ltd.",
-	"Category": "Nanoleaf Aurora/Canvas/Shapes",
+	"Category": "Nanoleaf Panels/Canvas/Shapes",
 	"CategoryIcon": "plugin/images/actions/category",
 	"CodePath": "plugin/index.html",
 	"DefaultWindowSize": [500, 650],
-	"Description": "Control Nanoleaf Aurora, Canvas and Shapes tiles.",
+	"Description": "Control Nanoleaf Panels, Canvas and Shapes tiles.",
 	"Icon": "plugin/images/icons/plugin",
 	"Name": "Nanoleaf Tiles",
 	"OS": [{
@@ -89,8 +69,8 @@
 	"PropertyInspectorPath": "pi/index.html",
 	"SDKVersion": 2,
 	"Software": {
-		"MinimumVersion" : "4.8"
+		"MinimumVersion" : "5.0"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
-	"Version": "1.1"
+	"Version": "1.2"
 }

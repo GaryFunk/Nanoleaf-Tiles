@@ -15,7 +15,7 @@ function Action(inContext, inSettings) {
 	var context = inContext;
 	// Private variable containing the settings of the action
 	var settings = inSettings;
-	var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
+	// var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
 
 	// Set the default values
 	setDefaults();
@@ -32,19 +32,6 @@ function Action(inContext, inSettings) {
 		settings = inSettings;
 	};
 
-	/*
-	this.setTitle = function () {
-		var json = {
-			"event": "setTitle",
-			"context": context,
-			"payload": {
-				"title": "" + inSettings.title,
-				"target": DestinationEnum.HARDWARE_AND_SOFTWARE
-			}
-		};
-		window.websocket.send(JSON.stringify(json));
-	};
-*/
 	// Private function to set the defaults
 	function setDefaults(inCallback) {
 		// If at least one controller is authorized
