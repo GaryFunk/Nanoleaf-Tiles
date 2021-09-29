@@ -12,7 +12,7 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 ## v1.2
 - Brightness supports a custom level
 - Long press on Brightness sets it to 100%
-- Fuxed Label on all Effects was set to current Effect
+- Fixed Label on all Effects was set to current Effect
 
 ## v1.1
 - Controller setup rewritten and optimized
