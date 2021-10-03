@@ -24,3 +24,11 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 ## v1.0
 - Initial release
 - This is my first Stream Deck plugin
+
+## *Credits, Donations and Thanks*
+
+### Donations
+@Backslasher#7748 (Discord)
+
+### Thanks
+@Backslasher#7748 - German translation
