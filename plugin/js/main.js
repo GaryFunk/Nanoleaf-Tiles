@@ -10,15 +10,14 @@
 // Global web socket
 window.websocket = null;
 // Global Plugin settings
-window.controllerCache = {status: ""};
-window.globalSettings = {};
+window.nanoControllerCache = {status: ""};
+window.nanoControllers = {};
 window.nanoIP = null;
 window.nanoToken = null;
-window.nanoCache = {};
-window.nanoCacheIPs = [];
-window.dt;
-window.startup;
+
+window.nanoControllerIPs = [];
 window.getGlobal = true;
+window.buttons = {};
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) {
@@ -33,12 +32,12 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 	// Websocket is closed
 	window.websocket.onclose = function (evt) {
 		var reason = WebsocketError(evt);
-		console.warn('Websocket closed: ', reason);
+		log('Websocket closed: ', reason);
 	};
 
 	// Websocket received a message
 	window.websocket.onerror = function (evt) {
-		console.warn('Websocket error', evt, evt.data);
+		log('Websocket error', evt, evt.data);
 	};
 
 	// Web socked received a message
@@ -59,51 +58,51 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				settings = jsonPayload['settings'];
 				break;
 			case 'keyUp':
-				console.log('keyup');
+				settings = jsonPayload['settings'];
 				timerLP = buttonLongpressTimeouts.get(context);
 				if (timerLP) {
 					clearTimeout(timerLP);
 					buttonLongpressTimeouts.delete(context)
 				}
-				settings = jsonPayload['settings'];
 				var coordinates = jsonPayload['coordinates'];
 				var userDesiredState = settings['userDesiredState'];
 				delete settings['userDesiredState'];
 				saveSettings(action, context, settings);
 				var state = jsonPayload['state'];
+
 				// Send onKeyUp event to actions
 				if (context in actions) {
 					var nanoController = actions[context].getSettings().nanoController;
-					for (inContext in actions) {
-						var setIngs = actions[inContext].getSettings();
-						if (setIngs['nanoController'] === nanoController) {
-							if (actions[inContext].constructor.name === 'PowerAction' && inContext !== context) {
-								var nanoKey = '"' + nanoController + '"';
-								var nanoSN = nanoController;
-								var NF = window.controllerCache[nanoKey];
-								var nanoInfo = NF.getInfo();
-								nanoInfo.state.on.value = 1;
-								setState(inContext, 1);
-								setTitle(inContext, 'On');
-							}
-						}
-					}
 					actions[context].onKeyUp(context, settings, coordinates, userDesiredState, state);
 				}
 				break;
 			case 'willAppear':
+				var state = null;
 				settings = jsonPayload['settings'];
+				if (typeof jsonPayload['state'] !== 'undefined') {
+					state = jsonPayload['state'];
+				}
+
+				if (!(settings.nanoController in window.buttons)) {
+					window.buttons[settings.nanoController] = [];
+				}
+
+				if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
+					var data = {"command": settings.command, "context": context};
+					window.buttons[settings.nanoController].push(data);
+				}
+
 				// Add current instance if not in actions array
 				if (!(context in actions)) {
 					// Add current instance to array
 					if (action === 'com.fsoft.nanoleaf.power') {
-						actions[context] = new PowerAction(context, settings);
-					} else if (action === 'com.fsoft.nanoleaf.brightness') {
-						actions[context] = new BrightnessAction(context, settings);
+						actions[context] = new PowerAction(context, settings, state);
+					} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+						actions[context] = new BrightnessAction(context, settings, state);
 					} else if (action === 'com.fsoft.nanoleaf.color') {
-						actions[context] = new ColorAction(context, settings);
-					} else if (action === 'com.fsoft.nanoleaf.effects') {
-						actions[context] = new EffectsAction(context, settings);
+						actions[context] = new ColorAction(context, settings, state);
+					} else if (action === 'com.fsoft.nanoleaf.effect') {
+						actions[context] = new EffectAction(context, settings, state);
 					}
 				}
 				break;
@@ -115,13 +114,10 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				break;
 			case 'didReceiveGlobalSettings':
 				// Set global settings
-				// console.log('didReceiveGlobalSettings');
-				// console.log(jsonPayload);
-				window.globalSettings = jsonPayload['settings'];
-				if (window.globalSettings.nanoControllers !== undefined) {
-					window.nanoCache = jsonPayload['settings']['nanoControllers'];
-					// If at least one controller is configured build the controllerCache
-					if (Object.keys(window.nanoCache).length > 0 && window.controllerCache['status'] == "") {
+				if (jsonPayload['settings']['nanoControllers'] !== undefined) {
+					window.nanoControllers = jsonPayload['settings']['nanoControllers'];
+					// If at least one controller is configured build the nanoControllerCache
+					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
 						Nanoleaf.buildcache()
 					}
@@ -138,26 +134,33 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 			case 'propertyInspectorDidAppear':
 				// Send cache to PI
 				var payLoad = {};
-				payLoad.settings = globalSettings;
+				payLoad.settings = window.nanoControllers;
 				sendToPropertyInspector(action, context, payLoad);
 				break;
+			case 'propertyInspectorDidDisappear':
+				// Send data from PI and process it here as necessary
+				break;
 			case 'sendToPlugin':
+console.log(jsonPayload);
 				var piEvent = jsonPayload['piEvent'];
 				if (piEvent === 'newController') {
-					// console.log('sendToPlugin');
-					window.controllerCache['status'] = "";
+					window.nanoControllerCache['status'] = "";
 					requestGlobalSettings(inUUID);
+				}
+				if (piEvent === 'valueChanged') {
+					// Send manual onKeyUp event to action
+					if (context in actions) {
+						actions[context].onKeyUp(context);
+					}
 				}
 				break;
 			case 'systemDidWakeUp':
 				// Request the global settings of the plugin
-				// console.log('systemDidWakeUp');
 				requestGlobalSettings(inUUID);
 				break;
 			case 'deviceDidConnect':
 				// Request the global settings of the plugin
 				if (window.getGlobal) {
-					// console.log('deviceDidConnect');
 					requestGlobalSettings(inUUID);
 					window.getGlobal = false;
 				}
@@ -165,24 +168,27 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 			case 'deviceDidDisconnect':
 				// Request the global settings of the plugin
 				if (!window.getGlobal) {
-					// console.log('deviceDidConnect');
 					requestGlobalSettings(inUUID);
-					window.getGlobal = true;
 				}
+				window.getGlobal = true;
 				break;
 			default:
-				// console.log('event = ', event);
-				// console.log('-------------------');
+				log('event = ', event);
+				log('-------------------');
 		}
 
 		function longPress(context) {
-			console.log('longPress', action);
 			var timerLP = buttonLongpressTimeouts.get(context);
 			clearTimeout(timerLP);
 			buttonLongpressTimeouts.delete(context)
-			if (action === 'com.fsoft.nanoleaf.brightness') {
-				settings["userDesiredState"] = "100";
-				saveSettings(action, context, settings);
+			if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+				if (settings.transition == 'increase') {
+					settings["userDesiredState"] = "100";
+					saveSettings(action, context, settings);
+				} else {
+					settings["userDesiredState"] = "0";
+					saveSettings(action, context, settings);
+				}
 			}
 		}
 	};
@@ -193,10 +199,11 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		registerPluginOrPI(inRegisterEvent, inUUID);
 		// Request the global settings of the plugin
 		requestGlobalSettings(inUUID);
+		window.getGlobal = false;
+
 	};
 
 	function getKeyByValue(object, value) {
 		return Object.keys(object).find(key => object[key] === value);
 	}
 }
-

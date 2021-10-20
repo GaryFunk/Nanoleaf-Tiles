@@ -8,11 +8,11 @@
 //==============================================================================
 
 // Prototype which represents a color action
-function ColorAction(inContext, inSettings) {
+function ColorAction(inContext, inSettings, inState) {
 	// Init ColorAction
 	var instance = this;
 	// Inherit from Action
-	Action.call(this, inContext, inSettings);
+	Action.call(this, inContext, inSettings, inState);
 	// Set the default values
 	updateState();
 	// Public function called on key up event
@@ -27,30 +27,34 @@ function ColorAction(inContext, inSettings) {
 			showAlert(inContext);
 			return;
 		}
-		if (window.controllerCache == null) {
+		if (window.nanoControllerCache == null) {
 			log('plugin/colorAction.js line 31: No controller in cache');
 			showAlert(inContext);
 			return;
 		}
+
 		// Find the configured controller
 		var nanoKey = '"' + inSettings.nanoController + '"';
-		var nanoSN = inSettings.nanoController;
-		var NF = window.controllerCache[nanoKey];
-		var nanoInfo = NF.getInfo();
-		var targetState = inSettings.color;
+		var NF = window.nanoControllerCache[nanoKey];
+		var targetState = 1;
+
 		// Set the target value
-		var targetValue = inSettings.color;
+		var targetValue = inSettings.value;
+
 		// Set state
-		var state = NF.setColor(targetState, targetValue, function (success, error) {
+		NF.setColor(targetState, targetValue, function (success, message, value) {
 			if (success) {
-				var nanoKey = '"' + inSettings.nanoController + '"';
-				var nanoSN = inSettings.nanoController;
+				// Add loop here to update the other buttons
+				var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'color' || x.command === 'effect');
+				for (let button of theButtons) {
+					setState(button.context, !targetState);
+				}
+
+				// Set the new color
 				setActionState(inContext, targetState, targetValue);
-				window.controllerCache[nanoKey].getInfo().state.ct.value = state.ct.value;   //fix this
-				window.controllerCache[nanoKey].getInfo().state.hue.value = state.hue.value;   //fix this
-				window.controllerCache[nanoKey].getInfo().state.sat.value = state.sat.value;   //fix this
+				instance.updateCrap('brightness', inSettings.nanoController, targetState, NF.getInfo());
 			} else {
-				log(error);
+				log(message);
 				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
@@ -62,24 +66,28 @@ function ColorAction(inContext, inSettings) {
 		// Get the settings and the context
 		var settings = instance.getSettings();
 		var context = instance.getContext();
+		var state = instance.getState();
 		// Check if any controller is configured
 		if (!('nanoController' in settings)) {
 			return;
 		}
-		if (window.controllerCache == null) {
+		if (window.nanoControllerCache == null) {
 			return;
 		}
 		// Find the configured controller
 		var nanoKey = '"' + inSettings.nanoController + '"';
-		var nanoSN = inSettings.nanoController;
-		var NF = window.controllerCache[nanoKey];
-		nanoInfo = NF.getInfo();
-		// Set the target state
-		var targetState = settings.color;
-		// Set the target value
-		var targetValue = settings.color;
-		// Set the new action state
-		setActionState(context, targetState, targetValue);
+		var NF = window.nanoControllerCache[nanoKey];
+		try {
+			var nanoInfo = NF.getInfo();
+			// Set the target state
+			var targetState = state;
+			// Set the target value
+			var targetValue = settings.value;
+			// Set the new action state
+			setActionState(context, targetState, targetValue);
+		} catch(e) {
+			log(e);
+		}
 	}
 
 	// Private function to set the state

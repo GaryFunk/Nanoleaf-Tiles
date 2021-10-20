@@ -31,7 +31,7 @@ function loadSearchView() {
 	// Search for controllers
 	function autoSearch() {
 		try {
-			Nanoleaf.search(function (status, needAuth, haveAuth) {
+			Nanoleaf.findControllers(function (status, needAuth, haveAuth) {
 				if (status) {
 					// Nanoleaf Search request was successful
 					nanoHaveIPs = haveAuth;

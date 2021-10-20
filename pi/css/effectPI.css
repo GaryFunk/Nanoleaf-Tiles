@@ -1,17 +1,17 @@
 /**
 //==============================================================================
-@file       effectsPI.css
+@file       effectPI.css
 @brief      Nanoleaf Plugin
 @copyright  (c) 2021, fSoft, Ltd.
             This source code is licensed under the MIT-style license found in the LICENSE file.
 //==============================================================================
 **/
 
-#effects-buttons .sdpi-item-value {
+#effect-buttons .sdpi-item-value {
     font-size: 0;
 }
 
-#effects-buttons button {
+#effect-buttons button {
     width: 36px;
     font-weight: 900;
     display: inline-block;

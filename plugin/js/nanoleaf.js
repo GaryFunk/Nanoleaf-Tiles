@@ -39,60 +39,86 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	};
 
 	// Public function to retrieve the controller infomation
-
 	this.getInfo = function () {
 		return info;
 	};
 
+	// Public function to set the controller infomation
+	this.setInfo = function (result, callback) {
+		info = result;
+		callback(true);
+	};
+
 	// Public function to set the brightness status of the controller
-	this.setBrightness = function (brightness, value, callback) {
-		// Define state object and Send new state
-		var state = '{"brightness": {"value": ' + value + '}}';
-		instance.setState('state', state, callback);
-		return state;
+	this.setBrightness = function (state, value, callback) {
+		// Define value object and Send new payload
+		var temp = '{"brightness": {"value": ' + value + '}}';
+		instance.setController('state', temp, function (success, message, value) {
+			instance.getController('A', function (success, result) {
+				instance.setInfo(result, function (success) {
+					callback(success, message);
+				});
+			});
+		});
 	};
 
 	// Public function to set the color of the controller
-	this.setColor = function (color, value, callback) {
+	this.setColor = function (state, value, callback) {
 		// Define color object
-		var hsv = convertcolor(color);
-		var state = '{"ct": {"value": ' + parseInt(hsv.v) + '}, "hue": {"value": ' + parseInt(hsv.h) + '}, "sat": {"value": ' + parseInt(hsv.s) + '}}';
-		instance.setState('state', state, callback);
-		return JSON.parse(state);
+		var hsv = convertcolor(value);
+		var temp = '{"ct": {"value": ' + parseInt(hsv.v) + '}, "hue": {"value": ' + parseInt(hsv.h) + '}, "sat": {"value": ' + parseInt(hsv.s) + '}}';
+		instance.setController('state', temp, function (success, message, value) {
+			instance.getController('A', function (success, result) {
+				instance.setInfo(result, function (success) {
+					callback(success, message);
+				});
+			});
+		});
 	};
 
 	// Public function to set the effects of the controller
-	this.setEffects = function (effects, value, callback) {
+	this.setEffect = function (state, value, callback) {
 		// Define state object and Send new state
-		var effects = '{"select": "' + effects + '"}';
-		instance.setState('effects', effects, callback);
-		return effects;
+		var temp = '{"select": "' + value + '"}';
+		instance.setController('effects', temp, function (success, message, value) {
+			instance.getController('A', function (success, result) {
+				instance.setInfo(result, function (success) {
+					callback(success, message);
+				});
+			});
+		});
 	};
 
 	// Public function to set the power status of the controller
-	this.setPower = function (power, value, callback) {
+	this.setPower = function (state, value, callback) {
 		// Set the power to true/false
-		var power = (power ? true : false);
+		var temp = (state ? true : false);
 		// Define state object and Send new state
-		var state = '{"on": {"value": ' + power + '}}';
-		instance.setState('state', state, callback);
-		return state;
-	};
+		var temp = '{"on": {"value": ' + temp + '}}';
+		instance.setController('state', temp, function (success, message, value) {
+			instance.getController('A', function (success, result) {
+				instance.setInfo(result, function (success) {
+					callback(success, message);
+				});
+			});
+		});
+	}
 
-	// Public function to set the state
-	this.setState = function (command, state, callback) {
-		var URL = "http://" + ip + ":16021/api/v1/" + token + "/" + command;
+	// Static function to get the data from a controller
+	this.getController = async function (result, callback) {
+		var URL = "http://" + ip + ":16021/api/v1/" + token + "/";
 		var XHR = new XMLHttpRequest();
-		XHR.responseType = 'text';
-		XHR.timeout = 2000;
-		XHR.open('PUT', URL, true);
+		XHR.responseType = 'json';
+		XHR.timeout = 5000;
+		XHR.open('GET', URL, true);
 		XHR.setRequestHeader("Content-Type", "application/json");
 
 		XHR.onload = function () {
-			if (XHR.readyState === 4 && XHR.status === 204) {
+			if (XHR.readyState === 4 && XHR.status === 200) {
 				if (XHR.response !== undefined && XHR.response !== null) {
-					if (XHR.statusText == 'No Content') {
-						callback(true, 'Sent');
+					var result = XHR.response;
+					if ('name' in result && 'serialNo' in result) {
+						callback(true, result);
 					} else {
 						callback(false, 'Did not get controller serial number.');
 					}
@@ -112,36 +138,75 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 			callback(false, 'Connection to the controller timed out.');
 		};
 
-		state.devicetype = 'stream_deck';
-		XHR.send(state);
+		var obj = {};
+		obj.devicetype = 'stream_deck';
+		var data = JSON.stringify(obj);
+		XHR.send(data);
+	};
+
+	// Public function to set a value on the controller
+	this.setController = function (command, value, callback) {
+		var URL = "http://" + ip + ":16021/api/v1/" + token + "/" + command;
+		var XHR = new XMLHttpRequest();
+		XHR.responseType = 'text';
+		XHR.timeout = 2000;
+		XHR.open('PUT', URL, true);
+		XHR.setRequestHeader("Content-Type", "application/json");
+
+		XHR.onload = function () {
+			if (XHR.readyState === 4 && XHR.status === 204) {
+				if (XHR.response !== undefined && XHR.response !== null) {
+					if (XHR.statusText == 'No Content') {
+						callback(true, 'OK', value);
+					} else {
+						callback(false, 'Did not get controller serial number.');
+					}
+				} else {
+					callback(false, 'Controller response is undefined or null.');
+				}
+			} else {
+				callback(false, 'Could not connect to the controller.');
+			}
+		};
+
+		XHR.onerror = function () {
+			callback(false, 'Unable to connect to the controller.');
+		};
+
+		XHR.ontimeout = function () {
+			callback(false, 'Connection to the controller timed out.');
+		};
+
+		value.devicetype = 'stream_deck';
+		XHR.send(value);
 	};
 }
 
 // Private function to build a cache
 Nanoleaf.buildcache = async function (callback) {
-	if (window.controllerCache['status'] !== "") {
+	if (window.nanoControllerCache['status'] !== "") {
 		return;
 	}
-	window.controllerCache['status'] = 'building';
-	var keys = Object.keys(window.nanoCache);
+	window.nanoControllerCache['status'] = 'building';
+	var keys = Object.keys(window.nanoControllers);
 	// Iterate through all controllers that were discovered
 	for (let index = 0; index < keys.length; index++) {
 		var SN = keys[index];
-		var nanoData = window.nanoCache[SN];
+		var nanoData = window.nanoControllers[SN];
 		// add the IP to the global array
-		window.nanoCacheIPs.push(nanoData.nanoIP);
+		window.nanoControllerIPs.push(nanoData.nanoIP);
 		// Get the controller info here
-		var result = await Nanoleaf.getinfo(nanoData.nanoIP, nanoData.nanoToken);
+		var result = await Nanoleaf.getController(nanoData.nanoIP, nanoData.nanoToken);
 		var NF = await getnanoleaf(result, nanoData.nanoIP, nanoData.nanoToken, nanoData.nanoSN, nanoData.nanoName);
 		var nanoKey = '"' + nanoData.nanoSN + '"';
-		window.controllerCache[nanoKey] = NF;
+		window.nanoControllerCache[nanoKey] = NF;
 	}
-	window.controllerCache['status'] = 'done';
+	window.nanoControllerCache['status'] = 'done';
 
 	async function getnanoleaf(result, nanoIP, nanoToken, nanoSN, nanoName) {
 		return new Promise(function (resolve, reject) {
 			if (result[0]) {
-				nanoInfo = result[1];
+				var nanoInfo = result[1];
 				var NF = new Nanoleaf(nanoIP, nanoToken, nanoSN, nanoName, nanoInfo);
 				resolve(NF);
 			} else {
@@ -151,15 +216,15 @@ Nanoleaf.buildcache = async function (callback) {
 	}
 };
 
-// Find the controller in the controllerCache
+// Find the controller in the nanoControllerCache
 Nanoleaf.findhost = function (callback) {
-	var hosts = window.controllerCache.length;
+	var hosts = window.nanoControllerCache.length;
 	var host = 0;
 	var thehost = 0;
 	while (host < hosts) {
 		host++;
 		(function (host) {
-			if (settings.nanoController in window.controllerCache) {
+			if (settings.nanoController in window.nanoControllerCache) {
 			}
 		})(host);
 		if (host >= hosts) {
@@ -168,8 +233,45 @@ Nanoleaf.findhost = function (callback) {
 	}
 }
 
-// Static function to get authorization from a controller
-Nanoleaf.getauth = function (nanoIP, callback) {
+// Static function to search the network for controllers
+Nanoleaf.findControllers = function (callback) {
+	// scanning a single Class-C. Need to search the subnet mask to determin if the network consists of more than one Class-C.
+	var _networkIP = localIP.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)./);
+	var networkIP = _networkIP[0];
+	var haveIPs = [];
+	var needIPs = [];
+	var XHR = [];
+	var host = 0;
+	while (host < 254) {
+		host++;
+		var URL = "http://" + networkIP + host + ":16021/api/v1/";
+		(function (host) {
+			var ip = "";
+			XHR[host] = new XMLHttpRequest();
+			XHR[host].timeout = 1000;
+			XHR[host].open('GET', URL, true);
+			XHR[host].setRequestHeader("Content-Type", "application/json");
+
+			XHR[host].onreadystatechange = function () {
+				if (XHR[host].readyState === 4 && XHR[host].status === 401) {
+					ip = (networkIP + host).toString();
+					if (window.nanoControllerIPs.indexOf(ip) < 0) {
+						needIPs.push(ip);
+					} else {
+						haveIPs.push(ip);
+					}
+				}
+			}
+			XHR[host].send();
+		})(host);
+		if (host >= 254) {
+			callback(true, needIPs, haveIPs);
+		}
+	}
+}
+
+// Static function to get a new authorization token from the controller
+Nanoleaf.getNewToken = function (nanoIP, callback) {
 	if (nanoIP) {
 		var URL = "http://" + nanoIP + ":16021/api/v1/new";
 		var XHR = new XMLHttpRequest();
@@ -213,42 +315,8 @@ Nanoleaf.getauth = function (nanoIP, callback) {
 	}
 };
 
-/*
-// Private function to build a cache
-Nanoleaf.getcontroller = async function (callback) {
-	var keys = Object.keys(window.nanoCache);
-	// Iterate through all controllers that were discovered
-	for (let index = 0; index < keys.length; index++) {
-		var SN = keys[index];
-		var ary =  window.nanoCache[SN];
-		nanoIP = ary.nanoIP;
-		nanoToken = ary.nanoToken;
-		nanoSN ======== '"' + ary.nanoSN + '"';
-		nanoName = ary.nanoName;
-		// add the IP to the global array
-		window.nanoCacheIPs.push(nanoIP);
-		// Get the controller info here
-		var result = await Nanoleaf.getinfo();
-		var NF = await getnanoleaf(result, nanoSN, nanoName);
-		window.controllerCache[nanoSN] = NF;
-	}
-
-	async function getnanoleaf(result, nanoSN, nanoName) {
-		return new Promise(function (resolve, reject) {
-			if (result[0]) {
-				nanoInfo = result[1];
-				resolve(new Nanoleaf(nanoIP, nanoToken, nanoSN, nanoName, nanoInfo));
-			} else {
-				reject(false);
-			}
-		});
-	}
-	forLoop();
-};
-*/
-
-// Static function to retrieve the name
-Nanoleaf.getinfo = async function (nanoIP, nanoToken) {
+// Static function to get the data from a controller
+Nanoleaf.getController = async function (nanoIP, nanoToken) {
 	var XHR = new XMLHttpRequest();
 	return new Promise(function (resolve, reject) {
 		var URL = "http://" + nanoIP + ":16021/api/v1/" + nanoToken + "/";
@@ -288,43 +356,6 @@ Nanoleaf.getinfo = async function (nanoIP, nanoToken) {
 		XHR.send(data);
 	});
 };
-
-// Static function to search for controllers
-Nanoleaf.search = function (callback) {
-	// scanning a single Class-C. Need to search the subnet mask to determin if the network consists of more than one Class-C.
-	var _networkIP = localIP.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)./);
-	var networkIP = _networkIP[0];
-	var haveIPs = [];
-	var needIPs = [];
-	var XHR = [];
-	var host = 0;
-	while (host < 254) {
-		host++;
-		var URL = "http://" + networkIP + host + ":16021/api/v1/";
-		(function (host) {
-			var ip = "";
-			XHR[host] = new XMLHttpRequest();
-			XHR[host].timeout = 1000;
-			XHR[host].open('GET', URL, true);
-			XHR[host].setRequestHeader("Content-Type", "application/json");
-
-			XHR[host].onreadystatechange = function () {
-				if (XHR[host].readyState === 4 && XHR[host].status === 401) {
-					ip = (networkIP + host).toString();
-					if (window.nanoCacheIPs.indexOf(ip) < 0) {
-						needIPs.push(ip);
-					} else {
-						haveIPs.push(ip);
-					}
-				}
-			}
-			XHR[host].send();
-		})(host);
-		if (host >= 254) {
-			callback(true, needIPs, haveIPs);
-		}
-	}
-}
 
 function convertcolor(color) {
 	var hsv = hex2hsv(color);

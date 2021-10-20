@@ -17,22 +17,50 @@
 		"Tooltip": "Power tiles on or off.",
 		"UUID": "com.fsoft.nanoleaf.power"
 	}, {
-		"Icon": "plugin/images/actions/brightness",
-		"Name": "Brightness",
+		"Icon": "plugin/images/actions/brightnessu",
+		"Name": "Brightness Up",
 		"States": [{
-				"Image": "plugin/images/icons/brightness",
-				"Name": "0",
-				"TitleAlignment": "bottom",
-				"FontSize": "12"
-			}],
+			"Image": "plugin/images/icons/brightnessuoff",
+			"Name": "0",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}, {
+			"Image": "plugin/images/icons/brightnessu",
+			"Name": "1",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}],
 		"SupportedInMultiActions": true,
-		"Tooltip": "Set the brightness of the tiles.",
+		"Tooltip": "Increase the brightness of the tiles.",
 		"UUID": "com.fsoft.nanoleaf.brightness"
+	}, {
+		"Icon": "plugin/images/actions/brightnessd",
+		"Name": "Brightness Down",
+		"States": [{
+			"Image": "plugin/images/icons/brightnessdoff",
+			"Name": "0",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}, {
+			"Image": "plugin/images/icons/brightnessd",
+			"Name": "1",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}],
+		"SupportedInMultiActions": true,
+		"Tooltip": "Decrease the brightness of the tiles.",
+		"UUID": "com.fsoft.nanoleaf.brightnessd"
 	}, {
 		"Icon": "plugin/images/actions/color",
 		"Name": "Color",
 		"States": [{
+			"Image": "plugin/images/icons/coloroff",
+			"Name": "0",
+			"TitleAlignment": "bottom",
+			"FontSize": "8"
+		}, {
 			"Image": "plugin/images/icons/color",
+			"Name": "1",
 			"TitleAlignment": "bottom",
 			"FontSize": "8"
 		}],
@@ -40,16 +68,22 @@
 		"Tooltip": "Set the color of the tiles.",
 		"UUID": "com.fsoft.nanoleaf.color"
 	}, {
-		"Icon": "plugin/images/actions/effects",
-		"Name": "Effects",
+		"Icon": "plugin/images/actions/effect",
+		"Name": "Effect",
 		"States": [{
-			"Image": "plugin/images/icons/effects",
+			"Image": "plugin/images/icons/effectoff",
+			"Name": "0",
+			"TitleAlignment": "bottom",
+			"FontSize": "8"
+		}, {
+			"Image": "plugin/images/icons/effect",
+			"Name": "1",
 			"TitleAlignment": "bottom",
 			"FontSize": "8"
 		}],
 		"SupportedInMultiActions": true,
 		"Tooltip": "Set an effect on the tiles.",
-		"UUID": "com.fsoft.nanoleaf.effects"
+		"UUID": "com.fsoft.nanoleaf.effect"
 	}],
 	"Author": "Gary Funk, fSoft, Ltd.",
 	"Category": "Nanoleaf Panels/Canvas/Shapes",
@@ -72,5 +106,5 @@
 		"MinimumVersion" : "5.0"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
-	"Version": "1.2"
+	"Version": "1.3"
 }

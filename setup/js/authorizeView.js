@@ -72,11 +72,11 @@ function loadAuthorizeView() {
 		var theCount = 0;
 		window.nanoNeedIPs.some(function (item, index, object) {
 			var nanoIP = item;
-			Nanoleaf.getauth(nanoIP, async function (status, data) {
+			Nanoleaf.getNewToken(nanoIP, async function (status, data) {
 				theCount++;
 				if (status) { // Authorization was successful
 					var nanoToken = data;
-					var result = await Nanoleaf.getinfo(nanoIP, nanoToken);
+					var result = await Nanoleaf.getController(nanoIP, nanoToken);
 					if (result[0]) { // Authorization was successful
 						// Stop the timer
 						clearInterval(timer);
@@ -91,7 +91,7 @@ function loadAuthorizeView() {
 						wait();
 					}
 				} else {
-					console.warn('failed to get item', index);
+					log('failed to get item', index);
 				}
 				if (theCount == window.nanoNeedIPs.length) {
 					autoCycle();

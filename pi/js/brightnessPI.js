@@ -7,18 +7,25 @@
 **/
 //==============================================================================
 
-function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
+function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion, action) {
 	// Init BrightnessPI
 	var instance = this;
 
 	// Inherit from PI
-	PI.call(this, inContext, inLanguage, inStreamDeckVersion, inPluginVersion);
+	PI.call(this, inContext, inLanguage, inStreamDeckVersion, inPluginVersion, action);
 
 	// Before overwriting parent method, save a copy of it
 	var piLocalize = this.localize;
 
-	// Add brightness slider to p;aceholder
-	var brightnessSlider = "<div type='range' class='sdpi-item'><div class='sdpi-item-label' id='brightness-label'></div><div class='sdpi-item-value'><input class='floating-tooltip' data-suffix='%' type='range' id='brightness-input' min='1' max='100' value='" + settings.brightness + "'></div></div>";
+	if (action === 'com.fsoft.nanoleaf.brightnessd') {
+		window.settings.transition = 'decrease';
+	} else {
+		window.settings.transition = 'increase';
+	}
+	window.settings.command = 'brightness';
+
+	// Add brightness slider to placeholder
+	var brightnessSlider = "<div type='range' class='sdpi-item'><div class='sdpi-item-label' id='brightness-label'>Brightness Change</div><div class='sdpi-item-value'><input class='floating-tooltip' data-suffix='%' type='range' id='brightness-input' min='1' max='100' value='" + window.settings.value + "'></div></div>";
 	document.getElementById('placeholder').innerHTML = brightnessSlider;
 
 	// Localize the UI
@@ -33,12 +40,12 @@ function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersio
 	initToolTips();
 
 	// Add event listener
-	document.getElementById('brightness-input').addEventListener('change', brightnessChanged);
+	document.getElementById('brightness-input').addEventListener('change', valueChanged);
 
 	// Brightness changed
-	function brightnessChanged(inEvent) {
+	function valueChanged(inEvent) {
 		// Save the new brightness settings
-		settings.brightness = inEvent.target.value;
+		window.settings.value = inEvent.target.value;
 		instance.saveSettings();
 		// Inform the plugin that a new brightness is set
 		instance.sendToPlugin({'piEvent': 'valueChanged'});

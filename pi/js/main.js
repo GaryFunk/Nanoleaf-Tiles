@@ -10,14 +10,14 @@
 // Global web socket
 window.websocket = null;
 // Global Plugin settings
-window.controllerCache = {status: ""};
-window.globalSettings = {};
+window.nanoControllerCache = {status: ""};
+window.nanoControllers = {};
 window.nanoIP = null;
 window.nanoToken = null;
-window.nanoCache = {};
-window.nanoCacheIPs = [];
+window.nanoControllerIPs = [];
 window.name = "PI";
 
+var globalSettings = {};
 var setupWindow;
 
 // Setup the websocket and handle communication
@@ -33,6 +33,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	var language = info['application']['language'];
 	// Retrieve action identifier
 	var action = actionInfo['action'];
+	var device = actionInfo['device'];
 
 	// Open the websocket to Stream Deck
 	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
@@ -41,12 +42,12 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	// Websocket is closed
 	window.websocket.onclose = function (evt) {
 		var reason = WebsocketError(evt);
-		console.warn('Websocket closed: ', reason);
+		log('Websocket closed: ', reason);
 	};
 
 	// Websocket received a message
 	window.websocket.onerror = function (evt) {
-		console.warn('Websocket error', evt, evt.data);
+		log('Websocket error', evt, evt.data);
 	};
 
 	// Websocket received a message
@@ -56,37 +57,42 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 		var event = jsonObj['event'];
 		var jsonPayload = jsonObj['payload'];
 		var settings;
-		if (event === 'didReceiveGlobalSettings') {
-			// Set global settings
-			window.globalSettings = jsonPayload['settings'];
-			if (window.globalSettings.nanoControllers !== undefined) {
-				window.nanoCache = jsonPayload['settings']['nanoControllers'];
-				// If at least one controller is configured build the controllerCache
-				if (Object.keys(window.nanoCache).length > 0 && window.controllerCache['status'] == "") {
+		// Events
+		switch (event) {
+			case 'didReceiveGlobalSettings':
+				// Set global settings
+				if (jsonPayload['settings']['nanoControllers'] !== undefined) {
+					window.nanoControllers = jsonPayload['settings']['nanoControllers'];
+					// If at least one controller is configured build the nanoControllerCache
+					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
+						// Refresh the cache
+						Nanoleaf.buildcache()
+					}
+				}
+				break;
+			case 'didReceiveSettings':
+				settings = jsonPayload['settings'];
+				// Set settings
+				if (context in actions) {
+					actions[context].setSettings(settings);
+				}
+				break;
+			case 'sendToPropertyInspector':
+				// Load controllers
+				window.nanoControllers = jsonPayload['settings'];
+				if ((window.nanoControllers == null) || (window.nanoControllers == undefined)) {
+					window.nanoControllers = {};
+				}
+				if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 					// Refresh the cache
 					Nanoleaf.buildcache()
+					pi.loadControllers();
+				} else {
+					pi.loadControllers();
 				}
-			}
-		} else if (event === 'didReceiveSettings') {
-			settings = jsonPayload['settings'];
-			// Set settings
-			if (context in actions) {
-				actions[context].setSettings(settings);
-			}
-		} else if (event === 'sendToPropertyInspector') {
-			// Load controllers
-			window.globalSettings = jsonPayload['settings'];
-			window.nanoCache = jsonPayload['settings']['nanoControllers'];
-			if ((window.nanoCache == null) || (window.nanoCache == undefined)) {
-				window.nanoCache = {};
-			}
-			if (Object.keys(window.nanoCache).length > 0 && window.controllerCache['status'] == "") {
-				Nanoleaf.buildcache()
-				// Refresh the cache
-				pi.loadControllers();
-			} else {
-				pi.loadControllers();
-			}
+				break;
+			default:
+				log('Unprocessed event = ', event);
 		}
 	};
 
@@ -102,11 +108,11 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	var pi;
 	if (action === 'com.fsoft.nanoleaf.power') {
 		pi = new PowerPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.brightness') {
-		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion);
+	} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion, action, device);
 	} else if (action === 'com.fsoft.nanoleaf.color') {
 		pi = new ColorPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.effects') {
-		pi = new EffectsPI(inUUID, language, streamDeckVersion, pluginVersion);
+	} else if (action === 'com.fsoft.nanoleaf.effect') {
+		pi = new EffectPI(inUUID, language, streamDeckVersion, pluginVersion);
 	}
 }

@@ -17,12 +17,13 @@ function ColorPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	// Before overwriting parent method, save a copy of it
 	var piLocalize = this.localize;
 
-	if (settings.color == undefined) {
-		settings.color = '#FFFFFF';
+	if (window.settings.value == undefined) {
+		window.settings.value = '#FFFFFF';
 	}
+	window.settings.command = 'color';
 
 	// Add color picker to placeholder
-	var colorPicker = "<div type='color' class='sdpi-item'><div class='sdpi-item-label' id='color-label'>" + instance.localization['Color'] + "</div><input type='color' class='sdpi-item-value' id='color-inputPicker' value='" + settings.color + "'><input type='text' style='font-size: 10pt' class='sdpi-item-value' id='color-inputText' value='" + settings.color + "'></div>";
+	var colorPicker = "<div type='color' class='sdpi-item'><div class='sdpi-item-label' id='color-label'>" + instance.localization['Color'] + "</div><input type='color' class='sdpi-item-value' id='color-inputPicker' value='" + window.settings.value + "'><input type='text' style='font-size: 10pt' class='sdpi-item-value' id='color-inputText' value='" + window.settings.value + "'></div>";
 	document.getElementById('placeholder').innerHTML = colorPicker;
 
 	// Localize the UI
@@ -37,16 +38,16 @@ function ColorPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	initToolTips();
 
 	// Add event listener
-	document.getElementById('color-inputPicker').addEventListener('change', colorChanged);
-	document.getElementById('color-inputText').addEventListener('change', colorChanged);
+	document.getElementById('color-inputPicker').addEventListener('change', valueChanged);
+	document.getElementById('color-inputText').addEventListener('change', valueChanged);
 
 	// Color changed
-	function colorChanged(inEvent) {
+	function valueChanged(inEvent) {
 		// Get the new color settings
-		settings.color = inEvent.target.value;
+		window.settings.value = inEvent.target.value.toUpperCase();
 		instance.saveSettings();
-		document.getElementById('color-inputPicker').value = settings.color;
-		document.getElementById('color-inputText').value = settings.color.toUpperCase();
+		document.getElementById('color-inputPicker').value = window.settings.value;
+		document.getElementById('color-inputText').value = window.settings.value.toUpperCase();
 		// Inform the plugin that a new color is set
 		instance.sendToPlugin({ 'piEvent': 'valueChanged' });
 	}

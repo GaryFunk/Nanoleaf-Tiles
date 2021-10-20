@@ -8,7 +8,6 @@
 //==============================================================================
 
 // Global setup settings
-var globalSettings = {};
 
 setupWindow = window.window;
 setupWindow.localization = null;
@@ -18,8 +17,7 @@ setupWindow.localIP;
 setupWindow.settings = {};
 setupWindow.nanoHaveIPs = [];
 setupWindow.nanoNeedIPs = [];
-setupWindow.nanoCacheIPs = [];
-setupWindow.nanoCache = {};
+setupWindow.nanoControllerIPs = [];
 
 function closeSetup() {
 	setupWindow.close();
@@ -53,7 +51,7 @@ function getLocal//IP() {
 		rtc.createOffer(function (offerDesc) {
 			rtc.setLocalDescription(offerDesc);
 		}, function (e) {
-			console.warn("offer failed", e);
+			log("offer failed", e);
 		});
 
 		rtc.onicecandidate = function (evt) {
@@ -123,8 +121,7 @@ setupWindow.onload = async function () { // Bind Enter and ESC keys
 	// Get the url parameter
 	var url = new URL(setupWindow.location.href);
 	var language = url.searchParams.get('language');
-	setupWindow.nanoCacheIPs = JSON.parse(url.searchParams.get('nanoCacheIPs'));
-
+	setupWindow.nanoControllerIPs = JSON.parse(url.searchParams.get('nanoControllerIPs'));
 	// Load the localizations
 	getLocalization(language, function (inStatus, inLocalization) {
 		if (inStatus) {

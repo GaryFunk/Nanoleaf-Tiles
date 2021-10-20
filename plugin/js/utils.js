@@ -20,7 +20,7 @@ function getLocalization(inLanguage, inCallback) {
 				var localization = data['Localization'];
 				inCallback(true, localization);
 			} catch (e) {
-				console.warn(e);
+				log(e);
 				inCallback(false, 'Localizations is not a valid json.');
 			}
 		} else {
@@ -41,7 +41,6 @@ function getLocalization(inLanguage, inCallback) {
 
 // Log to the global log file
 function log(inMessage) {
-	// Log to the developer console
 	var time = new Date();
 	var timeString = time.toLocaleDateString() + ' ' + time.toLocaleTimeString();
 	// Log to the Stream Deck log file
@@ -84,7 +83,7 @@ function saveGlobalSettings(inUUID) {
 		const json = {
 			'event': 'setGlobalSettings',
 			'context': inUUID,
-			'payload': window.globalSettings
+			'payload': globalSettings
 		};
 		window.websocket.send(JSON.stringify(json));
 	}
@@ -144,7 +143,7 @@ function setState(inContext, inState) {
 }
 
 // Set the title of a key
-this.setTitle = function (inContext, inTitle) {
+function setTitle(inContext, inTitle) {
 	if (websocket) {
 		var json = {
 			"event": "setTitle",
@@ -157,6 +156,21 @@ this.setTitle = function (inContext, inTitle) {
 		window.websocket.send(JSON.stringify(json));
 	}
 };
+
+// Send information the plugin
+function sendValueToPlugin(inAction, inContext, value, param) {
+	if (websocket) {
+		const json = {
+			action: inAction,
+			event: "sendToPlugin",
+			context: inContext,
+			payload: {
+				[param]: value
+			}
+		};
+		websocket.send(JSON.stringify(json));
+	}
+}
 
 // Show alert icon on the key
 function showAlert(inUUID) {

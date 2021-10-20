@@ -17,7 +17,7 @@
 		<script src="js/powerPI.js"></script>
 		<script src="js/brightnessPI.js"></script>
 		<script src="js/colorPI.js"></script>
-		<script src="js/effectsPI.js"></script>
+		<script src="js/effectPI.js"></script>
 	</head>
 	<body>
 		<!-- Property Inspector -->
@@ -26,12 +26,18 @@
 			<div class="sdpi-item">
 				<div class="sdpi-item-label" id="controller-label"></div>
 				<select class="sdpi-item-value select last_center" id="controller-select">
-					<option id="blank-controller" value="blank-controller"></option>
-					<option id="add-controller" value="add-controller"></option>
+					<option id="blank-controller" value="blank-controller">- - Select Controller - -</option>
+					<option id="add-controller" value="add-controller">- - Add New Controller - -</option>
 				</select>
 			</div>
 			<!-- Placeholder for more UI elements -->
 			<div id="placeholder"></div>
+			<!--- Delete credentials --->
+			<div class="sdpi-item" id="removeController">
+				<div class="sdpi-item-label" id="delete-controller-label">Delete Controller</div>
+				<button class="sdpi-item-value max20" id="controller-delete">Delete</button>
+				<p id="controller-delete-message">Remove the controller from the plugin</p>
+			</div>
 		</div>
 		<!-- Floating tooltips element -->
 		<div class="sdpi-info-label hidden" style="top: -1000px;" value=""></div>
