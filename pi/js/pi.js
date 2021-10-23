@@ -203,13 +203,10 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 				window.nanoControllerIPs.splice(i, 1);
 			}
 		}
-/*
 		delete window.nanoControllers[controllerID];
 		delete window.settings;
 		globalSettings.nanoControllers = window.nanoControllers;
 		saveGlobalSettings(inContext);
-*/
-		window.close();
 	}
 
 	// Function called on successful controller authorization

@@ -141,13 +141,11 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				// Send data from PI and process it here as necessary
 				break;
 			case 'sendToPlugin':
-console.log(jsonPayload);
 				var piEvent = jsonPayload['piEvent'];
 				if (piEvent === 'newController') {
 					window.nanoControllerCache['status'] = "";
 					requestGlobalSettings(inUUID);
-				}
-				if (piEvent === 'valueChanged') {
+				} else if (piEvent === 'valueChanged') {
 					// Send manual onKeyUp event to action
 					if (context in actions) {
 						actions[context].onKeyUp(context);

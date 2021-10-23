@@ -214,7 +214,7 @@ Nanoleaf.buildcache = async function (callback) {
 			}
 		});
 	}
-};
+}
 
 // Find the controller in the nanoControllerCache
 Nanoleaf.findhost = function (callback) {
