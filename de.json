@@ -13,12 +13,12 @@
 		}]
 	},
 	"com.fsoft.nanoleaf.brightness": {
-		"Name": "Brightness Increase",
-		"Tooltip": "Increase the brightness of the tiles."
+		"Name": "Helligkeit erhöhen",
+		"Tooltip": "Erhöhe die Helligkeit der Tiles."
 	},
 	"com.fsoft.nanoleaf.brightnessd": {
-		"Name": "Brightness Decrease",
-		"Tooltip": "Decrease the brightness of the tiles."
+		"Name": "Helligkeit veringern",
+		"Tooltip": "Veringere die Helligkeit der Tiles."
 	},
 	"com.fsoft.nanoleaf.color": {
 		"Name": "Farbe",
@@ -30,51 +30,51 @@
 	},
 	"Localization": {
 		"PI": {
-			"AddController": "neues Ger�t hinzuf�gen",
+			"AddController": "neues Gerät hinzufügen",
 			"Brightness": "Helligkeit",
 			"Color": "Farbe",
 			"Colors": "Farben",
-			"Controller": "Ger�t",
-			"Decrease": "Decrease",
-			"Delete": "Delete",
-			"DeleteController": "Delete Controller",
-			"DeleteMessage": "Delete the controller from the plugin",
+			"Controller": "Gerät",
+			"Decrease": "Veringern",
+			"Delete": "Entfernen",
+			"DeleteController": "Gerät entfernen",
+			"DeleteMessage": "Gerät von diesem Plugin entfernen",
 			"Effect": "Effekte",
-			"Increase": "Increase",
-			"NoController": "kein Ger�t",
+			"Increase": "Erhöhen",
+			"NoController": "kein Gerät",
 			"NoEffect": "keine Effekte",
 			"NoScenes": "keine Szenen",
 			"Scene": "Szene",
-			"SelectController": "w�hle Ger�t",
+			"SelectController": "wähle Gerät",
 			"Temperature": "Temperatur",
-			"Transition": "Transition"
+			"Transition": "Übersetzung"
 		},
 		"Setup": {
 			"Header": "Nanoleaf Aurora, Canvas & Shapes",
 			"Intro": {
-				"Continue": "suche Ger�t mit gefundener IP Adresse",
-				"Description": "finde das aktive Nanoleaf Ger�t auf dem lokalen Netzwerk",
-				"EnterIPaddress": "f�ge eine IP Adresse von ihrem lokalen Netzwerk ein",
+				"Continue": "suche Gerät mit gefundener IP Adresse",
+				"Description": "finde das aktive Nanoleaf Gerät auf dem lokalen Netzwerk",
+				"EnterIPaddress": "füge eine IP Adresse von ihrem lokalen Netzwerk ein",
 				"Exit": "Abbrechen",
 				"IPaddress": "Fehler: die lokale IP Adresse konnte nicht gefunden werden",
-				"NoIPaddress": "f�ge eine IP Adresse von ihrem lokalen Netzwerk ein",
+				"NoIPaddress": "füge eine IP Adresse von ihrem lokalen Netzwerk ein",
 				"Or": "oder",
-				"Title": "neues Ger�t hinzuf�gen"
+				"Title": "neues Gerät hinzufügen"
 			},
 			"Search": {
 
 				"Continue": "erhalte Autorisierungscode",
-				"ControllersAuth": "Ger�te mit Autorisierungscode",
-				"ControllersNeedAuth": "Ger�te ohen Autorisierungscode",
-				"DescriptionFound": "halte dein ein/ausshaltknopf am Ger�t bis das Licht zu blinken beginnt",
-				"DescriptionNone": "stelle sicher dass das Ger�t eingeschalten und mit dem lokalen Netzwerk verbunden ist ",
+				"ControllersAuth": "Geräte mit Autorisierungscode",
+				"ControllersNeedAuth": "Geräte ohen Autorisierungscode",
+				"DescriptionFound": "halte den Einschaltknopf am Gerät gedrückt bis die Leuchte zu blinken beginnt",
+				"DescriptionNone": "stelle sicher dass das Gerät eingeschalten und mit dem lokalen Netzwerk verbunden ist ",
 				"Exit": "Abbrechen",
 				"GoBack": "IP Adresse eingeben",
 				"Retry": "erneut versuchen",
-				"Title": "Suche Ger�t...",
-				"TitleNone": "kein Ger�t gefunden",
-				"TitleOne": "ein Ger�t gefunden",
-				"TitleMultiple": "{{ number }} Ger�te gefunden"
+				"Title": "Suche Gerät...",
+				"TitleNone": "kein Gerät gefunden",
+				"TitleOne": "ein Gerät gefunden",
+				"TitleMultiple": "{{ number }} Geräte gefunden"
 			},
 			"Authorize": {
 				"Continue": "Autorisierungscode speichern",
@@ -82,17 +82,17 @@
 				"ControllerIP": "IP",
 				"ControllerName": "Name",
 				"ControllerSN": "SN",
-				"Description": "erhalte Autorisierungscode und Ger�teinformation",
+				"Description": "erhalte Autorisierungscode und Geräteinformation",
 				"Exit": "Abbrechen",
-				"NoControllerAuth": "kein Ger�t f�r die Autorisieren gefunden<br>stelle sicher das sich das Ger�t im Verbindungsmodus befindet",
+				"NoControllerAuth": "kein Gerät für die Autorisieren gefunden<br>stelle sicher das sich das Gerät im Verbindungsmodus befindet",
 				"Retry": "erneut versuchen",
 				"Title" : "Autorisierung..."
 			},
 			"Save": {
 				"Continue": "Autorisierungscode speichern",
-				"Description": "der Autorisierungscode wurde erfolgreich �bertragen und gespeichert",
+				"Description": "der Autorisierungscode wurde erfolgreich übertragen und gespeichert",
 				"Exit": "Einstellungen verlassen",
-				"Title": "Ger�t Speichern"
+				"Title": "Gerät Speichern"
 			}
 		}
 	}

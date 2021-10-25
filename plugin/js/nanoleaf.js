@@ -189,9 +189,11 @@ Nanoleaf.buildcache = async function (callback) {
 	}
 	window.nanoControllerCache['status'] = 'building';
 	var keys = Object.keys(window.nanoControllers);
+	var index = 0;
 	// Iterate through all controllers that were discovered
-	for (let index = 0; index < keys.length; index++) {
+	while (index < keys.length) {
 		var SN = keys[index];
+		index++;
 		var nanoData = window.nanoControllers[SN];
 		// add the IP to the global array
 		window.nanoControllerIPs.push(nanoData.nanoIP);
@@ -200,8 +202,11 @@ Nanoleaf.buildcache = async function (callback) {
 		var NF = await getnanoleaf(result, nanoData.nanoIP, nanoData.nanoToken, nanoData.nanoSN, nanoData.nanoName);
 		var nanoKey = '"' + nanoData.nanoSN + '"';
 		window.nanoControllerCache[nanoKey] = NF;
+		if (index >= keys.length) {
+			window.nanoControllerCache['status'] = 'done';
+			callback(true);
+		}
 	}
-	window.nanoControllerCache['status'] = 'done';
 
 	async function getnanoleaf(result, nanoIP, nanoToken, nanoSN, nanoName) {
 		return new Promise(function (resolve, reject) {

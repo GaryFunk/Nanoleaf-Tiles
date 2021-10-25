@@ -17,7 +17,9 @@ window.nanoToken = null;
 
 window.nanoControllerIPs = [];
 window.getGlobal = true;
+window.hasGlobal = false;
 window.buttons = {};
+window.buttonsCache = [];
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) {
@@ -77,33 +79,37 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				}
 				break;
 			case 'willAppear':
-				var state = null;
-				settings = jsonPayload['settings'];
-				if (typeof jsonPayload['state'] !== 'undefined') {
-					state = jsonPayload['state'];
-				}
-
-				if (!(settings.nanoController in window.buttons)) {
-					window.buttons[settings.nanoController] = [];
-				}
-
-				if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
-					var data = {"command": settings.command, "context": context};
-					window.buttons[settings.nanoController].push(data);
-				}
-
-				// Add current instance if not in actions array
-				if (!(context in actions)) {
-					// Add current instance to array
-					if (action === 'com.fsoft.nanoleaf.power') {
-						actions[context] = new PowerAction(context, settings, state);
-					} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
-						actions[context] = new BrightnessAction(context, settings, state);
-					} else if (action === 'com.fsoft.nanoleaf.color') {
-						actions[context] = new ColorAction(context, settings, state);
-					} else if (action === 'com.fsoft.nanoleaf.effect') {
-						actions[context] = new EffectAction(context, settings, state);
+				if (window.hasGlobal) {
+					var state = null;
+					settings = jsonPayload['settings'];
+					if (typeof jsonPayload['state'] !== 'undefined') {
+						state = jsonPayload['state'];
 					}
+
+					if (!(settings.nanoController in window.buttons)) {
+						window.buttons[settings.nanoController] = [];
+					}
+
+					if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
+						var data = {"command": settings.command, "context": context};
+						window.buttons[settings.nanoController].push(data);
+					}
+
+					// Add current instance if not in actions array
+					if (!(context in actions)) {
+						// Add current instance to array
+						if (action === 'com.fsoft.nanoleaf.power') {
+							actions[context] = new PowerAction(context, settings, state);
+						} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+							actions[context] = new BrightnessAction(context, settings, state);
+						} else if (action === 'com.fsoft.nanoleaf.color') {
+							actions[context] = new ColorAction(context, settings, state);
+						} else if (action === 'com.fsoft.nanoleaf.effect') {
+							actions[context] = new EffectAction(context, settings, state);
+						}
+					}
+				} else {
+					window.buttonsCache.push(jsonObj);
 				}
 				break;
 			case 'willDisappear':
@@ -119,7 +125,12 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 					// If at least one controller is configured build the nanoControllerCache
 					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
-						Nanoleaf.buildcache()
+						Nanoleaf.buildcache( function() {
+							window.hasGlobal = true;
+							if (window.buttonsCache.length > 0) {
+								_buttonsCache();
+							}
+						});
 					}
 				}
 				break;
@@ -203,5 +214,42 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 
 	function getKeyByValue(object, value) {
 		return Object.keys(object).find(key => object[key] === value);
+	}
+
+	function _buttonsCache() {
+		while (window.buttonsCache.length > 0) {
+			var jsonObj = window.buttonsCache.pop();
+			var action = jsonObj['action'];
+			var context = jsonObj['context'];
+			var jsonPayload = jsonObj['payload'];
+			var state = null;
+			var settings = jsonPayload['settings'];
+			if (typeof jsonPayload['state'] !== 'undefined') {
+				state = jsonPayload['state'];
+			}
+
+			if (!(settings.nanoController in window.buttons)) {
+				window.buttons[settings.nanoController] = [];
+			}
+
+			if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
+				var data = {"command": settings.command, "context": context};
+				window.buttons[settings.nanoController].push(data);
+			}
+
+			// Add current instance if not in actions array
+			if (!(context in actions)) {
+				// Add current instance to array
+				if (action === 'com.fsoft.nanoleaf.power') {
+					actions[context] = new PowerAction(context, settings, state);
+				} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+					actions[context] = new BrightnessAction(context, settings, state);
+				} else if (action === 'com.fsoft.nanoleaf.color') {
+					actions[context] = new ColorAction(context, settings, state);
+				} else if (action === 'com.fsoft.nanoleaf.effect') {
+					actions[context] = new EffectAction(context, settings, state);
+				}
+			}
+		}
 	}
 }
