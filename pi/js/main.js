@@ -16,6 +16,7 @@ window.nanoIP = null;
 window.nanoToken = null;
 window.nanoControllerIPs = [];
 window.name = "PI";
+window.device = null;
 
 var globalSettings = {};
 var setupWindow;
@@ -33,7 +34,6 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	var language = info['application']['language'];
 	// Retrieve action identifier
 	var action = actionInfo['action'];
-	var device = actionInfo['device'];
 
 	// Open the websocket to Stream Deck
 	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
@@ -42,12 +42,12 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	// Websocket is closed
 	window.websocket.onclose = function (evt) {
 		var reason = WebsocketError(evt);
-		log('Websocket closed: ', reason);
+		log('Websocket closed: ' + reason);
 	};
 
 	// Websocket received a message
 	window.websocket.onerror = function (evt) {
-		log('Websocket error', evt, evt.data);
+		log('Websocket error: ' + evt + ' ' + evt.data);
 	};
 
 	// Websocket received a message
@@ -66,7 +66,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 					// If at least one controller is configured build the nanoControllerCache
 					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
-						Nanoleaf.buildcache()
+						Nanoleaf.buildcache( function () {});
 					}
 				}
 				break;
@@ -85,14 +85,14 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 				}
 				if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 					// Refresh the cache
-					Nanoleaf.buildcache()
+					Nanoleaf.buildcache( function () {});
 					pi.loadControllers();
 				} else {
 					pi.loadControllers();
 				}
 				break;
 			default:
-				log('Unprocessed event = ', event);
+				log('pi/main.js line 95 uncaught event: ' + event);
 		}
 	};
 
@@ -108,8 +108,8 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	var pi;
 	if (action === 'com.fsoft.nanoleaf.power') {
 		pi = new PowerPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
-		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion, action, device);
+	} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd' || action === 'com.fsoft.nanoleaf.brightnessi') {
+		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion, action);
 	} else if (action === 'com.fsoft.nanoleaf.color') {
 		pi = new ColorPI(inUUID, language, streamDeckVersion, pluginVersion);
 	} else if (action === 'com.fsoft.nanoleaf.effect') {

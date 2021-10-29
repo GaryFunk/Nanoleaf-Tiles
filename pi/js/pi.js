@@ -20,6 +20,8 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		event.preventDefault();
 		deleteController(window.settings.nanoController, inContext);
 	}
+
+	/*
 	// The beforeunload event is fired, before the view disappears
 	window.addEventListener('beforeunload', function (e) {
 		e.preventDefault();
@@ -36,6 +38,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	window.addEventListener('unload', function (event) {
 		sendValueToPlugin(getAction(), inContext, 'propertyInspectorDisconnected', 'property_inspector');
 	});
+	*/
 
 	// Load the localizations
 	getLocalization(inLanguage, function (inStatus, inLocalization) {
@@ -64,7 +67,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 
 	// Show all authorized controllers
 	this.loadControllers = async function () {
-		await Nanoleaf.buildcache();
+		await Nanoleaf.buildcache( function () {});
 		// Remove previously shown controllers
 		// window.nanoControllers = document.getElementsByClassName('nanoControllers');
 		while (window.nanoControllers.length > 0) {
@@ -141,6 +144,11 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			window.settings.nanoController = inEvent.target.value;
 			instance.saveSettings();
 			instance.loadControllers();
+			let temp = {};
+			temp['piEvent'] = 'buttonChanged';
+			temp['settings'] = window.settings;
+			temp['state'] = true;
+			instance.sendToPlugin(temp);
 		}
 		if (instance instanceof EffectPI) {
 			loadEffects();
@@ -191,7 +199,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 				}
 			}
 		} catch(e) {
-			log('error = ', e);
+			log('error: ' + e);
 		}
 	}
 
@@ -222,7 +230,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		window.settings.nanoController = inEvent.detail.nanoSN;
 		instance.saveSettings();
 		instance.loadControllers();
-		sendToPlugin(getAction(), inContext, { 'piEvent': 'newController' });
+		sendToPlugin({'piEvent': 'newController'});
 	}
 
 	const sleep = (milliseconds) => {

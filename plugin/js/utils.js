@@ -70,8 +70,8 @@ function registerPluginOrPI(inEvent, inUUID) {
 function requestGlobalSettings(inUUID) {
 	if (websocket) {
 		var json = {
-			'event': 'getGlobalSettings',
-			'context': inUUID
+			'context': inUUID,
+			'event': 'getGlobalSettings'
 		};
 		window.websocket.send(JSON.stringify(json));
 	}
@@ -81,8 +81,8 @@ function requestGlobalSettings(inUUID) {
 function saveGlobalSettings(inUUID) {
 	if (websocket) {
 		const json = {
-			'event': 'setGlobalSettings',
 			'context': inUUID,
+			'event': 'setGlobalSettings',
 			'payload': globalSettings
 		};
 		window.websocket.send(JSON.stringify(json));
@@ -94,8 +94,8 @@ function saveSettings(inAction, inUUID, inSettings) {
 	if (websocket) {
 		const json = {
 			'action': inAction,
-			'event': 'setSettings',
 			'context': inUUID,
+			'event': 'setSettings',
 			'payload': inSettings
 		};
 		window.websocket.send(JSON.stringify(json));
@@ -107,8 +107,8 @@ function sendToPlugin(inAction, inContext, inData) {
 	if (websocket) {
 		var json = {
 			'action': inAction,
-			'event': 'sendToPlugin',
 			'context': inContext,
+			'event': 'sendToPlugin',
 			'payload': inData
 		};
 		window.websocket.send(JSON.stringify(json));
@@ -120,8 +120,8 @@ function sendToPropertyInspector(inAction, inContext, inData) {
 	if (websocket) {
 		var json = {
 			'action': inAction,
-			'event': 'sendToPropertyInspector',
 			'context': inContext,
+			'event': 'sendToPropertyInspector',
 			'payload': inData
 		};
 		window.websocket.send(JSON.stringify(json));
@@ -132,8 +132,8 @@ function sendToPropertyInspector(inAction, inContext, inData) {
 function setState(inContext, inState) {
 	if (websocket) {
 		var json = {
-			'event': 'setState',
 			'context': inContext,
+			'event': 'setState',
 			'payload': {
 				'state': inState
 			}
@@ -146,11 +146,11 @@ function setState(inContext, inState) {
 function setTitle(inContext, inTitle) {
 	if (websocket) {
 		var json = {
-			"event": "setTitle",
-			"context": inContext,
-			"payload": {
-				"title": "" + inTitle,
-				"target": 0
+			'context': inContext,
+			'event': 'setTitle',
+			'payload': {
+				'title': '' + inTitle,
+				'target': 0
 			}
 		};
 		window.websocket.send(JSON.stringify(json));
@@ -161,10 +161,10 @@ function setTitle(inContext, inTitle) {
 function sendValueToPlugin(inAction, inContext, value, param) {
 	if (websocket) {
 		const json = {
-			action: inAction,
-			event: "sendToPlugin",
-			context: inContext,
-			payload: {
+			'action': inAction,
+			'context': inContext,
+			'event': 'sendToPlugin',
+			'payload': {
 				[param]: value
 			}
 		};
@@ -176,8 +176,8 @@ function sendValueToPlugin(inAction, inContext, value, param) {
 function showAlert(inUUID) {
 	if (websocket) {
 		var json = {
-			'event': 'showAlert',
-			'context': inUUID
+			'context': inUUID,
+			'event': 'showAlert'
 		};
 		window.websocket.send(JSON.stringify(json));
 	}
@@ -185,35 +185,35 @@ function showAlert(inUUID) {
 
 function WebsocketError(evt) {
 	// Websocket closed
-	var reason = '';
+	var reason = "";
 	if (evt.code === 1000) {
-		reason = 'Normal Closure. The purpose for which the connection was established has been fulfilled.';
+		reason = "Normal Closure. The purpose for which the connection was established has been fulfilled.";
 	} else if (evt.code === 1001) {
-		reason = 'Going Away. An endpoint is "going away", such as a server going down or a browser having navigated away from a page.';
+		reason = "Going Away. An endpoint is 'going away,' such as a server going down or a browser having navigated away from a page.";
 	} else if (evt.code === 1002) {
-		reason = 'Protocol error. An endpoint is terminating the connection due to a protocol error';
+		reason = "Protocol error. An endpoint is terminating the connection due to a protocol error";
 	} else if (evt.code === 1003) {
 		reason = "Unsupported Data. An endpoint received a type of data it doesn't support.";
 	} else if (evt.code === 1004) {
-		reason = '--Reserved--. The specific meaning might be defined in the future.';
+		reason = "--Reserved--. The specific meaning might be defined in the future.";
 	} else if (evt.code === 1005) {
-		reason = 'No Status. No status code was actually present.';
+		reason = "No Status. No status code was actually present.";
 	} else if (evt.code === 1006) {
-		reason = 'Abnormal Closure. The connection was closed abnormally, e.g., without sending or receiving a Close control frame';
+		reason = "Abnormal Closure. The connection was closed abnormally, e.g., without sending or receiving a Close control frame";
 	} else if (evt.code === 1007) {
-		reason = 'Invalid frame payload data. The connection was closed, because the received data was not consistent with the type of the message (e.g., non-UTF-8 [http://tools.ietf.org/html/rfc3629]).';
+		reason = "Invalid frame payload data. The connection was closed, because the received data was not consistent with the type of the message (e.g., non-UTF-8 [http://tools.ietf.org/html/rfc3629]).";
 	} else if (evt.code === 1008) {
-		reason = 'Policy Violation. The connection was closed, because current message data "violates its policy". This reason is given either if there is no other suitable reason, or if there is a need to hide specific details about the policy.';
+		reason = "Policy Violation. The connection was closed, because current message data 'violates its policy.' This reason is given either if there is no other suitable reason, or if there is a need to hide specific details about the policy.";
 	} else if (evt.code === 1009) {
-		reason = 'Message Too Big. Connection closed because the message is too big for it to process.';
+		reason = "Message Too Big. Connection closed because the message is too big for it to process.";
 	} else if (evt.code === 1010) { // Note that this status code is not used by the server, because it can fail the WebSocket handshake instead.
 		reason = "Mandatory Ext. Connection is terminated the connection because the server didn't negotiate one or more extensions in the WebSocket handshake. <br /> Mandatory extensions were: " + evt.reason;
 	} else if (evt.code === 1011) {
-		reason = 'Internl Server Error. Connection closed because it encountered an unexpected condition that prevented it from fulfilling the request.';
+		reason = "Internl Server Error. Connection closed because it encountered an unexpected condition that prevented it from fulfilling the request.";
 	} else if (evt.code === 1015) {
 		reason = "TLS Handshake. The connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can't be verified).";
 	} else {
-		reason = 'Unknown reason';
+		reason = "Unknown reason";
 	}
 	return reason;
 }

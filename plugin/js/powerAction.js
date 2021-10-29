@@ -23,12 +23,12 @@ function PowerAction(inContext, inSettings, isState) {
 		}
 		// Check if any controller is configured
 		if (!('nanoController' in inSettings)) {
-			log('plugin/powerAction.js line 26: No controller configured');
+			log('plugin/powerAction.js line 26 No controller configured');
 			showAlert(inContext);
 			return;
 		}
 		if (window.nanoControllerCache == null) {
-			log('plugin/powerAction.js line 31: No controller in cache');
+			log('plugin/powerAction.js line 31 No controller in cache');
 			showAlert(inContext);
 			return;
 		}

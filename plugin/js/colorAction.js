@@ -23,12 +23,12 @@ function ColorAction(inContext, inSettings, inState) {
 		}
 		// Check if any controller is configured
 		if (!('nanoController' in inSettings)) {
-			log('plugin/colorAction.js line 26: No controller configured');
+			log('plugin/colorAction.js line 26 No controller configured');
 			showAlert(inContext);
 			return;
 		}
 		if (window.nanoControllerCache == null) {
-			log('plugin/colorAction.js line 31: No controller in cache');
+			log('plugin/colorAction.js line 31 No controller in cache');
 			showAlert(inContext);
 			return;
 		}

@@ -23,12 +23,12 @@ function BrightnessAction(inContext, inSettings, inState) {
 		}
 		// Check if any controller is configured
 		if (!('nanoController' in inSettings)) {
-			log('plugin/brightnessAction.js line 26: No controller configured');
+			log('plugin/brightnessAction.js line 26 No controller configured');
 			showAlert(inContext);
 			return;
 		}
 		if (window.nanoControllerCache == null) {
-			log('plugin/brightnessAction.js line 31: No controller in cache');
+			log('plugin/brightnessAction.js line 31 No controller in cache');
 			showAlert(inContext);
 			return;
 		}
@@ -99,6 +99,7 @@ function BrightnessAction(inContext, inSettings, inState) {
 	// Set the targetValue
 	function setTargetValue(NF, inUserDesiredState) {
 		var setValue = parseInt(inSettings.value);
+console.log(setValue);
 		var nanoInfo = NF.getInfo();
 		var currentValue = parseInt(nanoInfo.state.brightness.value);
 		if (inUserDesiredState !== undefined) {
@@ -109,12 +110,14 @@ function BrightnessAction(inContext, inSettings, inState) {
 			} else {
 				targetValue = (currentValue + setValue > 100 ? 100 : currentValue + setValue);
 			}
-		} else {
+		} else if (inSettings.transition == 'decrease') {
 			if (currentValue == 0) {
 				//targetValue = setValue;
 			} else {
 				targetValue = (currentValue - setValue < 0 ? 0 : currentValue - setValue);
 			}
+		} else {
+			targetValue = setValue;
 		}
 		return targetValue;
 	}

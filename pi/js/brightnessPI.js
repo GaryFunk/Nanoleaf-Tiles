@@ -19,8 +19,19 @@ function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersio
 
 	if (action === 'com.fsoft.nanoleaf.brightnessd') {
 		window.settings.transition = 'decrease';
-	} else {
+		if (window.settings.value === undefined) {
+			window.settings.value = 15;
+		}
+	} else if (action === 'com.fsoft.nanoleaf.brightnessi') {
 		window.settings.transition = 'increase';
+		if (window.settings.value === undefined) {
+			window.settings.value = 15;
+		}
+	} else {
+		window.settings.transition = 'set';
+		if (window.settings.value === undefined) {
+			window.settings.value = 50;
+		}
 	}
 	window.settings.command = 'brightness';
 

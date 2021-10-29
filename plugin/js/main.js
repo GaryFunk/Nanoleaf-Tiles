@@ -34,12 +34,12 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 	// Websocket is closed
 	window.websocket.onclose = function (evt) {
 		var reason = WebsocketError(evt);
-		log('Websocket closed: ', reason);
+		log('Websocket closed: ' + reason);
 	};
 
 	// Websocket received a message
 	window.websocket.onerror = function (evt) {
-		log('Websocket error', evt, evt.data);
+		log('Websocket error: ' + evt + ' ' + evt.data);
 	};
 
 	// Web socked received a message
@@ -61,6 +61,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				break;
 			case 'keyUp':
 				settings = jsonPayload['settings'];
+console.log(settings);
 				timerLP = buttonLongpressTimeouts.get(context);
 				if (timerLP) {
 					clearTimeout(timerLP);
@@ -82,6 +83,10 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				if (window.hasGlobal) {
 					var state = null;
 					settings = jsonPayload['settings'];
+					if (!('nanoController' in settings)) {
+						return;
+					}
+
 					if (typeof jsonPayload['state'] !== 'undefined') {
 						state = jsonPayload['state'];
 					}
@@ -100,7 +105,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 						// Add current instance to array
 						if (action === 'com.fsoft.nanoleaf.power') {
 							actions[context] = new PowerAction(context, settings, state);
-						} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+						} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd' || action === 'com.fsoft.nanoleaf.brightnessi') {
 							actions[context] = new BrightnessAction(context, settings, state);
 						} else if (action === 'com.fsoft.nanoleaf.color') {
 							actions[context] = new ColorAction(context, settings, state);
@@ -125,7 +130,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 					// If at least one controller is configured build the nanoControllerCache
 					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
-						Nanoleaf.buildcache( function() {
+						Nanoleaf.buildcache( function () {
 							window.hasGlobal = true;
 							if (window.buttonsCache.length > 0) {
 								_buttonsCache();
@@ -161,6 +166,9 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 					if (context in actions) {
 						actions[context].onKeyUp(context);
 					}
+				} else if (piEvent === 'buttonChanged') {
+					window.buttonsCache.push(jsonObj);
+					_buttonsCache();
 				}
 				break;
 			case 'systemDidWakeUp':
@@ -182,19 +190,18 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				window.getGlobal = true;
 				break;
 			default:
-				log('event = ', event);
-				log('-------------------');
+				log('plugin/main.js line 192 uncaught event: ' + event);
 		}
 
 		function longPress(context) {
 			var timerLP = buttonLongpressTimeouts.get(context);
 			clearTimeout(timerLP);
 			buttonLongpressTimeouts.delete(context)
-			if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+			if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd' || action === 'com.fsoft.nanoleaf.brightnessi') {
 				if (settings.transition == 'increase') {
 					settings["userDesiredState"] = "100";
 					saveSettings(action, context, settings);
-				} else {
+				} else if (settings.transition == 'decrease') {
 					settings["userDesiredState"] = "0";
 					saveSettings(action, context, settings);
 				}
@@ -217,8 +224,9 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 	}
 
 	function _buttonsCache() {
-		while (window.buttonsCache.length > 0) {
-			var jsonObj = window.buttonsCache.pop();
+		let bTemp = window.buttonsCache;
+		while (bTemp.length > 0) {
+			var jsonObj = bTemp.pop();
 			var action = jsonObj['action'];
 			var context = jsonObj['context'];
 			var jsonPayload = jsonObj['payload'];
@@ -227,22 +235,19 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 			if (typeof jsonPayload['state'] !== 'undefined') {
 				state = jsonPayload['state'];
 			}
-
 			if (!(settings.nanoController in window.buttons)) {
 				window.buttons[settings.nanoController] = [];
 			}
-
 			if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
 				var data = {"command": settings.command, "context": context};
 				window.buttons[settings.nanoController].push(data);
 			}
-
 			// Add current instance if not in actions array
 			if (!(context in actions)) {
 				// Add current instance to array
 				if (action === 'com.fsoft.nanoleaf.power') {
 					actions[context] = new PowerAction(context, settings, state);
-				} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd') {
+				} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd' || action === 'com.fsoft.nanoleaf.brightnessi') {
 					actions[context] = new BrightnessAction(context, settings, state);
 				} else if (action === 'com.fsoft.nanoleaf.color') {
 					actions[context] = new ColorAction(context, settings, state);

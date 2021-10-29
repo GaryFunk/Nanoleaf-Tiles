@@ -28,12 +28,12 @@ function PowerPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	// Initialize the tooltips
 	initToolTips();
 
-	// Brightness changed
+	// Power changed
 	function valueChanged(inEvent) {
-		// Save the new brightness settings
+		// Save the new power settings
 		window.settings.value = inEvent.target.value;
 		instance.saveSettings();
-		// Inform the plugin that a new brightness is set
+		// Inform the plugin that a new power is set
 		instance.sendToPlugin({'piEvent': 'valueChanged'});
 	}
 }

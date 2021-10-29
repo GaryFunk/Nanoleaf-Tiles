@@ -91,7 +91,7 @@ function loadAuthorizeView() {
 						wait();
 					}
 				} else {
-					log('failed to get item', index);
+					log('failed to get item: ' + index);
 				}
 				if (theCount == window.nanoNeedIPs.length) {
 					autoCycle();

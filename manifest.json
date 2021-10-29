@@ -17,22 +17,22 @@
 		"Tooltip": "Power tiles on or off.",
 		"UUID": "com.fsoft.nanoleaf.power"
 	}, {
-		"Icon": "plugin/images/actions/brightnessu",
+		"Icon": "plugin/images/actions/brightnessi",
 		"Name": "Brightness Up",
 		"States": [{
-			"Image": "plugin/images/icons/brightnessuoff",
+			"Image": "plugin/images/icons/brightnessioff",
 			"Name": "0",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}, {
-			"Image": "plugin/images/icons/brightnessu",
+			"Image": "plugin/images/icons/brightnessi",
 			"Name": "1",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}],
 		"SupportedInMultiActions": true,
 		"Tooltip": "Increase the brightness of the tiles.",
-		"UUID": "com.fsoft.nanoleaf.brightness"
+		"UUID": "com.fsoft.nanoleaf.brightnessi"
 	}, {
 		"Icon": "plugin/images/actions/brightnessd",
 		"Name": "Brightness Down",
@@ -50,6 +50,23 @@
 		"SupportedInMultiActions": true,
 		"Tooltip": "Decrease the brightness of the tiles.",
 		"UUID": "com.fsoft.nanoleaf.brightnessd"
+	}, {
+		"Icon": "plugin/images/actions/brightness",
+		"Name": "Brightness Set",
+		"States": [{
+			"Image": "plugin/images/icons/brightnessoff",
+			"Name": "0",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}, {
+			"Image": "plugin/images/icons/brightness",
+			"Name": "1",
+			"TitleAlignment": "bottom",
+			"FontSize": "12"
+		}],
+		"SupportedInMultiActions": true,
+		"Tooltip": "Set the brightness of the tiles.",
+		"UUID": "com.fsoft.nanoleaf.brightness"
 	}, {
 		"Icon": "plugin/images/actions/color",
 		"Name": "Color",

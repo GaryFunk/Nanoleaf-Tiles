@@ -12,13 +12,17 @@
 			"Name": "Aus"
 		}]
 	},
-	"com.fsoft.nanoleaf.brightness": {
+	"com.fsoft.nanoleaf.brightnessi": {
 		"Name": "Helligkeit erhöhen",
 		"Tooltip": "Erhöhe die Helligkeit der Tiles."
 	},
 	"com.fsoft.nanoleaf.brightnessd": {
 		"Name": "Helligkeit veringern",
 		"Tooltip": "Veringere die Helligkeit der Tiles."
+	},
+	"com.fsoft.nanoleaf.brightness": {
+		"Name": "Brightness Set",
+		"Tooltip": "Set the brightness of the tiles."
 	},
 	"com.fsoft.nanoleaf.color": {
 		"Name": "Farbe",
@@ -62,7 +66,6 @@
 				"Title": "neues Gerät hinzufügen"
 			},
 			"Search": {
-
 				"Continue": "erhalte Autorisierungscode",
 				"ControllersAuth": "Geräte mit Autorisierungscode",
 				"ControllersNeedAuth": "Geräte ohen Autorisierungscode",

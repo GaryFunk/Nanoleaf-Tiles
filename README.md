@@ -5,19 +5,22 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 ## Current features
 - Power - Toggles power to the controller On / Off
-- Brightness Increase - Set brightness to current value + Brightness%, LongPress to set at full brightness
-- Brightness Decrease - Set brightness to current value - Brightness%, LongPress to set at zero brightness
+- Brightness Increase - Set brightness to current value + Brightness %, LongPress to set at full brightness
+- Brightness Decrease - Set brightness to current value - Brightness %, LongPress to set at zero brightness
+- Brightness - Set brightness to a static level
 - Color - Set a static color for all tiles
 - Effect - Set one of the effect routines available for the controller
+- Buttons across devices are kept in sync
 
 ## Known Issues
-- Adding new buttons does not update the cache in the plugin
+- No known issues in this release
 
 ## v1.3
 - Added Brightness Increase and Brightness Decrease buttons
 - Added additional localization files in English (de, en, es, fr, ja, ko and zh_CN)
 - Added code to update like buttons across Stream Deck hardware
 - Added new icons for Brightness, Color and Effect where the multi-color icon indicates last pushed
+- Changed Brightness to set a static value
 
 ## v1.2
 - Brightness supports a custom value
@@ -41,4 +44,5 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
     *  [@Backslasher](https://discordapp.com/users/277603804399140865/)
 
 * ### Special Thanks
-    * [@Backslasher](https://discordapp.com/users/277603804399140865/)  - German translation
+    * [@BarRaider](https://discordapp.com/users/270832792802164736/) - Plugin hosting
+    * [@Backslasher](https://discordapp.com/users/277603804399140865/) - German translation
