@@ -47,7 +47,11 @@ function Action(inContext, inSettings, inState) {
 			case 'brightness':
 				theButtons = window.buttons[nanoController].filter(x => x.command === 'brightness');
 				for (let button of theButtons) {
-					setTitle(button.context, info.state.brightness.value);
+					if (button.level === "set") {
+						setTitle(button.context,  "-" + button.value + "-");
+					} else {
+						setTitle(button.context, info.state.brightness.value);
+					}
 				}
 			case 'power':
 				// Set the power button to on
@@ -79,7 +83,7 @@ function Action(inContext, inSettings, inState) {
 			return;
 		}
 		// Find out type of action
-		var action;
+		let action;
 		if (instance instanceof PowerAction) {
 			action = 'com.fsoft.nanoleaf.power';
 		} else if (instance instanceof BrightnessAction) {
@@ -92,7 +96,7 @@ function Action(inContext, inSettings, inState) {
 		// If the controller is set for this action
 		if (!('nanoController' in settings)) {
 			// Sort the controllers alphabetically
-			var controllerIDsSorted = Object.keys(window.nanoControllers).sort(function (a, b) {
+			let controllerIDsSorted = Object.keys(window.nanoControllers).sort(function (a, b) {
 				return window.nanoControllers[a].nanoName.localeCompare(window.nanoControllers[b].nanoName);
 			});
 			// Save the settings

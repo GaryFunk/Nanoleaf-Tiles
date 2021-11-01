@@ -54,7 +54,7 @@ function ColorAction(inContext, inSettings, inState) {
 				setActionState(inContext, targetState, targetValue);
 				instance.updateCrap('brightness', inSettings.nanoController, targetState, NF.getInfo());
 			} else {
-				log(message);
+				log('plugin/colorAction.js line 57: ' + message);
 				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
@@ -86,7 +86,7 @@ function ColorAction(inContext, inSettings, inState) {
 			// Set the new action state
 			setActionState(context, targetState, targetValue);
 		} catch(e) {
-			log(e);
+			log('plugin/colorAction.js line 89: ' + e);
 		}
 	}
 

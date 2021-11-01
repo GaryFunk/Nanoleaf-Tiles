@@ -91,7 +91,11 @@ function loadAuthorizeView() {
 						wait();
 					}
 				} else {
-					log('failed to get item: ' + index);
+					//log('failed to get item: ' + index);
+					let temp = {};
+					temp['piEvent'] = 'log';
+					temp['message'] = 'failed to get item: ' + index;
+					instance.sendToPlugin(temp);
 				}
 				if (theCount == window.nanoNeedIPs.length) {
 					autoCycle();

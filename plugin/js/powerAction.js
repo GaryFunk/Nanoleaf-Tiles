@@ -23,12 +23,12 @@ function PowerAction(inContext, inSettings, isState) {
 		}
 		// Check if any controller is configured
 		if (!('nanoController' in inSettings)) {
-			log('plugin/powerAction.js line 26 No controller configured');
+			log('plugin/powerAction.js line 26: No controller configured');
 			showAlert(inContext);
 			return;
 		}
 		if (window.nanoControllerCache == null) {
-			log('plugin/powerAction.js line 31 No controller in cache');
+			log('plugin/powerAction.js line 31: No controller in cache');
 			showAlert(inContext);
 			return;
 		}
@@ -55,7 +55,7 @@ function PowerAction(inContext, inSettings, isState) {
 				// Set the new power
 				// setActionState(inContext, targetState, targetValue);
 			} else {
-				log(message);
+				log('plugin/powerAction.js line 58: ' + message);
 				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
@@ -87,7 +87,7 @@ function PowerAction(inContext, inSettings, isState) {
 			// Set the new action state
 			setActionState(context, targetState, targetValue);
 		} catch(e) {
-			log(e);
+			log('plugin/powerAction.js line 90: ' + e);
 		}
 	}
 

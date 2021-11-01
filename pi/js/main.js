@@ -8,55 +8,76 @@
 //==============================================================================
 
 // Global web socket
-window.websocket = null;
+var websocket = null;
+let globalSettings = {};
+
 // Global Plugin settings
+window.name = "PI";
 window.nanoControllerCache = {status: ""};
+window.nanoControllerIPs = [];
 window.nanoControllers = {};
 window.nanoIP = null;
 window.nanoToken = null;
-window.nanoControllerIPs = [];
-window.name = "PI";
-window.device = null;
-
-var globalSettings = {};
-var setupWindow;
+window.settings = null;
+let pi;
+let setupWindow;
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
+	// Create array of currently used actions
+	var actions = {};
+
 	// Parse parameter from string to object
-	var actionInfo = JSON.parse(inActionInfo);
-	var info = JSON.parse(inInfo);
-	var streamDeckVersion = info['application']['version'];
-	var pluginVersion = info['plugin']['version'];
+	let actionInfo = JSON.parse(inActionInfo);
+	let info = JSON.parse(inInfo);
+	let streamDeckVersion = info['application']['version'];
+	let pluginVersion = info['plugin']['version'];
+
 	// Set settings
 	settings = actionInfo['payload']['settings'];
+
 	// Retrieve language
-	var language = info['application']['language'];
+	let language = info['application']['language'];
+
 	// Retrieve action identifier
-	var action = actionInfo['action'];
+	let action = actionInfo['action'];
+
+	// Public function to send data to the plugin
+	const SendToPlugin = function (inData) {
+		sendToPlugin(action, inUUID, inData);
+	}
 
 	// Open the websocket to Stream Deck
 	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
-	window.websocket = new WebSocket('ws://127.0.0.1:' + inPort);
+	websocket = new WebSocket('ws://127.0.0.1:' + inPort);
 
 	// Websocket is closed
-	window.websocket.onclose = function (evt) {
-		var reason = WebsocketError(evt);
-		log('Websocket closed: ' + reason);
+	websocket.onclose = function (evt) {
+		let reason = WebsocketError(evt);
+		//log('Websocket closed: ' + reason);
+		let inData = {};
+		inData['piEvent'] = 'log';
+		inData['message'] = 'Websocket closed: ' + reason;
+		SendToPlugin(inData);
 	};
 
 	// Websocket received a message
-	window.websocket.onerror = function (evt) {
-		log('Websocket error: ' + evt + ' ' + evt.data);
+	websocket.onerror = function (evt) {
+		//log('Websocket error: ' + evt + ' ' + evt.data);
+		let inData = {};
+		inData['piEvent'] = 'log';
+		inData['message'] = 'Websocket error: ' + evt + ' ' + evt.data;
+		SendToPlugin(inData);
 	};
 
 	// Websocket received a message
-	window.websocket.onmessage = function (inEvent) {
+	websocket.onmessage = function (inEvent) {
 		// Received message from Stream Deck
-		var jsonObj = JSON.parse(inEvent.data);
-		var event = jsonObj['event'];
-		var jsonPayload = jsonObj['payload'];
-		var settings;
+		let jsonObj = JSON.parse(inEvent.data);
+		let event = jsonObj['event'];
+		let jsonPayload = jsonObj['payload'];
+		let settings;
+
 		// Events
 		switch (event) {
 			case 'didReceiveGlobalSettings':
@@ -66,7 +87,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 					// If at least one controller is configured build the nanoControllerCache
 					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
-						Nanoleaf.buildcache( function () {});
+						Nanoleaf.buildcache(function () {});
 					}
 				}
 				break;
@@ -92,20 +113,24 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 				}
 				break;
 			default:
-				log('pi/main.js line 95 uncaught event: ' + event);
+				//log('pi/main.js line 112 uncaught event: ' + event);
+				let inData = {};
+				inData['piEvent'] = 'log';
+				inData['message'] = 'pi/main.js line 119 uncaught event: ' + event;
+				SendToPlugin(inData);
 		}
 	};
 
 	// WebSocket is connected, send message
-	window.websocket.onopen = function () {
+	websocket.onopen = function () {
 		// Register property inspector to Stream Deck
 		registerPluginOrPI(inRegisterEvent, inUUID);
+
 		// Request the global settings of the plugin
 		requestGlobalSettings(inUUID);
 	};
 
 	// Create actions
-	var pi;
 	if (action === 'com.fsoft.nanoleaf.power') {
 		pi = new PowerPI(inUUID, language, streamDeckVersion, pluginVersion);
 	} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd' || action === 'com.fsoft.nanoleaf.brightnessi') {

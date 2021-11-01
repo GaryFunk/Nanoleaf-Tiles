@@ -47,6 +47,6 @@ function EffectPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		window.settings.value = inEvent.target.value;
 		instance.saveSettings();
 		// Inform the plugin that a new effect is set
-		instance.sendToPlugin({'piEvent': 'valueChanged'});
+		instance.sendToPlugin({'piEvent': 'valueChanged', 'settings': {'command': window.settings.command, 'nanoController': window.settings.nanoController, 'value': inEvent.target.value}});
 	}
 }

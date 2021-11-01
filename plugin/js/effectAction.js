@@ -54,7 +54,7 @@ function EffectAction(inContext, inSettings, inState) {
 				setActionState(inContext, targetState, targetValue);
 				instance.updateCrap('brightness', inSettings.nanoController, targetState, NF.getInfo());
 			} else {
-				log(message);
+				log('plugin/effectAction.js line 57: ' + message);
 				setActionState(inContext, targetState, targetValue);
 				showAlert(inContext);
 			}
@@ -86,17 +86,21 @@ function EffectAction(inContext, inSettings, inState) {
 			// Set the new action state
 			setActionState(context, targetState, targetValue);
 		} catch(e) {
-			log(e);
+			log('plugin/colorAction.js line 89: ' + e);
 		}
 	}
 
 	// Private function to set the state
 	function setActionState(inContext, targetState, targetValue) {
-		var newTitle = targetValue.split(" ");
-		for (let i = 0; i < newTitle.length -1; i++) {
-			newTitle[i] = newTitle[i] + "\n";
+		if (targetValue !== undefined) {
+			var newTitle = targetValue.split(" ");
+			for (let i = 0; i < newTitle.length -1; i++) {
+				newTitle[i] = newTitle[i] + "\n";
+			}
+			newTitle = newTitle.join("");
+		} else {
+			newTitle = "";
 		}
-		newTitle = newTitle.join("");
 		setState(inContext, targetState);
 		setTitle(inContext, newTitle);
 	}

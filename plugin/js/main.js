@@ -8,18 +8,19 @@
 //==============================================================================
 
 // Global web socket
-window.websocket = null;
+websocket = null;
 // Global Plugin settings
+window.buttons = {};
+window.buttonsCache = [];
+window.getGlobal = true;
+window.hasGlobal = false;
+
 window.nanoControllerCache = {status: ""};
+window.nanoControllerIPs = [];
 window.nanoControllers = {};
 window.nanoIP = null;
 window.nanoToken = null;
 
-window.nanoControllerIPs = [];
-window.getGlobal = true;
-window.hasGlobal = false;
-window.buttons = {};
-window.buttonsCache = [];
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) {
@@ -29,21 +30,21 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 
 	// Open the web socket to Stream Deck
 	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
-	window.websocket = new WebSocket('ws://127.0.0.1:' + inPort);
+	websocket = new WebSocket('ws://127.0.0.1:' + inPort);
 
 	// Websocket is closed
-	window.websocket.onclose = function (evt) {
+	websocket.onclose = function (evt) {
 		var reason = WebsocketError(evt);
 		log('Websocket closed: ' + reason);
 	};
 
 	// Websocket received a message
-	window.websocket.onerror = function (evt) {
+	websocket.onerror = function (evt) {
 		log('Websocket error: ' + evt + ' ' + evt.data);
 	};
 
 	// Web socked received a message
-	window.websocket.onmessage = function (inEvent) {
+	websocket.onmessage = function (inEvent) {
 		// Parse parameter from string to object
 		var jsonObj = JSON.parse(inEvent.data);
 		var event = jsonObj['event'];
@@ -52,6 +53,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		var jsonPayload = jsonObj['payload'];
 		var settings;
 		var timerLP;
+
 		// Events
 		switch (event) {
 			case 'keyDown':
@@ -61,7 +63,6 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				break;
 			case 'keyUp':
 				settings = jsonPayload['settings'];
-console.log(settings);
 				timerLP = buttonLongpressTimeouts.get(context);
 				if (timerLP) {
 					clearTimeout(timerLP);
@@ -72,16 +73,16 @@ console.log(settings);
 				delete settings['userDesiredState'];
 				saveSettings(action, context, settings);
 				var state = jsonPayload['state'];
-
 				// Send onKeyUp event to actions
 				if (context in actions) {
-					var nanoController = actions[context].getSettings().nanoController;
+					// var nanoController = actions[context].getSettings().nanoController;
 					actions[context].onKeyUp(context, settings, coordinates, userDesiredState, state);
 				}
 				break;
 			case 'willAppear':
 				if (window.hasGlobal) {
 					var state = null;
+					var data = null;
 					settings = jsonPayload['settings'];
 					if (!('nanoController' in settings)) {
 						return;
@@ -96,7 +97,11 @@ console.log(settings);
 					}
 
 					if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
-						var data = {"command": settings.command, "context": context};
+						if (settings.command === 'brightness') {
+							data = {"command": settings.command, "context": context, "level": settings.transition, "value": settings.value};
+						} else {
+							data = {"command": settings.command, "context": context, "level": "title", "value": settings.value};
+						}
 						window.buttons[settings.nanoController].push(data);
 					}
 
@@ -149,7 +154,7 @@ console.log(settings);
 				break;
 			case 'propertyInspectorDidAppear':
 				// Send cache to PI
-				var payLoad = {};
+				let payLoad = {};
 				payLoad.settings = window.nanoControllers;
 				sendToPropertyInspector(action, context, payLoad);
 				break;
@@ -162,12 +167,20 @@ console.log(settings);
 					window.nanoControllerCache['status'] = "";
 					requestGlobalSettings(inUUID);
 				} else if (piEvent === 'valueChanged') {
+					settings = jsonPayload['settings'];
+					// Set settings
+					if (context in actions) {
+						actions[context].setSettings(settings);
+					}
 					// Send manual onKeyUp event to action
 					if (context in actions) {
-						actions[context].onKeyUp(context);
+						actions[context].onKeyUp(context, settings);
 					}
 				} else if (piEvent === 'buttonChanged') {
 					window.buttonsCache.push(jsonObj);
+					_buttonsCache();
+				} else if (piEvent === 'log') {
+					log(jsonPayload['message']);
 					_buttonsCache();
 				}
 				break;
@@ -188,6 +201,8 @@ console.log(settings);
 					requestGlobalSettings(inUUID);
 				}
 				window.getGlobal = true;
+				break;
+			case 'titleParametersDidChange':
 				break;
 			default:
 				log('plugin/main.js line 192 uncaught event: ' + event);
@@ -210,7 +225,7 @@ console.log(settings);
 	};
 
 	// Web socket is connected
-	window.websocket.onopen = function () {
+	websocket.onopen = function () {
 		// Register plugin to Stream Deck
 		registerPluginOrPI(inRegisterEvent, inUUID);
 		// Request the global settings of the plugin

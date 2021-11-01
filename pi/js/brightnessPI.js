@@ -59,6 +59,6 @@ function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersio
 		window.settings.value = inEvent.target.value;
 		instance.saveSettings();
 		// Inform the plugin that a new brightness is set
-		instance.sendToPlugin({'piEvent': 'valueChanged'});
+		instance.sendToPlugin({'piEvent': 'valueChanged', 'settings': {'command': window.settings.command, 'nanoController': window.settings.nanoController, 'transition': 'set', 'value': inEvent.target.value}});
 	}
 }

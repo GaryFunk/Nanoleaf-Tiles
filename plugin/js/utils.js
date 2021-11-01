@@ -41,18 +41,21 @@ function getLocalization(inLanguage, inCallback) {
 
 // Log to the global log file
 function log(inMessage) {
-	var time = new Date();
-	var timeString = time.toLocaleDateString() + ' ' + time.toLocaleTimeString();
-	// Log to the Stream Deck log file
-	if (websocket) {
-		var json = {
-			'event': 'logMessage',
-			'payload': {
-				'message': inMessage
-			}
-		};
-		window.websocket.send(JSON.stringify(json));
-	}
+    // Log to the developer console
+    var time = new Date();
+    var timeString = time.toLocaleDateString() + ' ' + time.toLocaleTimeString();
+    console.log(timeString, inMessage);
+
+    // Log to the Stream Deck log file
+    if (websocket) {
+        var json = {
+            'event': 'logMessage',
+            'payload': {
+                'message': inMessage
+            }
+        };
+        websocket.send(JSON.stringify(json));
+    }
 }
 
 // Register the plugin or PI
@@ -62,7 +65,7 @@ function registerPluginOrPI(inEvent, inUUID) {
 			'event': inEvent,
 			'uuid': inUUID
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -73,7 +76,7 @@ function requestGlobalSettings(inUUID) {
 			'context': inUUID,
 			'event': 'getGlobalSettings'
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -85,7 +88,7 @@ function saveGlobalSettings(inUUID) {
 			'event': 'setGlobalSettings',
 			'payload': globalSettings
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -98,7 +101,7 @@ function saveSettings(inAction, inUUID, inSettings) {
 			'event': 'setSettings',
 			'payload': inSettings
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -111,7 +114,7 @@ function sendToPlugin(inAction, inContext, inData) {
 			'event': 'sendToPlugin',
 			'payload': inData
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -124,7 +127,7 @@ function sendToPropertyInspector(inAction, inContext, inData) {
 			'event': 'sendToPropertyInspector',
 			'payload': inData
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -138,7 +141,7 @@ function setState(inContext, inState) {
 				'state': inState
 			}
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 
@@ -153,7 +156,7 @@ function setTitle(inContext, inTitle) {
 				'target': 0
 			}
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 };
 
@@ -179,7 +182,7 @@ function showAlert(inUUID) {
 			'context': inUUID,
 			'event': 'showAlert'
 		};
-		window.websocket.send(JSON.stringify(json));
+		websocket.send(JSON.stringify(json));
 	}
 }
 

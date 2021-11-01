@@ -10,15 +10,37 @@
 function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	// Init PI
 	var instance = this;
+
 	// Public localizations for the UI
 	this.localization = {};
+
 	// Add event listener
 	document.getElementById('controller-select').addEventListener('change', controllerChanged);
 	document.addEventListener('saveNanoController', saveNanoControllerCallback);
 
-	var _deleteController = function () {
+	// Load the localizations
+	getLocalization(inLanguage, function (inStatus, inLocalization) {
+		if (inStatus) {
+			// Save public localization
+			instance.localization = inLocalization['PI'];
+			// Localize the PI
+			instance.localize();
+		} else {
+			//log(inLocalization);
+			let inData = {};
+			inData['piEvent'] = 'log';
+			inData['message'] = inLocalization;
+			instance.sendToPlugin(inData);
+		}
+	});
+
+	const _deleteController = function () {
 		event.preventDefault();
 		deleteController(window.settings.nanoController, inContext);
+	}
+
+	const sleep = (milliseconds) => {
+		return new Promise(resolve => setTimeout(resolve, milliseconds))
 	}
 
 	/*
@@ -39,18 +61,6 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		sendValueToPlugin(getAction(), inContext, 'propertyInspectorDisconnected', 'property_inspector');
 	});
 	*/
-
-	// Load the localizations
-	getLocalization(inLanguage, function (inStatus, inLocalization) {
-		if (inStatus) {
-			// Save public localization
-			instance.localization = inLocalization['PI'];
-			// Localize the PI
-			instance.localize();
-		} else {
-			log(inLocalization);
-		}
-	});
 
 	// Localize the UI
 	this.localize = function () {
@@ -135,7 +145,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			document.getElementById('controller-select').value = 'add-controller';
 			document.getElementById("controller-delete").removeEventListener("click", _deleteController);
 			// Open setup window
-			setupWindow = window.open('../setup/index.html?language=' + inLanguage + '&nanoControllerIPs=' + JSON.stringify(window.nanoControllerIPs));
+			setupWindow = window.open('../setup/index.html?language=' + inLanguage + '&nanoControllerIPs=' + JSON.stringify(window.nanoControllerIPs), 'setup');
 		} else if (inEvent.target.value === 'blank-controller') {
 			// If no controller was selected, do nothing
 			document.getElementById('controller-select').value = 'blank-controller';
@@ -144,11 +154,11 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			window.settings.nanoController = inEvent.target.value;
 			instance.saveSettings();
 			instance.loadControllers();
-			let temp = {};
-			temp['piEvent'] = 'buttonChanged';
-			temp['settings'] = window.settings;
-			temp['state'] = true;
-			instance.sendToPlugin(temp);
+			let inData = {};
+			inData['piEvent'] = 'buttonChanged';
+			inData['settings'] = window.settings;
+			inData['state'] = true;
+			instance.sendToPlugin(inData);
 		}
 		if (instance instanceof EffectPI) {
 			loadEffects();
@@ -157,7 +167,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 
 	// Private function to return the action identifier
 	function getAction() {
-		var action;
+		let action;
 		// Find out type of action
 		if (instance instanceof PowerPI) {
 			action = 'com.fsoft.nanoleaf.power';
@@ -176,22 +186,22 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		var nanoSN = window.settings.nanoController;
 		var NF = window.nanoControllerCache[nanoKey];
 		try {
-			if (NF == undefined) {
+			if (NF === undefined) {
 				document.getElementById('controller-select').value = 'no-controller';
 				sleep(250).then(() => {
 					document.getElementById('controller-select').value = window.settings.nanoController;
 					instance.loadControllers();
 				})
+				return;
 			}
 			// Get effectList
 			var data = NF.getInfo();
 			var effectsList = data.effects.effectsList;
-			var effectSelect = data.effects['select'];
 			if (effectsList.length > 0) {
 				var options = document.getElementById('effect-select');
 				options.length = 0;
 				for (index in effectsList) {
-					var selected = false;
+					let selected = false;
 					if (effectsList[index] == window.settings.value) {
 						selected = true;
 					}
@@ -199,7 +209,11 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 				}
 			}
 		} catch(e) {
-			log('error: ' + e);
+			//log('error: ' + e);
+			let inData = {};
+			inData['piEvent'] = 'log';
+			inData['message'] = 'error pi/pi.js line 215: ' + e;
+			instance.sendToPlugin(inData);
 		}
 	}
 
@@ -230,10 +244,6 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		window.settings.nanoController = inEvent.detail.nanoSN;
 		instance.saveSettings();
 		instance.loadControllers();
-		sendToPlugin({'piEvent': 'newController'});
-	}
-
-	const sleep = (milliseconds) => {
-		return new Promise(resolve => setTimeout(resolve, milliseconds))
+		instance.sendToPlugin({'piEvent': 'newController'});
 	}
 }

@@ -51,7 +51,7 @@ function getLocal//IP() {
 		rtc.createOffer(function (offerDesc) {
 			rtc.setLocalDescription(offerDesc);
 		}, function (e) {
-			log("offer failed: " + e);
+			//log("offer failed: " + e);
 		});
 
 		rtc.onicecandidate = function (evt) {
