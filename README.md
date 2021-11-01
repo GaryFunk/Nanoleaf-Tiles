@@ -44,10 +44,8 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 ## *Credits, Donations and Thanks*
     * Alerts provided by [Sweet Alert](https://sweetalert.js.org/)
-
 * ### Donations
     *  [@Backslasher](https://discordapp.com/users/277603804399140865/)
-
 * ### Special Thanks
     * [@BarRaider](https://discordapp.com/users/270832792802164736/) - Plugin hosting and advice
     * [@Backslasher](https://discordapp.com/users/277603804399140865/) - German translation
