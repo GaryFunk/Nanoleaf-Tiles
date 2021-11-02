@@ -28,7 +28,7 @@
 
 **Support Links**
 - [Issues](https://github.com/GaryFunk/Nanoleaf-Tiles/issues).
-- [Discord]().
+- [Discord](https://discord.gg/gQ4kKVCc).
 
 **Known Issues**
 - No known issues in this release.
