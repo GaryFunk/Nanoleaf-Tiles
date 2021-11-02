@@ -1,4 +1,11 @@
-# Nanoleaf Tiles
+<style>
+  p: {
+    font-size: 300%;
+  }
+</style>
+
+
+<span style="font-size: 2.5em;">Nanoleaf Tiles</span><br>
 - A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 ## Overview
