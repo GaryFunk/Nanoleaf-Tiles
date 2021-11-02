@@ -1,5 +1,5 @@
 # Nanoleaf Tiles
-- A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
+A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 **Overview**
 - Power - Toggles power on the controller On / Off.
