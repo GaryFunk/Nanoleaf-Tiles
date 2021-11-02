@@ -1,7 +1,6 @@
 ![plugin@2x](https://user-images.githubusercontent.com/704275/139780209-c1c3845d-3dbd-42e7-8f9e-64ad65bb23a5.png)
 # Nanoleaf Tiles
-
-A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
+- A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 **Overview**
 - Power - Toggles power on the controller On / Off.
@@ -40,13 +39,16 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 **Credits**
 - Alerts provided by [Sweet Alert](https://sweetalert.js.org/).
+
 **Donations**
 - [@Backslasher](https://discordapp.com/users/277603804399140865/).
+
 **Special Thanks**
 - [@BarRaider](https://discordapp.com/users/270832792802164736/) - Plugin hosting and advice.
 - [@Backslasher](https://discordapp.com/users/277603804399140865/) - German translation.
 
 **Previous Releases**
+
 **v1.2**
 - Brightness supports a custom value.
 - Long press on Brightness sets it to 100%.
