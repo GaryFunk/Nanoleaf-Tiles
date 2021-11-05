@@ -34,31 +34,35 @@ function EffectAction(inContext, inSettings, inState) {
 		}
 
 		// Find the configured controller
-		var nanoKey = '"' + inSettings.nanoController + '"';
-		var NF = window.nanoControllerCache[nanoKey];
-		var targetState = 1;
+		try {
+			var nanoKey = '"' + inSettings.nanoController + '"';
+			var NF = window.nanoControllerCache[nanoKey];
+			var targetState = 1;
 
-		// Set the target value
-		var targetValue = inSettings.value;
+			// Set the target value
+			var targetValue = inSettings.value;
 
-		// Set state
-		NF.setEffect(targetState, targetValue, function (success, message, value) {
-			if (success) {
-				// Add loop here to update the other buttons
-				var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'color' || x.command === 'effect');
-				for (let button of theButtons) {
-					setState(button.context, !targetState);
+			// Set state
+			NF.setEffect(targetState, targetValue, function (success, message, value) {
+				if (success) {
+					// Add loop here to update the other buttons
+					var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'color' || x.command === 'effect');
+					for (let button of theButtons) {
+						setState(button.context, !targetState);
+					}
+
+					// Set the new effect
+					setActionState(inContext, targetState, targetValue);
+					instance.updateCrap('brightness', inSettings.nanoController, targetState, NF.getInfo());
+				} else {
+					log('plugin/effectAction.js line 58: ' + message);
+					setActionState(inContext, targetState, targetValue);
+					showAlert(inContext);
 				}
-
-				// Set the new effect
-				setActionState(inContext, targetState, targetValue);
-				instance.updateCrap('brightness', inSettings.nanoController, targetState, NF.getInfo());
-			} else {
-				log('plugin/effectAction.js line 57: ' + message);
-				setActionState(inContext, targetState, targetValue);
-				showAlert(inContext);
-			}
-		});
+			});
+		} catch(e) {
+			log('plugin/effectAction.js line 64: ' + e);
+		}
 	};
 
 	// Private function to set the defaults
@@ -75,9 +79,9 @@ function EffectAction(inContext, inSettings, inState) {
 			return;
 		}
 		// Find the configured controller
-		var nanoKey = '"' + inSettings.nanoController + '"';
-		var NF = window.nanoControllerCache[nanoKey];
 		try {
+			var nanoKey = '"' + inSettings.nanoController + '"';
+			var NF = window.nanoControllerCache[nanoKey];
 			var nanoInfo = NF.getInfo();
 			// Set the target state
 			var targetState = state;
@@ -86,7 +90,7 @@ function EffectAction(inContext, inSettings, inState) {
 			// Set the new action state
 			setActionState(context, targetState, targetValue);
 		} catch(e) {
-			log('plugin/colorAction.js line 89: ' + e);
+			log('plugin/effectAction.js line 93: ' + e);
 		}
 	}
 

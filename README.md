@@ -1,4 +1,3 @@
-![plugin@2x](https://user-images.githubusercontent.com/704275/139780209-c1c3845d-3dbd-42e7-8f9e-64ad65bb23a5.png)
 # Nanoleaf Tiles
 - A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
@@ -23,7 +22,7 @@
 - [README](https://github.com/GaryFunk/Nanoleaf-Tiles/edit/main/README.md).
 
 **Information**
-- Compatibility: Strean Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.
+- Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.
 - Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.
 
 **Support Links**

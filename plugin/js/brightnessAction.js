@@ -34,38 +34,43 @@ function BrightnessAction(inContext, inSettings, inState) {
 		}
 
 		// Find the configured controller
-		var nanoKey = '"' + inSettings.nanoController + '"';
-		var NF = window.nanoControllerCache[nanoKey];
-		var targetState = 1;
+		try {
+			var nanoKey = '"' + inSettings.nanoController + '"';
+			var NF = window.nanoControllerCache[nanoKey];
+			var targetState = 1;
 
-		// Set the target value
-		var targetValue = setTargetValue(NF, inSettings, inUserDesiredState);
-		// Set state
-		NF.setBrightness(targetState, targetValue, function (success, message, value) {
-			if (success) {
-				// Add loop here to update the other buttons
-				let theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'brightness');
-				for (let button of theButtons) {
-					if (button.level === "set") {
-						setActionState(button.context, !targetState, "-" + button.value + "-");
-					} else {
-						setActionState(button.context, !targetState, targetValue);
+			// Set the target value
+			var targetValue = setTargetValue(NF, inSettings, inUserDesiredState);
+
+			// Set state
+			NF.setBrightness(targetState, targetValue, function (success, message, value) {
+				if (success) {
+					// Add loop here to update the other buttons
+					let theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'brightness');
+					for (let button of theButtons) {
+						if (button.level === "set") {
+							setActionState(button.context, !targetState, "-" + button.value + "-");
+						} else {
+							setActionState(button.context, !targetState, targetValue);
+						}
 					}
-				}
 
-				// Set the new brightness
-				if (inSettings.transition === "set") {
-					setActionState(inContext, targetState, "-" + targetValue + "-");
+					// Set the new brightness
+					if (inSettings.transition === "set") {
+						setActionState(inContext, targetState, "-" + targetValue + "-");
+					} else {
+						setActionState(inContext, targetState, targetValue);
+					}
+					instance.updateCrap('power', inSettings.nanoController, targetState, NF.getInfo());
 				} else {
+					log('plugin/brightnessAction.js line 66: ' + message);
 					setActionState(inContext, targetState, targetValue);
+					showAlert(inContext);
 				}
-				instance.updateCrap('power', inSettings.nanoController, targetState, NF.getInfo());
-			} else {
-				log('plugin/brightnessAction.js line 64: ' + message);
-				setActionState(inContext, targetState, targetValue);
-				showAlert(inContext);
-			}
-		});
+			});
+		} catch(e) {
+			log('plugin/brightnessAction.js line 72: ' + e);
+		}
 	};
 
 	// Private function to set the state
@@ -98,7 +103,7 @@ function BrightnessAction(inContext, inSettings, inState) {
 			// Set the new action state
 			setActionState(context, targetState, targetValue);
 		} catch(e) {
-			log('plugin/brightnessAction.js line 101: ' + e);
+			log('plugin/brightnessAction.js line 106: ' + e);
 		}
 	}
 

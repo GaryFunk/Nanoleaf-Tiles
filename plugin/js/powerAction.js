@@ -34,32 +34,36 @@ function PowerAction(inContext, inSettings, isState) {
 		}
 
 		// Find the configured controller
-		var nanoKey = '"' + inSettings.nanoController + '"';
-		var NF = window.nanoControllerCache[nanoKey];
-		var nanoInfo = NF.getInfo();
+		try {
+			var nanoKey = '"' + inSettings.nanoController + '"';
+			var NF = window.nanoControllerCache[nanoKey];
+			var nanoInfo = NF.getInfo();
 
-		// Set the target value
-		var currentState = (nanoInfo.state.on.value ? 1 : 0);
-		var targetState = (currentState ? 0 : 1);
-		var targetValue = (targetState ? 'On' : 'Off');
+			// Set the target value
+			var currentState = (nanoInfo.state.on.value ? 1 : 0);
+			var targetState = (currentState ? 0 : 1);
+			var targetValue = (targetState ? 'On' : 'Off');
 
-		// Set state
-		NF.setPower(targetState, targetValue, function (success, message, value) {
-			if (success) {
-				// Add loop here to update the other buttons
-				var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'power');
-				for (let button of theButtons) {
-					setActionState(button.context, targetState, targetValue);
+			// Set state
+			NF.setPower(targetState, targetValue, function (success, message, value) {
+				if (success) {
+					// Add loop here to update the other buttons
+					var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'power');
+					for (let button of theButtons) {
+						setActionState(button.context, targetState, targetValue);
+					}
+
+					// Set the new power
+					// setActionState(inContext, targetState, targetValue);
+				} else {
+					log('plugin/powerAction.js line 59: ' + message);
+					setActionState(inContext, targetState, targetValue);
+					showAlert(inContext);
 				}
-
-				// Set the new power
-				// setActionState(inContext, targetState, targetValue);
-			} else {
-				log('plugin/powerAction.js line 58: ' + message);
-				setActionState(inContext, targetState, targetValue);
-				showAlert(inContext);
-			}
-		});
+			});
+		} catch(e) {
+			log('plugin/powerAction.js line 65: ' + e);
+		}
 	};
 
 	// Private function to set the state
@@ -76,9 +80,9 @@ function PowerAction(inContext, inSettings, isState) {
 			return;
 		}
 		// Find the configured controller
-		var nanoKey = '"' + inSettings.nanoController + '"';
-		var NF = window.nanoControllerCache[nanoKey];
 		try {
+			var nanoKey = '"' + inSettings.nanoController + '"';
+			var NF = window.nanoControllerCache[nanoKey];
 			var nanoInfo = NF.getInfo();
 			// Set the target state
 			var targetState = (nanoInfo.state.on.value ? 1 : 0);
@@ -87,7 +91,7 @@ function PowerAction(inContext, inSettings, isState) {
 			// Set the new action state
 			setActionState(context, targetState, targetValue);
 		} catch(e) {
-			log('plugin/powerAction.js line 90: ' + e);
+			log('plugin/powerAction.js line 94: ' + e);
 		}
 	}
 
