@@ -100,7 +100,6 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 				var option = "<option id='" + inControllerID + "' value='" + inControllerID + "' class='nanoControllers'>" + window.nanoControllers[inControllerID].nanoName + "</option>";
 				document.getElementById('controller-select').insertAdjacentHTML('beforeend', option);
 			});
-
 			// Check if the controller is configured
 			if (window.settings.nanoController === undefined) {
 				document.getElementById('controller-select').value = "blank-controller";
@@ -118,7 +117,9 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 			} else if (instance instanceof ColorPI) {
 
 			} else if (instance instanceof EffectPI) {
-				loadEffects();
+				if (window.settings.nanoController !== undefined) {
+					loadEffects();
+				}
 			}
 		} else {
 			// Show the 'No Controllers' option
@@ -183,7 +184,6 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 
 	function loadEffects() {
 		var nanoKey = '"' + window.settings.nanoController + '"';
-		var nanoSN = window.settings.nanoController;
 		var NF = window.nanoControllerCache[nanoKey];
 		try {
 			if (NF === undefined) {

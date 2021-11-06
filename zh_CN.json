@@ -54,7 +54,7 @@
 			"Transition": "Transition"
 		},
 		"Setup": {
-			"Header": "Nanoleaf Aurora, Canvas & Shapes",
+			"Header": "Nanoleaf Panels, Canvas & Shapes",
 			"Intro": {
 				"Continue": "Find Controller by discovered address",
 				"Description": "Find the active Nanoleaf controllers on the local network",
