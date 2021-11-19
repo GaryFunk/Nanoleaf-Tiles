@@ -5,12 +5,12 @@
 		"States": [{
 			"Image": "plugin/images/icons/off",
 			"Name": "Off",
-			"TitleAlignment": "bottom",
+			"TitleAlignment": "middle",
 			"FontSize": "12"
 		}, {
 			"Image": "plugin/images/icons/on",
 			"Name": "On",
-			"TitleAlignment": "bottom",
+			"TitleAlignment": "middle",
 			"FontSize": "12"
 		}],
 		"SupportedInMultiActions": true,
@@ -123,5 +123,5 @@
 		"MinimumVersion" : "5.0"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
-	"Version": "1.3"
+	"Version": "1.3.1"
 }

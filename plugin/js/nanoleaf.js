@@ -246,7 +246,7 @@ Nanoleaf.findhost = function (callback) {
 
 // Static function to search the network for controllers
 Nanoleaf.findControllers = function (callback) {
-	// scanning a single Class-C. Need to search the subnet mask to determin if the network consists of more than one Class-C.
+	// scanning a single Class-C. Need to search the subnet mask to determine if the network consists of more than one Class-C.
 	var _networkIP = localIP.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)./);
 	var networkIP = _networkIP[0];
 	var haveIPs = [];
