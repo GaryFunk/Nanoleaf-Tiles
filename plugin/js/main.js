@@ -119,6 +119,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 						}
 					}
 				} else {
+console.log(jsonObj);
 					window.buttonsCache.push(jsonObj);
 				}
 				break;
@@ -254,7 +255,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				window.buttons[settings.nanoController] = [];
 			}
 			if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
-				var data = {"command": settings.command, "context": context};
+				var data = {"command": settings.command, "context": context, "level": settings.transition, "value": settings.value};
 				window.buttons[settings.nanoController].push(data);
 			}
 			// Add current instance if not in actions array
