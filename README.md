@@ -1,4 +1,4 @@
-![plugin@2x](https://user-images.githubusercontent.com/704275/139780209-c1c3845d-3dbd-42e7-8f9e-64ad65bb23a5.png)
+![NanoleafRepository](https://user-images.githubusercontent.com/704275/142563215-b66c03fa-3d11-4935-8db9-131987d76e02.png)
 # Nanoleaf Tiles
 - A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
