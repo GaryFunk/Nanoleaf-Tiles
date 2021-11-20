@@ -36,7 +36,7 @@ function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersio
 	window.settings.command = 'brightness';
 
 	// Add brightness slider to placeholder
-	var brightnessSlider = "<div type='range' class='sdpi-item'><div class='sdpi-item-label' id='brightness-label'>Brightness Change</div><div class='sdpi-item-value'><input class='floating-tooltip' type='range' id='brightness-input' min='1' max='100' value='" + window.settings.value + "'></div></div>";
+	var brightnessSlider = "<div type='range' class='sdpi-item'><div class='sdpi-item-label' id='brightness-label'>Brightness Change</div><div class='sdpi-item-value'><input class='floating-tooltip' data-suffix='%' type='range' id='brightness-input' min='1' max='100' value='" + window.settings.value + "'></div></div>";
 	document.getElementById('placeholder').innerHTML = brightnessSlider;
 
 	// Localize the UI
@@ -59,6 +59,6 @@ function BrightnessPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersio
 		window.settings.value = inEvent.target.value;
 		instance.saveSettings();
 		// Inform the plugin that a new brightness is set
-		instance.sendToPlugin({'piEvent': 'valueChanged', 'settings': {'command': window.settings.command, 'nanoController': window.settings.nanoController, 'transition': window.settings.transition, 'value': inEvent.target.value}});
+		instance.sendToPlugin({'piEvent': 'valueChanged', 'settings': {'command': window.settings.command, 'nanoController': window.settings.nanoController, 'transition': 'set', 'value': inEvent.target.value}});
 	}
 }
