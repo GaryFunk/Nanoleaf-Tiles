@@ -98,9 +98,9 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 
 					if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
 						if (settings.command === 'brightness') {
-							data = {"command": settings.command, "context": context, "level": settings.transition, "value": settings.value};
+							data = {"command": settings.command, "context": context, "transition": settings.transition, "value": settings.value, "duration": settings.duration};
 						} else {
-							data = {"command": settings.command, "context": context, "level": "title", "value": settings.value};
+							data = {"command": settings.command, "context": context, "transition": "title", "value": settings.value};
 						}
 						window.buttons[settings.nanoController].push(data);
 					}
@@ -119,7 +119,6 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 						}
 					}
 				} else {
-console.log(jsonObj);
 					window.buttonsCache.push(jsonObj);
 				}
 				break;
@@ -133,6 +132,7 @@ console.log(jsonObj);
 				// Set global settings
 				if (jsonPayload['settings']['nanoControllers'] !== undefined) {
 					window.nanoControllers = jsonPayload['settings']['nanoControllers'];
+console.log(window.nanoControllers);
 					// If at least one controller is configured build the nanoControllerCache
 					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
@@ -255,7 +255,7 @@ console.log(jsonObj);
 				window.buttons[settings.nanoController] = [];
 			}
 			if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
-				var data = {"command": settings.command, "context": context, "level": settings.transition, "value": settings.value};
+				var data = {"command": settings.command, "context": context, "transition": settings.transition, "value": settings.value};
 				window.buttons[settings.nanoController].push(data);
 			}
 			// Add current instance if not in actions array
