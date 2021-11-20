@@ -32,7 +32,6 @@ function BrightnessAction(inContext, inSettings, inState) {
 			showAlert(inContext);
 			return;
 		}
-
 		// Find the configured controller
 		try {
 			var nanoKey = '"' + inSettings.nanoController + '"';
@@ -41,14 +40,15 @@ function BrightnessAction(inContext, inSettings, inState) {
 
 			// Set the target value
 			var targetValue = setTargetValue(NF, inSettings, inUserDesiredState);
+			let targetDuration = 0;
 
 			// Set state
-			NF.setBrightness(targetState, targetValue, function (success, message, value) {
+			NF.setBrightness(targetState, targetValue, targetDuration, function (success, message, value) {
 				if (success) {
 					// Add loop here to update the other buttons
 					let theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'brightness');
 					for (let button of theButtons) {
-						if (button.level === "set") {
+						if (button.transition === "set") {
 							setActionState(button.context, !targetState, "-" + button.value + "-");
 						} else {
 							setActionState(button.context, !targetState, targetValue);
