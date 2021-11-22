@@ -1,14 +1,16 @@
 # Nanoleaf Tiles
-- A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
-
+<ul>
+A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
+</ul>
 **Overview**
+<ul>
 Control Nanoleaf Panels, Canvas and Shapes Tiles from your Stream Deck.
 Toggle the controller tiles on or off; increase, decrease or set the brightness level; set the tiles color or apply one of the special effects.
 Use the Stream Deck 'Multi Action' to send actions to several controllers.
 Use 'Folders' to group actions per Nanoleaf controller.
 Buttons across devices are kept in sync.
 Suggestions and comments, good or bad, are always welcome.
-
+</ul>
 **What's New**
 <ul>
 Version 1.3 - 11/08/2021</br>
@@ -20,8 +22,9 @@ Changed Brightness to set a static value.
 Pay attention as to how the button icons update.
 </ul>
 **Helpful Links**
-- [README](https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).
-
+<ul>
+README: (https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).
+</ul>
 **Information**
 Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.</br>
 Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.</br>
