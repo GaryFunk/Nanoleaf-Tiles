@@ -1,15 +1,10 @@
-<style>
-	H1 {
-		color: #d00000;
-	}
-</style>
 
 <h1>Nanoleaf Tiles</h1>
 <ul>
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.<br />
 </ul>
 
-<h3>Overview</h3>
+<h3 style="color: #D00000">Overview</h3>
 <ul>
 Control Nanoleaf Panels, Canvas and Shapes Tiles from your Stream Deck.
 Toggle the controller tiles on or off; increase, decrease or set the brightness level; set the tiles color or apply one of the special effects.
