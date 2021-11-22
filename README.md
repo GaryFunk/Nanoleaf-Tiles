@@ -2,7 +2,7 @@
 <ul>
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 </ul>
-**Overview**
+<h3>Overview</h3>
 <ul>
 Control Nanoleaf Panels, Canvas and Shapes Tiles from your Stream Deck.
 Toggle the controller tiles on or off; increase, decrease or set the brightness level; set the tiles color or apply one of the special effects.
@@ -11,7 +11,7 @@ Use 'Folders' to group actions per Nanoleaf controller.
 Buttons across devices are kept in sync.
 Suggestions and comments, good or bad, are always welcome.
 </ul>
-**What's New**
+<h3>What's New</h3>
 <ul>
 Version 1.3 - 11/08/2021</br>
 Added Brightness Increase and Brightness Decrease buttons.
@@ -21,7 +21,7 @@ Added new icons for Brightness, Color and Effect where the multi-color icon indi
 Changed Brightness to set a static value.
 Pay attention as to how the button icons update.
 </ul>
-**Helpful Links**
+<v3>Helpful Links</h3>
 <ul>
 README: (https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).
 </ul>
