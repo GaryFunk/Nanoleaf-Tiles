@@ -1,4 +1,4 @@
-<h1Nanoleaf Tiles</h1>
+<h1>Nanoleaf Tiles</h1>
 <ul>
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 </ul>
