@@ -1,4 +1,4 @@
-# Nanoleaf Tiles
+<h1Nanoleaf Tiles</h1>
 <ul>
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 </ul>
@@ -23,16 +23,18 @@ Pay attention as to how the button icons update.
 </ul>
 <v3>Helpful Links</h3>
 <ul>
-README: (https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).
+README: (https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).</br>
 </ul>
-**Information**
+<h3>Information</h3>
+<ul>
 Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.</br>
 Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.</br>
-
-**Support Links**
-<p>Issues (https://github.com/GaryFunk/Nanoleaf-Tiles/issues).</p>
-<p>Discord (https://discord.gg/gQ4kKVCc).</p>
-
+</ul>
+<h3>Support Links</h3>
+<ul>
+Issues (https://github.com/GaryFunk/Nanoleaf-Tiles/issues).</br>
+Discord (https://discord.gg/gQ4kKVCc).</br>
+</ul>
 **Known Issues**
 - No known issues in this release.
 
