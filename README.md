@@ -1,3 +1,9 @@
+<style>
+	H1 {
+		color: #d00000;
+	}
+</style>
+
 <h1>Nanoleaf Tiles</h1>
 <ul>
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.<br />
