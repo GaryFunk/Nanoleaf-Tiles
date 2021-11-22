@@ -10,14 +10,15 @@ Buttons across devices are kept in sync.
 Suggestions and comments, good or bad, are always welcome.
 
 **What's New**
-- Version 1.3 - 11/08/2021</br>
+<ul>
+Version 1.3 - 11/08/2021</br>
 Added Brightness Increase and Brightness Decrease buttons.
 Added additional localization files in English (de, en, es, fr, ja, ko and zh_CN).
 Added code to update like buttons across Stream Deck hardware.
 Added new icons for Brightness, Color and Effect where the multi-color icon indicates last pushed.
 Changed Brightness to set a static value.
 Pay attention as to how the button icons update.
-
+</ul>
 **Helpful Links**
 - [README](https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).
 
@@ -26,8 +27,8 @@ Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 an
 Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.</br>
 
 **Support Links**
-<p>[Issues](https://github.com/GaryFunk/Nanoleaf-Tiles/issues).</p>
-<p>[Discord](https://discord.gg/gQ4kKVCc).</p>
+<p>Issues (https://github.com/GaryFunk/Nanoleaf-Tiles/issues).</p>
+<p>Discord (https://discord.gg/gQ4kKVCc).</p>
 
 **Known Issues**
 - No known issues in this release.
