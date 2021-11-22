@@ -2,32 +2,32 @@
 - A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
 
 **Overview**
-- Power - Toggles power on the controller On / Off.
-- Brightness Increase - Set brightness to current value + Brightness Value, LongPress to set at full brightness.
-- Brightness Decrease - Set brightness to current value - Brightness value, LongPress to set at zero brightness.
-- Brightness - Set brightness to the Brightness Value.
-- Color - Set a static color for all tiles.
-- Effect - Set one of the built-in effects available on the controller.
-- Buttons across devices are kept in sync.
+Control Nanoleaf Panels, Canvas and Shapes Tiles from your Stream Deck.
+Toggle the controller tiles on or off; increase, decrease or set the brightness level; set the tiles color or apply one of the special effects.
+Use the Stream Deck 'Multi Action' to send actions to several controllers.
+Use 'Folders' to group actions per Nanoleaf controller.
+Buttons across devices are kept in sync.
+Suggestions and comments, good or bad, are always welcome.
 
 **What's New**
-- Version 1.3 -
-- Added Brightness Increase and Brightness Decrease buttons.
-- Added additional localization files in English (de, en, es, fr, ja, ko and zh_CN).
-- Added code to update like buttons across Stream Deck hardware.
-- Added new icons for Brightness, Color and Effect where the multi-color icon indicates last pushed.
-- Changed Brightness to set a static value.
+- Version 1.3 - 11/08/2021</br>
+Added Brightness Increase and Brightness Decrease buttons.
+Added additional localization files in English (de, en, es, fr, ja, ko and zh_CN).
+Added code to update like buttons across Stream Deck hardware.
+Added new icons for Brightness, Color and Effect where the multi-color icon indicates last pushed.
+Changed Brightness to set a static value.
+Pay attention as to how the button icons update.
 
 **Helpful Links**
-- [README](https://github.com/GaryFunk/Nanoleaf-Tiles/edit/main/README.md).
+- [README](https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md).
 
 **Information**
-- Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.
-- Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.
+Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.</br>
+Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.</br>
 
 **Support Links**
-- [Issues](https://github.com/GaryFunk/Nanoleaf-Tiles/issues).
-- [Discord](https://discord.gg/gQ4kKVCc).
+<p>[Issues](https://github.com/GaryFunk/Nanoleaf-Tiles/issues).</p>
+<p>[Discord](https://discord.gg/gQ4kKVCc).</p>
 
 **Known Issues**
 - No known issues in this release.
