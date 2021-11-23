@@ -1,65 +1,93 @@
-# Nanoleaf Tiles
-- A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.
+<h1>Nanoleaf Tiles</h1>
+<ul>
+A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.<br />
+</ul>
 
-**Overview**
-- Power - Toggles power on the controller On / Off.
-- Brightness Increase - Set brightness to current value + Brightness Value, LongPress to set at full brightness.
-- Brightness Decrease - Set brightness to current value - Brightness value, LongPress to set at zero brightness.
-- Brightness - Set brightness to the Brightness Value.
-- Color - Set a static color for all tiles.
-- Effect - Set one of the built-in effects available on the controller.
-- Buttons across devices are kept in sync.
+<h3 style="color: #D00000;">Overview</h3>
+<ul>
+Control Nanoleaf Panels, Canvas, Lines and Shapes Tiles from your Stream Deck.
+Toggle the controller tiles on or off; increase, decrease or set the brightness level; set the tiles color or apply one of the special effects.
+Use the Stream Deck 'Multi Action' to send actions to several controllers.
+Use 'Folders' to group actions per Nanoleaf controller.
+Buttons across devices are kept in sync.
+Suggestions and comments, good or bad, are always welcome.<br />
+</ul>
 
-**What's New**
-- Version 1.3 -
-- Added Brightness Increase and Brightness Decrease buttons.
-- Added additional localization files in English (de, en, es, fr, ja, ko and zh_CN).
-- Added code to update like buttons across Stream Deck hardware.
-- Added new icons for Brightness, Color and Effect where the multi-color icon indicates last pushed.
-- Changed Brightness to set a static value.
+<h3>What's New</h3>
+<ul>
+Version 1.3 - 11/08/2021<br />
+Added Brightness Increase and Brightness Decrease buttons.
+Added additional localization files in English (de, en, es, fr, ja, ko and zh_CN).
+Added code to update like buttons across Stream Deck hardware.
+Added new icons for Brightness, Color and Effect where the multi-color icon indicates last pushed.
+Changed Brightness to set a static value.
+Pay attention as to how the button icons update.<br />
+</ul>
 
-**Helpful Links**
-- [README](https://github.com/GaryFunk/Nanoleaf-Tiles/edit/main/README.md).
+<h3>Helpful Links</h3>
+<ul>
+README: https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md<br />
+</ul>
 
-**Information**
-- Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.
-- Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.
+<h3>Information</h3>
+<ul>
+Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.<br />
+Languages: English, German. Translation needed for: Chinese, French, Japanese, Korean, Spanish.<br />
+</ul>
 
-**Support Links**
-- [Issues](https://github.com/GaryFunk/Nanoleaf-Tiles/issues).
-- [Discord](https://discord.gg/gQ4kKVCc).
+<h3>Support Links</h3>
+<ul>
+Issues:  https://github.com/GaryFunk/Nanoleaf-Tiles/issues<br />
+Discord: https://discord.gg/gQ4kKVCc<br />
+</ul>
 
-**Known Issues**
-- No known issues in this release.
+<h3>Known Issues</h3>
+<ul>
+No known issues in this release.<br />
+</ul>
 
-**Notes**
-- On the Property Inspector, leave the Title blank except for Color which you will enter the name of the color.
-- The Stream Deck will indicate the status of the controller by dislaying a colored (non-green) icon.
+<h3>Notes</h3>
+<ul>
+On the Property Inspector, leave the Title blank except for Color which you will enter the name of the color.<br />
+The Stream Deck will indicate the status of the controller by dislaying a colored (non-green) icon.<br />
+</ul>
 
-**Credits**
-- Alerts provided by [Sweet Alert](https://sweetalert.js.org/).
+<h3>Credits</h3>
+<ul>
+Alerts provided by Sweet Alert https://sweetalert.js.org/<br />
+</ul>
 
-**Donations**
-- [@Backslasher](https://discordapp.com/users/277603804399140865/).
+<h3>Donations</h3>
+<ul>
+@Backslasher: https://discordapp.com/users/277603804399140865/<br />
+</ul>
 
-**Special Thanks**
-- [@BarRaider](https://discordapp.com/users/270832792802164736/) - Plugin hosting and advice.
-- [@Backslasher](https://discordapp.com/users/277603804399140865/) - German translation.
+<h3>Special Thanks</h3>
+<ul>
+@BarRaider https://discordapp.com/users/270832792802164736/ - Plugin hosting and advice.<br />
+@Backslasher https://discordapp.com/users/277603804399140865/ - German translation.<br />
+</ul>
 
-**Previous Releases**
+<h3>Previous Releases</h3>
 
-**v1.2**
-- Brightness supports a custom value.
-- Long press on Brightness sets it to 100%.
-- Fixed: Label on all Effect buttons was set to current Effect.
+<h3>v1.2</h3>
+<ul>
+Brightness supports a custom value.<br />
+Long press on Brightness sets it to 100.<br />
+Fixed: Label on all Effect buttons was set to current Effect.<br />
+</ul>
 
-**v1.1**
-- Controller setup rewritten and optimized.
-- Property Inspector main code rewritten.
-- Plugin code rewritten.
-- Unused code removed.
-- Bug fixes and more bug fixes.
+<h3>v1.1</h3>
+<ul>
+Controller setup rewritten and optimized.<br />
+Property Inspector main code rewritten.<br />
+Plugin code rewritten.<br />
+Unused code removed.<br />
+Bug fixes and more bug fixes.<br />
+</ul>
 
-**v1.0**
-- Initial release.
-- This is my first Stream Deck plugin.
+<h3>v1.0</h3>
+<ul>
+Initial release.<br />
+This is my first Stream Deck plugin.<br />
+</ul>
