@@ -43,6 +43,15 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		log('Websocket error: ' + evt + ' ' + evt.data);
 	};
 
+	// Web socket is connected
+	websocket.onopen = function () {
+		// Register plugin to Stream Deck
+		registerPluginOrPI(inRegisterEvent, inUUID);
+		// Request the global settings of the plugin
+		requestGlobalSettings(inUUID);
+		window.getGlobal = false;
+	};
+
 	// Web socked received a message
 	websocket.onmessage = function (inEvent) {
 		// Parse parameter from string to object
@@ -223,16 +232,6 @@ console.log(window.nanoControllers);
 				}
 			}
 		}
-	};
-
-	// Web socket is connected
-	websocket.onopen = function () {
-		// Register plugin to Stream Deck
-		registerPluginOrPI(inRegisterEvent, inUUID);
-		// Request the global settings of the plugin
-		requestGlobalSettings(inUUID);
-		window.getGlobal = false;
-
 	};
 
 	function getKeyByValue(object, value) {
