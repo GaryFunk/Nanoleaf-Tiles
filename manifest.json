@@ -103,11 +103,11 @@
 		"UUID": "com.fsoft.nanoleaf.effect"
 	}],
 	"Author": "Gary Funk, fSoft, Ltd.",
-	"Category": "Nanoleaf Panels/Canvas/Shapes",
+	"Category": "Lighting",
 	"CategoryIcon": "plugin/images/actions/category",
 	"CodePath": "plugin/index.html",
 	"DefaultWindowSize": [500, 650],
-	"Description": "Control Nanoleaf Panels, Canvas and Shapes tiles.",
+	"Description": "Control Nanoleaf Panels, Canvas, Lines and Shapes tiles.",
 	"Icon": "plugin/images/icons/plugin",
 	"Name": "Nanoleaf Tiles",
 	"OS": [{
