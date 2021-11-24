@@ -6,7 +6,7 @@
 					color: white;
 				}
 				h1 {
-					font-size: 50px;
+					color: #3fae29;
 					line-height: 1.3;
 					letter-spacing: 5px;
 					text-shadow:
@@ -15,8 +15,6 @@
 						0 3px 0 #efefef,
 						0 4px 0 #efefef,
 						0 12px 5px rgba(0, 0, 0, 0.1);
-					animation: rotate ease-in-out 1s infinite alternate;
-					color: #3fae29;
 				}
 				h3 {
 					color: #d00000;
@@ -24,7 +22,6 @@
 
 			</style>
 			<div class="container">
-<!-- start of text -->
 <h1>Nanoleaf Tiles</h1>
 <ul>
 A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.<br />
@@ -104,7 +101,6 @@ Bug fixes and more bug fixes.<br />
 Initial release.<br />
 This is my first Stream Deck plugin.<br />
 </ul>
-<!-- end of test -->
 			</div>
 		</div>
 	</foreignObject>
