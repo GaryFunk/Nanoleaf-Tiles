@@ -23,7 +23,7 @@ Pay attention as to how the button icons update.<br />
 </ul>
 <h3>Helpful Links</h3>
 <ul>
-README: <a href="https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md">README.md</a><br />
+README: <a href="https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md">https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README</a><br />
 </ul>
 <h3>Information</h3>
 <ul>
@@ -32,8 +32,8 @@ Languages: English, German. Translation needed for: Chinese, French, Japanese, K
 </ul>
 <h3>Support Links</h3>
 <ul>
-Issues:  <a href="https://github.com/GaryFunk/Nanoleaf-Tiles/issues"> Issues </a><br />
-Discord: <a href="https://discord.gg/gQ4kKVCc">Discord</a><br />
+Issues:  <a href="https://github.com/GaryFunk/Nanoleaf-Tiles/issues">https://github.com/GaryFunk/Nanoleaf-Tiles/issues</a><br />
+Discord: <a href="https://discord.gg/gQ4kKVCc">https://discord.gg/gQ4kKVCc</a><br />
 </ul>
 <h3>Known Issues</h3>
 <ul>
@@ -46,11 +46,11 @@ The Stream Deck will indicate the status of the controller by dislaying a colore
 </ul>
 <h3>Credits</h3>
 <ul>
-Alerts provided by Sweet Alert <a href="https://sweetalert.js.org/">GitHub</a><br />
+Alerts provided by Sweet Alert <a href="https://sweetalert.js.org/">https://sweetalert.js.org/</a><br />
 </ul>
 <h3>Donations</h3>
 <ul>
-@Backslasher: <a href="https://discordapp.com/users/277603804399140865/">Discord</a><br />
+@Backslasher: <a href="https://discordapp.com/users/277603804399140865/">https://discordapp.com/users/277603804399140865/</a><br />
 </ul>
 <h3>Special Thanks</h3>
 <ul>
