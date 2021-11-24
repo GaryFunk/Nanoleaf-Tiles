@@ -3,8 +3,9 @@
 		<div xmlns="http://www.w3.org/1999/xhtml">
 			<style>
 				.container {
-					color: white;
 					background-color: #1d1e1f;
+					color: white;
+					margin: 0 10px 0 10px;
 				}
 				h1 {
 					color: #3fae29;
