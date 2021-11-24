@@ -5,7 +5,7 @@
 				.container {
 					background-color: #1d1e1f;
 					color: white;
-					margin: 0 10px 0 10px;
+					padding: 10px;
 				}
 				h1 {
 					color: #3fae29;
