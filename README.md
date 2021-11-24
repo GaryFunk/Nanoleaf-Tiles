@@ -1,1 +1,1 @@
-<img src="header.svg" alt="README.md">
+<img src="header.svg" align="top" alt="README.md">
