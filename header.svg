@@ -4,6 +4,7 @@
 			<style>
 				.container {
 					color: white;
+					fill: #1d1e1f;
 				}
 				h1 {
 					color: #3fae29;
