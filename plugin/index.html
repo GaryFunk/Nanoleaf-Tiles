@@ -8,9 +8,18 @@
 		<script src="js/utils.js"></script>
 		<script src="js/main.js"></script>
 		<script src="js/action.js"></script>
-		<script src="js/brightnessAction.js"></script>
+		<script src="js/brightAction.js"></script>
 		<script src="js/colorAction.js"></script>
 		<script src="js/effectAction.js"></script>
 		<script src="js/powerAction.js"></script>
 	</head>
+	<body>
+		<!-- Hidden Canvas to build images -->
+		<div class="sdpi-info-label hidden" style="top: -1000px;" value="">
+			<img id="icon0" width="0" height="0" src="images/icons/color.png">
+			<img id="icon1" width="0" height="0" src="images/icons/coloroff.png">
+			<canvas id="iconCanvas0" width="72" height="72"></canvas>
+			<canvas id="iconCanvas1" width="72" height="72"></canvas>
+		</div>
+	</body>
 </html>

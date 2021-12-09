@@ -8,96 +8,125 @@
 //==============================================================================
 
 // Prototype which represents a power action
-function PowerAction(inContext, inSettings, isState) {
+function PowerAction(inContext, inSettings, inState) {
 	// Init PowerAction
 	var instance = this;
 	// Inherit from Action
-	Action.call(this, inContext, inSettings, isState);
-	// Update the state
-	updateState();
-	// Public function called on key up event
+	Action.call(this, inContext, inSettings, inState);
+	// Get the Key values
+	getCurrentState();
+	// Public function called on KeyUp event
 	this.onKeyUp = function (inContext, inSettings, inCoordinates, inUserDesiredState, inState) {
 		// If onKeyUp was triggered manually, load settings
 		if (inSettings === undefined) {
 			inSettings = instance.getSettings();
 		}
+
 		// Check if any controller is configured
-		if (!('nanoController' in inSettings)) {
-			log('plugin/powerAction.js line 26: No controller configured');
+		if (!("nanoController" in inSettings)) {
+			log("lugin/powerAction.js: No controller configured");
 			showAlert(inContext);
 			return;
 		}
 		if (window.nanoControllerCache == null) {
-			log('plugin/powerAction.js line 31: No controller in cache');
+			log("plugin/powerAction.js: No controller in cache");
 			showAlert(inContext);
 			return;
 		}
 
 		// Find the configured controller
 		try {
-			var nanoKey = '"' + inSettings.nanoController + '"';
-			var NF = window.nanoControllerCache[nanoKey];
-			var nanoInfo = NF.getInfo();
+			let nanoKey = `"${inSettings.nanoController}"`;
+			let NF = window.nanoControllerCache[nanoKey];
+			let currentState = inState;
+			let setValues = {};
 
-			// Set the target value
-			var currentState = (nanoInfo.state.on.value ? 1 : 0);
-			var targetState = (currentState ? 0 : 1);
-			var targetValue = (targetState ? 'On' : 'Off');
+			// Set the Key values
+			let keyState = (currentState ? 0 : 1);
+			if (inUserDesiredState !== undefined) {
+				keyState = inUserDesiredState;
+			}
+			let keyTitle = (keyState ? "Off" : "On");
+
+			// Set the value to send to the Nanoleaf controller
+			setValues["on"] = (keyState ? false : true);
 
 			// Set state
-			NF.setPower(targetState, targetValue, function (success, message, value) {
+			NF.setPower(setValues, (success, message, result) => {
 				if (success) {
-					// Add loop here to update the other buttons
-					var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === 'power');
-					for (let button of theButtons) {
-						setActionState(button.context, targetState, targetValue);
-					}
+					// Update the cache
+					window.nanoControllerCache[nanoKey].setInfo(result, function (success) { });
 
-					// Set the new power
-					// setActionState(inContext, targetState, targetValue);
+					// Get current info from the controller
+					let nanoInfo = NF.getInfo();
+
+					// Get the Buttons that need the update
+					let theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === "power");
+
+					// Update the Buttons and Keys that need the new state
+					for (let [index, button] of theButtons.entries()) {
+						window.buttons[inSettings.nanoController][index].on = nanoInfo.state.on.value;
+						setActionState(button.context, keyState, keyTitle);
+					}
 				} else {
-					log('plugin/powerAction.js line 59: ' + message);
-					setActionState(inContext, targetState, targetValue);
+					log(`plugin/powerAction.js NF.setPower: ${message}`);
+					setActionState(inContext, keyState, keyTitle);
 					showAlert(inContext);
 				}
 			});
 		} catch(e) {
-			log('plugin/powerAction.js line 65: ' + e);
+			log(`plugin/powerAction.js onKeyUp: ${e}`);
 		}
 	};
 
-	// Private function to set the state
-	function updateState() {
-		// Get the settings and the context
-		var settings = instance.getSettings();
-		var context = instance.getContext();
-		var state = instance.getState();
+	// Private function to set current values
+	function getCurrentState() {
 		// Check if any controller is configured
-		if (!('nanoController' in settings)) {
+		if (!("nanoController" in inSettings)) {
 			return;
 		}
 		if (window.nanoControllerCache == null) {
 			return;
 		}
+
+		// To be removed in the future
+		if (inSettings.on === undefined) {
+			inSettings.on = inSettings.value;
+			delete inSettings.value;
+			instance.saveSettings(inSettings);
+		}
+
 		// Find the configured controller
 		try {
-			var nanoKey = '"' + inSettings.nanoController + '"';
-			var NF = window.nanoControllerCache[nanoKey];
-			var nanoInfo = NF.getInfo();
-			// Set the target state
-			var targetState = (nanoInfo.state.on.value ? 1 : 0);
-			// Set the target value
-			var targetValue = (nanoInfo.state.on.value ? 'On' : 'Off');
-			// Set the new action state
-			setActionState(context, targetState, targetValue);
+			let nanoKey = `"${inSettings.nanoController}"`;
+			let NF = window.nanoControllerCache[nanoKey];
+			let nanoInfo = NF.getInfo();
+
+			// Set on to value
+			let settings = inSettings;
+			settings.on = nanoInfo.state.on.value;
+
+			// Set the Buttons that need to be updated
+			let index = window.buttons[inSettings.nanoController].findIndex(x => x.context === inContext);
+			if (index !== -1) {
+				setButtons(settings, inContext, index);
+			}
+
+			// Set the Key values
+			let keyState = (nanoInfo.state.on.value ? 0 : 1);
+			let keyTitle = (nanoInfo.state.on.value ? "On" : "Off");
+
+			// Set the new Action State
+			setActionState(inContext, keyState, keyTitle);
+			return keyState;
 		} catch(e) {
-			log('plugin/powerAction.js line 94: ' + e);
+			log(`plugin/powerAction.js getCurrentState(): ${e}`);
 		}
 	}
 
-	// Private function to set the state
-	function setActionState(inContext, targetState, targetValue) {
-		setState(inContext, targetState);
-		setTitle(inContext, targetValue);
+	// Private function to set the Key values
+	function setActionState(inContext, keyState, keyTitle) {
+		setState(inContext, keyState);
+		setTitle(inContext, keyTitle);
 	}
 }

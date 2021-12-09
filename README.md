@@ -6,12 +6,12 @@ A Nanoleaf controller written in JavaScript for the Elgato Stream Deck devices.<
 <ul>
 Control Nanoleaf Panels, Canvas, Lines and Shapes Tiles from your Stream Deck.
 Toggle the controller tiles on or off; increase, decrease or set the brightness level; set the tiles color or apply one of the special effects.
-Use the Stream Deck 'Multi Action' to send actions to several controllers.
-Use 'Folders' to group actions per Nanoleaf controller.
+Use the Stream Deck "Multi Action" to send actions to several controllers.
+Use "Folders" to group actions per Nanoleaf controller.
 Buttons across devices are kept in sync.
 Suggestions and comments, good or bad, are always welcome.<br />
 </ul>
-<h3>What's New</h3>
+<h3>New In This Release</h3>
 <ul>
 Version 1.3 - 11/08/2021<br />
 Added Brightness Increase and Brightness Decrease buttons.
@@ -54,8 +54,8 @@ Alerts provided by Sweet Alert <a href="https://sweetalert.js.org/">https://swee
 </ul>
 <h3>Special Thanks</h3>
 <ul>
-@BarRaider https://discordapp.com/users/270832792802164736/ - Plugin hosting and advice.<br />
-@Backslasher https://discordapp.com/users/277603804399140865/ - German translation.<br />
+@BarRaider <a href="https://discordapp.com/users/270832792802164736/">https://discordapp.com/users/270832792802164736/</a> - Plugin hosting and advice.<br />
+@Backslasher <a href="https://discordapp.com/users/277603804399140865/">https://discordapp.com/users/277603804399140865/</a> - German translation.<br />
 </ul>
 <h3>Previous Releases</h3>
 <h3>v1.2</h3>

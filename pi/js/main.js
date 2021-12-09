@@ -9,7 +9,6 @@
 
 // Global web socket
 var websocket = null;
-let globalSettings = {};
 
 // Global Plugin settings
 window.name = "PI";
@@ -19,8 +18,10 @@ window.nanoControllers = {};
 window.nanoIP = null;
 window.nanoToken = null;
 window.settings = null;
+
 let pi;
 let setupWindow;
+let globalSettings = {};
 
 // Setup the websocket and handle communication
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
@@ -30,17 +31,17 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	// Parse parameter from string to object
 	let actionInfo = JSON.parse(inActionInfo);
 	let info = JSON.parse(inInfo);
-	let streamDeckVersion = info['application']['version'];
-	let pluginVersion = info['plugin']['version'];
+	let streamDeckVersion = info["application"]["version"];
+	let pluginVersion = info["plugin"]["version"];
 
 	// Set settings
-	settings = actionInfo['payload']['settings'];
+	settings = actionInfo["payload"]["settings"];
 
 	// Retrieve language
-	let language = info['application']['language'];
+	let language = info["application"]["language"];
 
 	// Retrieve action identifier
-	let action = actionInfo['action'];
+	let action = actionInfo["action"];
 
 	// Public function to send data to the plugin
 	const SendToPlugin = function (inData) {
@@ -49,24 +50,22 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 
 	// Open the websocket to Stream Deck
 	// Use 127.0.0.1 because Windows needs 300ms to resolve localhost
-	websocket = new WebSocket('ws://127.0.0.1:' + inPort);
+	websocket = new WebSocket(`ws://127.0.0.1:${inPort}`);
 
 	// Websocket is closed
 	websocket.onclose = function (evt) {
 		let reason = WebsocketError(evt);
-		//log('Websocket closed: ' + reason);
 		let inData = {};
-		inData['piEvent'] = 'log';
-		inData['message'] = 'Websocket closed: ' + reason;
+		inData["piEvent"] = "log";
+		inData["message"] = `Websocket closed: ${reason}`;
 		SendToPlugin(inData);
 	};
 
 	// Websocket received a message
 	websocket.onerror = function (evt) {
-		//log('Websocket error: ' + evt + ' ' + evt.data);
 		let inData = {};
-		inData['piEvent'] = 'log';
-		inData['message'] = 'Websocket error: ' + evt + ' ' + evt.data;
+		inData["piEvent"] = "log";
+		inData["message"] = `Websocket error: ${evt} ${evt.data}`;
 		SendToPlugin(inData);
 	};
 
@@ -74,37 +73,37 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	websocket.onmessage = function (inEvent) {
 		// Received message from Stream Deck
 		let jsonObj = JSON.parse(inEvent.data);
-		let event = jsonObj['event'];
-		let jsonPayload = jsonObj['payload'];
+		let event = jsonObj["event"];
+		let jsonPayload = jsonObj["payload"];
 		let settings;
 
 		// Events
 		switch (event) {
-			case 'didReceiveGlobalSettings':
+			case "didReceiveGlobalSettings":
 				// Set global settings
-				if (jsonPayload['settings']['nanoControllers'] !== undefined) {
-					window.nanoControllers = jsonPayload['settings']['nanoControllers'];
+				if (jsonPayload["settings"]["nanoControllers"] !== undefined) {
+					window.nanoControllers = jsonPayload["settings"]["nanoControllers"];
 					// If at least one controller is configured build the nanoControllerCache
-					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
+					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache["status"] == "") {
 						// Refresh the cache
 						Nanoleaf.buildcache(function () {});
 					}
 				}
 				break;
-			case 'didReceiveSettings':
-				settings = jsonPayload['settings'];
+			case "didReceiveSettings":
+				settings = jsonPayload["settings"];
 				// Set settings
 				if (context in actions) {
 					actions[context].setSettings(settings);
 				}
 				break;
-			case 'sendToPropertyInspector':
+			case "sendToPropertyInspector":
 				// Load controllers
-				window.nanoControllers = jsonPayload['settings'];
+				window.nanoControllers = jsonPayload["settings"];
 				if ((window.nanoControllers == null) || (window.nanoControllers == undefined)) {
 					window.nanoControllers = {};
 				}
-				if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
+				if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache["status"] == "") {
 					// Refresh the cache
 					Nanoleaf.buildcache( function () {});
 					pi.loadControllers();
@@ -113,10 +112,9 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 				}
 				break;
 			default:
-				//log('pi/main.js line 112 uncaught event: ' + event);
 				let inData = {};
-				inData['piEvent'] = 'log';
-				inData['message'] = 'pi/main.js line 119 uncaught event: ' + event;
+				inData["piEvent"] = "log";
+				inData["message"] = `pi/main.js line 119 uncaught event: ${event}`;
 				SendToPlugin(inData);
 		}
 	};
@@ -131,13 +129,15 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, 
 	};
 
 	// Create actions
-	if (action === 'com.fsoft.nanoleaf.power') {
+	if (action === "com.fsoft.nanoleaf.power") {
 		pi = new PowerPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.brightness' || action === 'com.fsoft.nanoleaf.brightnessd' || action === 'com.fsoft.nanoleaf.brightnessi') {
-		pi = new BrightnessPI(inUUID, language, streamDeckVersion, pluginVersion, action);
-	} else if (action === 'com.fsoft.nanoleaf.color') {
+	} else if (action === "com.fsoft.nanoleaf.bright" || action === "com.fsoft.nanoleaf.brightd" || action === "com.fsoft.nanoleaf.brighti") {
+		pi = new BrightPI(inUUID, language, streamDeckVersion, pluginVersion, action);
+	} else if (action === "com.fsoft.nanoleaf.brightcolor") {
+		pi = new BrightColorPI(inUUID, language, streamDeckVersion, pluginVersion);
+	} else if (action === "com.fsoft.nanoleaf.color") {
 		pi = new ColorPI(inUUID, language, streamDeckVersion, pluginVersion);
-	} else if (action === 'com.fsoft.nanoleaf.effect') {
+	} else if (action === "com.fsoft.nanoleaf.effect") {
 		pi = new EffectPI(inUUID, language, streamDeckVersion, pluginVersion);
 	}
 }

@@ -12,15 +12,15 @@
 			"Name": "Off"
 		}]
 	},
-	"com.fsoft.nanoleaf.brightnessi": {
+	"com.fsoft.nanoleaf.brighti": {
 		"Name": "Brightness Increase",
 		"Tooltip": "Increase the brightness of the tiles."
 	},
-	"com.fsoft.nanoleaf.brightnessd": {
+	"com.fsoft.nanoleaf.brightd": {
 		"Name": "Brightness Decrease",
 		"Tooltip": "Decrease the brightness of the tiles."
 	},
-	"com.fsoft.nanoleaf.brightness": {
+	"com.fsoft.nanoleaf.bright": {
 		"Name": "Brightness Set",
 		"Tooltip": "Set the brightness of the tiles."
 	},

@@ -11,14 +11,9 @@
 function Action(inContext, inSettings, inState) {
 	// Init Action
 	var instance = this;
-	// Private variable containing the context of the action
 	var context = inContext;
-	// Private variable containing the settings of the action
 	var settings = inSettings;
-	// Private variable containing the state of the action
 	var state = inState;
-
-	// var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
 
 	// Set the default values
 	setDefaults();
@@ -35,33 +30,38 @@ function Action(inContext, inSettings, inState) {
 	this.getSettings = function () {
 		return settings;
 	};
+	// Public function to save the settings
+	this.saveSettings = function (settings) {
+		saveSettings(getAction(), inContext, settings);
+	}
 	// Public function for settings the settings
 	this.setSettings = function (inSettings) {
 		settings = inSettings;
 	};
-
 	this.updateCrap = function (crap, nanoController, targetState, info) {
 		// call
-		var theButtons;
+		let theButtons;
 		switch (crap) {
-			case 'brightness':
-				theButtons = window.buttons[nanoController].filter(x => x.command === 'brightness');
+			case "brightness":
+				theButtons = window.buttons[nanoController].filter(x => x.command === "brightness");
 				for (let button of theButtons) {
 					if (button.transition === "set") {
-						setTitle(button.context,  "-" + button.value + "-");
+						setTitle(button.context, "-" + button.brightness + "-");
 					} else {
 						setTitle(button.context, info.state.brightness.value);
 					}
 				}
-			case 'power':
+			case "power":
+				let powerState;
+				let powerValue;
 				// Set the power button to on
-				theButtons = window.buttons[nanoController].filter(x => x.command === 'power');
+				theButtons = window.buttons[nanoController].filter(x => x.command === "power");
 				if (info.state.on.value == false) {
-					var powerState = 0;
-					var powerValue = 'Off';
+					powerState = 1;
+					powerValue = "Off";
 				} else {
-					var powerState = 1;
-					var powerValue = 'On';
+					powerState = 0;
+					powerValue = "On";
 				}
 				for (let button of theButtons) {
 					setState(button.context, powerState);
@@ -74,7 +74,7 @@ function Action(inContext, inSettings, inState) {
 	// Private function to set the defaults
 	function setDefaults(inCallback) {
 		// If at least one controller is authorized
-		if (Object.keys(window.nanoControllers).length == 0) {
+		if (Object.keys(window.nanoControllers).length === 0) {
 			// If a callback function was given
 			if (inCallback !== undefined) {
 				// Execute the callback function
@@ -82,25 +82,14 @@ function Action(inContext, inSettings, inState) {
 			}
 			return;
 		}
-		// Find out type of action
-		let action;
-		if (instance instanceof PowerAction) {
-			action = 'com.fsoft.nanoleaf.power';
-		} else if (instance instanceof BrightnessAction) {
-			action = 'com.fsoft.nanoleaf.brightness';
-		} else if (instance instanceof ColorAction) {
-			action = 'com.fsoft.nanoleaf.color';
-		} else if (instance instanceof EffectAction) {
-			action = 'com.fsoft.nanoleaf.effect';
-		}
 		// If the controller is set for this action
-		if (!('nanoController' in settings)) {
+		if (!("nanoController" in settings)) {
 			// Sort the controllers alphabetically
 			let controllerIDsSorted = Object.keys(window.nanoControllers).sort(function (a, b) {
 				return window.nanoControllers[a].nanoName.localeCompare(window.nanoControllers[b].nanoName);
 			});
 			// Save the settings
-			saveSettings(action, inContext, settings, state);
+			saveSettings(getAction(), inContext, settings, state);
 		}
 		// If a callback function was given
 		if (inCallback !== undefined) {
@@ -108,4 +97,26 @@ function Action(inContext, inSettings, inState) {
 			inCallback();
 		}
 	}
+
+	// Private function to return the action identifier
+	function getAction() {
+		let action;
+		// Find out type of action
+		if (instance instanceof PowerAction) {
+			action = "com.fsoft.nanoleaf.power";
+		} else if (instance instanceof BrightAction) {
+			action = "com.fsoft.nanoleaf.bright";
+		} else if (instance instanceof BrightColorAction) {
+			action = "com.fsoft.nanoleaf.brightcolor";
+		} else if (instance instanceof ColorAction) {
+			action = "com.fsoft.nanoleaf.color";
+		} else if (instance instanceof EffectAction) {
+			action = "com.fsoft.nanoleaf.effect";
+		}
+		return action;
+	}
+}
+
+const sleep = (milliseconds) => {
+	return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
