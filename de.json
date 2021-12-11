@@ -1,7 +1,7 @@
 {
 	"Name": "Nanoleaf Tiles",
-	"Category": "Nanoleaf Panels/Canvas/Shapes",
-	"Description": "Steuerung Nanoleaf Panels, Canvas and Shapes tiles.",
+	"Category": "Nanoleaf Panels/Canvas/Lines/Shapes",
+	"Description": "Steuerung Nanoleaf Panels, Canvas, Lines and Shapes tiles.",
 	"com.fsoft.nanoleaf.power": {
 		"Name": "Ein / Aus",
 		"Tooltip": "Power tiles Ein / Aus.",
@@ -54,7 +54,7 @@
 			"Transition": "Übersetzung"
 		},
 		"Setup": {
-			"Header": "Nanoleaf Panels, Canvas & Shapes",
+			"Header": "Nanoleaf Panels, Canvas, Lines & Shapes",
 			"Intro": {
 				"Continue": "suche Gerät mit gefundener IP Adresse",
 				"Description": "finde das aktive Nanoleaf Gerät auf dem lokalen Netzwerk",

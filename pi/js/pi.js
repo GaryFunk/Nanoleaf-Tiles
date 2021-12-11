@@ -188,7 +188,7 @@ function PI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 		try {
 			if (NF === undefined) {
 				document.getElementById('controller-select').value = 'no-controller';
-				sleep(250).then(() => {
+				sleep(50).then(() => {
 					document.getElementById('controller-select').value = window.settings.nanoController;
 					instance.loadControllers();
 				})

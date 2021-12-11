@@ -47,7 +47,7 @@ function Action(inContext, inSettings, inState) {
 			case 'brightness':
 				theButtons = window.buttons[nanoController].filter(x => x.command === 'brightness');
 				for (let button of theButtons) {
-					if (button.level === "set") {
+					if (button.transition === "set") {
 						setTitle(button.context,  "-" + button.value + "-");
 					} else {
 						setTitle(button.context, info.state.brightness.value);

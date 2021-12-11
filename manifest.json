@@ -5,12 +5,12 @@
 		"States": [{
 			"Image": "plugin/images/icons/off",
 			"Name": "Off",
-			"TitleAlignment": "bottom",
+			"TitleAlignment": "middle",
 			"FontSize": "12"
 		}, {
 			"Image": "plugin/images/icons/on",
 			"Name": "On",
-			"TitleAlignment": "bottom",
+			"TitleAlignment": "middle",
 			"FontSize": "12"
 		}],
 		"SupportedInMultiActions": true,
@@ -103,11 +103,11 @@
 		"UUID": "com.fsoft.nanoleaf.effect"
 	}],
 	"Author": "Gary Funk, fSoft, Ltd.",
-	"Category": "Nanoleaf Panels/Canvas/Shapes",
+	"Category": "Lighting",
 	"CategoryIcon": "plugin/images/actions/category",
 	"CodePath": "plugin/index.html",
 	"DefaultWindowSize": [500, 650],
-	"Description": "Control Nanoleaf Panels, Canvas and Shapes tiles.",
+	"Description": "Control Nanoleaf Panels, Canvas, Lines and Shapes tiles.",
 	"Icon": "plugin/images/icons/plugin",
 	"Name": "Nanoleaf Tiles",
 	"OS": [{
@@ -123,5 +123,5 @@
 		"MinimumVersion" : "5.0"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
-	"Version": "1.3"
+	"Version": "1.3.1"
 }

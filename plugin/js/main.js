@@ -43,6 +43,15 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		log('Websocket error: ' + evt + ' ' + evt.data);
 	};
 
+	// Web socket is connected
+	websocket.onopen = function () {
+		// Register plugin to Stream Deck
+		registerPluginOrPI(inRegisterEvent, inUUID);
+		// Request the global settings of the plugin
+		requestGlobalSettings(inUUID);
+		window.getGlobal = false;
+	};
+
 	// Web socked received a message
 	websocket.onmessage = function (inEvent) {
 		// Parse parameter from string to object
@@ -98,9 +107,9 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 
 					if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
 						if (settings.command === 'brightness') {
-							data = {"command": settings.command, "context": context, "level": settings.transition, "value": settings.value};
+							data = {"command": settings.command, "context": context, "transition": settings.transition, "value": settings.value, "duration": settings.duration};
 						} else {
-							data = {"command": settings.command, "context": context, "level": "title", "value": settings.value};
+							data = {"command": settings.command, "context": context, "transition": "title", "value": settings.value};
 						}
 						window.buttons[settings.nanoController].push(data);
 					}
@@ -132,6 +141,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				// Set global settings
 				if (jsonPayload['settings']['nanoControllers'] !== undefined) {
 					window.nanoControllers = jsonPayload['settings']['nanoControllers'];
+console.log(window.nanoControllers);
 					// If at least one controller is configured build the nanoControllerCache
 					if (Object.keys(window.nanoControllers).length > 0 && window.nanoControllerCache['status'] == "") {
 						// Refresh the cache
@@ -224,16 +234,6 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 		}
 	};
 
-	// Web socket is connected
-	websocket.onopen = function () {
-		// Register plugin to Stream Deck
-		registerPluginOrPI(inRegisterEvent, inUUID);
-		// Request the global settings of the plugin
-		requestGlobalSettings(inUUID);
-		window.getGlobal = false;
-
-	};
-
 	function getKeyByValue(object, value) {
 		return Object.keys(object).find(key => object[key] === value);
 	}
@@ -254,7 +254,7 @@ function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo) 
 				window.buttons[settings.nanoController] = [];
 			}
 			if (!(window.buttons[settings.nanoController].find(x => x.context === context))) {
-				var data = {"command": settings.command, "context": context};
+				var data = {"command": settings.command, "context": context, "transition": settings.transition, "value": settings.value};
 				window.buttons[settings.nanoController].push(data);
 			}
 			// Add current instance if not in actions array

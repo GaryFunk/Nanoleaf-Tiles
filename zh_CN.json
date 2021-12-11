@@ -1,7 +1,7 @@
 {
 	"Name": "Nanoleaf Tiles",
-	"Category": "Nanoleaf Panels/Canvas/Shapes",
-	"Description": "Control Nanoleaf Panels, Canvas and Shapes tiles.",
+	"Category": "Nanoleaf Panels/Canvas/Lines/Shapes",
+	"Description": "Control Nanoleaf Panels, Canvas, Lines and Shapes tiles.",
 	"com.fsoft.nanoleaf.power": {
 		"Name": "On / Off",
 		"Tooltip": "Power tiles On / Off.",
@@ -54,7 +54,7 @@
 			"Transition": "Transition"
 		},
 		"Setup": {
-			"Header": "Nanoleaf Panels, Canvas & Shapes",
+			"Header": "Nanoleaf Panels, Canvas, Lines & Shapes",
 			"Intro": {
 				"Continue": "Find Controller by discovered address",
 				"Description": "Find the active Nanoleaf controllers on the local network",

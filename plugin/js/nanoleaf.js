@@ -50,9 +50,9 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	};
 
 	// Public function to set the brightness status of the controller
-	this.setBrightness = function (state, value, callback) {
+	this.setBrightness = function (state, value, duration, callback) {
 		// Define value object and Send new payload
-		var temp = '{"brightness": {"value": ' + value + '}}';
+		var temp = '{"brightness": {"value": ' + value + ', "duration": ' + duration + '}}';
 		instance.setController('state', temp, function (success, message, value) {
 			instance.getController('A', function (success, result) {
 				instance.setInfo(result, function (success) {
@@ -100,6 +100,15 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 				instance.setInfo(result, function (success) {
 					callback(success, message);
 				});
+			});
+		});
+	}
+
+	// Public function to update the status from the controller
+	this.updateInfo = function (callback) {
+		instance.getController('A', function (success, result) {
+			instance.setInfo(result, function (success) {
+				callback(success);
 			});
 		});
 	}
@@ -246,7 +255,7 @@ Nanoleaf.findhost = function (callback) {
 
 // Static function to search the network for controllers
 Nanoleaf.findControllers = function (callback) {
-	// scanning a single Class-C. Need to search the subnet mask to determin if the network consists of more than one Class-C.
+	// scanning a single Class-C. Need to search the subnet mask to determine if the network consists of more than one Class-C.
 	var _networkIP = localIP.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)./);
 	var networkIP = _networkIP[0];
 	var haveIPs = [];
