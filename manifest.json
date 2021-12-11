@@ -3,13 +3,13 @@
 		"Icon": "plugin/images/actions/power",
 		"Name": "On / Off",
 		"States": [{
-			"Image": "plugin/images/icons/off",
-			"Name": "Off",
+			"Image": "plugin/images/icons/on",
+			"Name": "On",
 			"TitleAlignment": "middle",
 			"FontSize": "12"
 		}, {
-			"Image": "plugin/images/icons/on",
-			"Name": "On",
+			"Image": "plugin/images/icons/off",
+			"Name": "Off",
 			"TitleAlignment": "middle",
 			"FontSize": "12"
 		}],
@@ -20,13 +20,13 @@
 		"Icon": "plugin/images/actions/brightnessi",
 		"Name": "Brightness Up",
 		"States": [{
-			"Image": "plugin/images/icons/brightnessioff",
-			"Name": "0",
+			"Image": "plugin/images/icons/brightnessi",
+			"Name": "On",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}, {
-			"Image": "plugin/images/icons/brightnessi",
-			"Name": "1",
+			"Image": "plugin/images/icons/brightnessioff",
+			"Name": "Off",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}],
@@ -37,13 +37,13 @@
 		"Icon": "plugin/images/actions/brightnessd",
 		"Name": "Brightness Down",
 		"States": [{
-			"Image": "plugin/images/icons/brightnessdoff",
-			"Name": "0",
+			"Image": "plugin/images/icons/brightnessd",
+			"Name": "On",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}, {
-			"Image": "plugin/images/icons/brightnessd",
-			"Name": "1",
+			"Image": "plugin/images/icons/brightnessdoff",
+			"Name": "Off",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}],
@@ -54,13 +54,13 @@
 		"Icon": "plugin/images/actions/brightness",
 		"Name": "Brightness Set",
 		"States": [{
-			"Image": "plugin/images/icons/brightnessoff",
-			"Name": "0",
+			"Image": "plugin/images/icons/brightness",
+			"Name": "On",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}, {
-			"Image": "plugin/images/icons/brightness",
-			"Name": "1",
+			"Image": "plugin/images/icons/brightnessoff",
+			"Name": "Off",
 			"TitleAlignment": "bottom",
 			"FontSize": "12"
 		}],
@@ -71,15 +71,15 @@
 		"Icon": "plugin/images/actions/color",
 		"Name": "Color",
 		"States": [{
-			"Image": "plugin/images/icons/coloroff",
-			"Name": "0",
-			"TitleAlignment": "bottom",
-			"FontSize": "8"
-		}, {
 			"Image": "plugin/images/icons/color",
-			"Name": "1",
+			"Name": "On",
 			"TitleAlignment": "bottom",
-			"FontSize": "8"
+			"FontSize": "10"
+		}, {
+			"Image": "plugin/images/icons/coloroff",
+			"Name": "Off",
+			"TitleAlignment": "bottom",
+			"FontSize": "10"
 		}],
 		"SupportedInMultiActions": true,
 		"Tooltip": "Set the color of the tiles.",
@@ -88,22 +88,22 @@
 		"Icon": "plugin/images/actions/effect",
 		"Name": "Effect",
 		"States": [{
-			"Image": "plugin/images/icons/effectoff",
-			"Name": "0",
-			"TitleAlignment": "bottom",
-			"FontSize": "8"
-		}, {
 			"Image": "plugin/images/icons/effect",
-			"Name": "1",
+			"Name": "On",
 			"TitleAlignment": "bottom",
-			"FontSize": "8"
+			"FontSize": "10"
+		}, {
+			"Image": "plugin/images/icons/effectoff",
+			"Name": "Off",
+			"TitleAlignment": "bottom",
+			"FontSize": "10"
 		}],
 		"SupportedInMultiActions": true,
 		"Tooltip": "Set an effect on the tiles.",
 		"UUID": "com.fsoft.nanoleaf.effect"
 	}],
 	"Author": "Gary Funk, fSoft, Ltd.",
-	"Category": "Lighting",
+	"Category": "Nanoleaf Tiles",
 	"CategoryIcon": "plugin/images/actions/category",
 	"CodePath": "plugin/index.html",
 	"DefaultWindowSize": [500, 650],
@@ -123,5 +123,5 @@
 		"MinimumVersion" : "5.0"
 	},
 	"URL": "https://www.fsoft.com/stream-deck/",
-	"Version": "1.3.1"
+	"Version": "1.3.2"
 }

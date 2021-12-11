@@ -50,55 +50,53 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	};
 
 	// Public function to set the brightness status of the controller
-	this.setBrightness = function (state, value, duration, callback) {
+	this.setBrightness = function (inValues, callback) {
 		// Define value object and Send new payload
-		var temp = '{"brightness": {"value": ' + value + ', "duration": ' + duration + '}}';
-		instance.setController('state', temp, function (success, message, value) {
-			instance.getController('A', function (success, result) {
+		var setBrightness = `{"brightness": {"value": ${inValues.brightness}, "duration": ${inValues.duration}}}`;
+		instance.setController("state", setBrightness, function (success, message) {
+			instance.getController("A", function (success, result) {
 				instance.setInfo(result, function (success) {
-					callback(success, message);
+					callback(success, message, result);
 				});
 			});
 		});
 	};
 
 	// Public function to set the color of the controller
-	this.setColor = function (state, value, callback) {
-		// Define color object
-		var hsv = convertcolor(value);
-		var temp = '{"ct": {"value": ' + parseInt(hsv.v) + '}, "hue": {"value": ' + parseInt(hsv.h) + '}, "sat": {"value": ' + parseInt(hsv.s) + '}}';
-		instance.setController('state', temp, function (success, message, value) {
-			instance.getController('A', function (success, result) {
+	this.setColor = function (inValues, callback) {
+		// Define value object and Send new payload
+		var hsv = convertcolor(inValues.color);
+		var setColor = `{"ct": {"value": ${parseInt(hsv.v)}}, "hue": {"value": ${parseInt(hsv.h)}}, "sat": {"value": ${parseInt(hsv.s)}}}`;
+		instance.setController("state", setColor, function (success, message) {
+			instance.getController("A", function (success, result) {
 				instance.setInfo(result, function (success) {
-					callback(success, message);
+					callback(success, message, result);
 				});
 			});
 		});
 	};
 
 	// Public function to set the effects of the controller
-	this.setEffect = function (state, value, callback) {
-		// Define state object and Send new state
-		var temp = '{"select": "' + value + '"}';
-		instance.setController('effects', temp, function (success, message, value) {
-			instance.getController('A', function (success, result) {
+	this.setEffect = function (inValues, callback) {
+		// Define value object and Send new payload
+		var setEffect = `{"select": "${inValues.select}"}`;
+		instance.setController("effects", setEffect, function (success, message) {
+			instance.getController("A", function (success, result) {
 				instance.setInfo(result, function (success) {
-					callback(success, message);
+					callback(success, message, result);
 				});
 			});
 		});
 	};
 
 	// Public function to set the power status of the controller
-	this.setPower = function (state, value, callback) {
-		// Set the power to true/false
-		var temp = (state ? true : false);
-		// Define state object and Send new state
-		var temp = '{"on": {"value": ' + temp + '}}';
-		instance.setController('state', temp, function (success, message, value) {
-			instance.getController('A', function (success, result) {
+	this.setPower = function (inValues, callback) {
+		// Define value object and Send new payload
+		let setOn = `{"on": {"value": ${inValues.on}}}`;
+		instance.setController("state", setOn, function (success, message) {
+			instance.getController("A", function (success, result) {
 				instance.setInfo(result, function (success) {
-					callback(success, message);
+					callback(success, message, result);
 				});
 			});
 		});
@@ -106,7 +104,7 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 
 	// Public function to update the status from the controller
 	this.updateInfo = function (callback) {
-		instance.getController('A', function (success, result) {
+		instance.getController("A", function (success, result) {
 			instance.setInfo(result, function (success) {
 				callback(success);
 			});
@@ -114,89 +112,89 @@ function Nanoleaf(ip = null, token = null, sn = null, name = null, info = null) 
 	}
 
 	// Static function to get the data from a controller
-	this.getController = async function (result, callback) {
+	this.getController = async function (_A, callback) {
 		var URL = "http://" + ip + ":16021/api/v1/" + token + "/";
 		var XHR = new XMLHttpRequest();
-		XHR.responseType = 'json';
+		XHR.responseType = "json";
 		XHR.timeout = 5000;
-		XHR.open('GET', URL, true);
+		XHR.open("GET", URL, true);
 		XHR.setRequestHeader("Content-Type", "application/json");
 
 		XHR.onload = function () {
 			if (XHR.readyState === 4 && XHR.status === 200) {
 				if (XHR.response !== undefined && XHR.response !== null) {
 					var result = XHR.response;
-					if ('name' in result && 'serialNo' in result) {
+					if ("name" in result && "serialNo" in result) {
 						callback(true, result);
 					} else {
-						callback(false, 'Did not get controller serial number.');
+						callback(false, "Did not get controller serial number.");
 					}
 				} else {
-					callback(false, 'Controller response is undefined or null.');
+					callback(false, "Controller response is undefined or null.");
 				}
 			} else {
-				callback(false, 'Could not connect to the controller.');
+				callback(false, "Could not connect to the controller.");
 			}
 		};
 
 		XHR.onerror = function () {
-			callback(false, 'Unable to connect to the controller.');
+			callback(false, "Unable to connect to the controller.");
 		};
 
 		XHR.ontimeout = function () {
-			callback(false, 'Connection to the controller timed out.');
+			callback(false, "Connection to the controller timed out.");
 		};
 
 		var obj = {};
-		obj.devicetype = 'stream_deck';
+		obj.devicetype = "stream_deck";
 		var data = JSON.stringify(obj);
 		XHR.send(data);
 	};
 
 	// Public function to set a value on the controller
-	this.setController = function (command, value, callback) {
+	this.setController = function (command, jsonString, callback) {
 		var URL = "http://" + ip + ":16021/api/v1/" + token + "/" + command;
 		var XHR = new XMLHttpRequest();
-		XHR.responseType = 'text';
+		XHR.responseType = "text";
 		XHR.timeout = 2000;
-		XHR.open('PUT', URL, true);
+		XHR.open("PUT", URL, true);
 		XHR.setRequestHeader("Content-Type", "application/json");
 
 		XHR.onload = function () {
 			if (XHR.readyState === 4 && XHR.status === 204) {
 				if (XHR.response !== undefined && XHR.response !== null) {
-					if (XHR.statusText == 'No Content') {
-						callback(true, 'OK', value);
+					if (XHR.statusText == "No Content") {
+						callback(true, "OK");
 					} else {
-						callback(false, 'Did not get controller serial number.');
+						callback(false, "Did not get controller serial number.");
 					}
 				} else {
-					callback(false, 'Controller response is undefined or null.');
+					callback(false, "Controller response is undefined or null.");
 				}
 			} else {
-				callback(false, 'Could not connect to the controller.');
+				callback(false, "Could not connect to the controller.");
 			}
 		};
 
 		XHR.onerror = function () {
-			callback(false, 'Unable to connect to the controller.');
+			callback(false, "Unable to connect to the controller.");
 		};
 
 		XHR.ontimeout = function () {
-			callback(false, 'Connection to the controller timed out.');
+			callback(false, "Connection to the controller timed out.");
 		};
 
-		value.devicetype = 'stream_deck';
-		XHR.send(value);
+		// value.devicetype = "stream_deck";
+		XHR.send(jsonString);
 	};
 }
 
 // Private function to build a cache
 Nanoleaf.buildcache = async function (callback) {
-	if (window.nanoControllerCache['status'] !== "") {
+	if (window.nanoControllerCache["status"] !== "") {
 		return;
 	}
-	window.nanoControllerCache['status'] = 'building';
+	window.nanoControllerCache["status"] = "building";
 	var keys = Object.keys(window.nanoControllers);
 	var index = 0;
 	// Iterate through all controllers that were discovered
@@ -211,14 +209,14 @@ Nanoleaf.buildcache = async function (callback) {
 			let result = await Nanoleaf.getController(nanoData.nanoIP, nanoData.nanoToken);
 			if (result[0]) {
 				var NF = await getnanoleaf(result, nanoData.nanoIP, nanoData.nanoToken, nanoData.nanoSN, nanoData.nanoName);
-				let nanoKey = '"' + nanoData.nanoSN + '"';
+				let nanoKey = `"${nanoData.nanoSN}"`;
 				window.nanoControllerCache[nanoKey] = NF;
 			}
 		} catch(e) {
 			log(e);
 		}
 		if (index >= keys.length) {
-			window.nanoControllerCache['status'] = 'done';
+			window.nanoControllerCache["status"] = "done";
 			callback(true);
 		}
 	}
@@ -269,7 +267,7 @@ Nanoleaf.findControllers = function (callback) {
 			var ip = "";
 			XHR[host] = new XMLHttpRequest();
 			XHR[host].timeout = 1000;
-			XHR[host].open('GET', URL, true);
+			XHR[host].open("GET", URL, true);
 			XHR[host].setRequestHeader("Content-Type", "application/json");
 
 			XHR[host].onreadystatechange = function () {
@@ -295,43 +293,43 @@ Nanoleaf.getNewToken = function (nanoIP, callback) {
 	if (nanoIP) {
 		var URL = "http://" + nanoIP + ":16021/api/v1/new";
 		var XHR = new XMLHttpRequest();
-		XHR.open('POST', URL, true);
+		XHR.open("POST", URL, true);
 		XHR.setRequestHeader("Content-Type", "application/json");
-		XHR.responseType = 'json';
+		XHR.responseType = "json";
 		XHR.timeout = 2500;
 
 		XHR.onload = function () {
 			if (XHR.readyState === 4 && XHR.status === 200) {
 				if (XHR.response !== undefined && XHR.response != null) {
 					var result = XHR.response;
-					if (XHR['responseType'] == "json") {
-						var nanoToken = result['auth_token'];
+					if (XHR["responseType"] == "json") {
+						var nanoToken = result["auth_token"];
 						callback(true, nanoToken);
 					} else {
-						callback(false, 'Did not get auth_token');
+						callback(false, "Did not get auth_token");
 					}
 				} else {
-					callback(false, 'Controller response is undefined or null.');
+					callback(false, "Controller response is undefined or null.");
 				}
 			} else {
-				callback(false, 'Could not connect to the controller.');
+				callback(false, "Could not connect to the controller.");
 			}
 		};
 
 		XHR.onerror = function () {
-			callback(false, 'Unable to connect to the controller.');
+			callback(false, "Unable to connect to the controller.");
 		};
 
 		XHR.ontimeout = function () {
-			callback(false, 'Connection to the controller timed out.');
+			callback(false, "Connection to the controller timed out.");
 		};
 
 		var obj = {};
-		obj.devicetype = 'stream_deck';
+		obj.devicetype = "stream_deck";
 		var data = JSON.stringify(obj);
 		XHR.send(data);
 	} else {
-		callback(false, 'No IP address given.');
+		callback(false, "No IP address given.");
 	}
 };
 
@@ -339,39 +337,39 @@ Nanoleaf.getNewToken = function (nanoIP, callback) {
 Nanoleaf.getController = async function (nanoIP, nanoToken) {
 	var XHR = new XMLHttpRequest();
 	return new Promise(function (resolve, reject) {
-		let URL = "http://" + nanoIP + ":16021/api/v1/" + nanoToken + "/";
-		XHR.open('GET', URL, true);
+		let URL = `http://${nanoIP}:16021/api/v1/${nanoToken}/`;
+		XHR.open("GET", URL, true);
 		XHR.setRequestHeader("Content-Type", "application/json");
-		XHR.responseType = 'json';
+		XHR.responseType = "json";
 		XHR.timeout = 5000;
 
 		XHR.onload = function () {
 			if (XHR.readyState === 4 && XHR.status === 200) {
 				if (XHR.response !== undefined && XHR.response != null) {
 					let result = XHR.response;
-					if ('name' in result && 'serialNo' in result) {
+					if ("name" in result && "serialNo" in result) {
 						resolve([true, result]);
 					} else {
-						reject([false, 'Did not get controller serial number: ' + nanoIP]);
+						reject([false, `Did not get controller serial number: ${nanoIP}`]);
 					}
 				} else {
-					reject([false, 'Controller response is undefined or null: ' + nanoIP]);
+					reject([false, `Controller response is undefined or null: ${nanoIP}`]);
 				}
 			} else {
-				reject([false, 'Could not connect to the controller: ' + nanoIP]);
+				reject([false, `Could not connect to the controller: ${nanoIP}`]);
 			}
 		};
 
 		XHR.onerror = function () {
-			reject([false, 'Unable to connect to the controller: ' + nanoIP]);
+			reject([false, `Unable to connect to the controller: ${nanoIP}`]);
 		};
 
 		XHR.ontimeout = function () {
-			reject([false, 'Connection to the controller timed out: ' + nanoIP]);
+			reject([false, `Connection to the controller timed out: ${nanoIP}`]);
 		};
 
 		let obj = {};
-		obj.devicetype = 'stream_deck';
+		obj.devicetype = "stream_deck";
 		let data = JSON.stringify(obj);
 		XHR.send(data);
 	});
@@ -383,7 +381,7 @@ function convertcolor(color) {
 	var hue = {"value": parseInt(hsv.h)};
 	var sat = {"value": parseInt(hsv.s)};
 	var ct = {"value": parseInt(hsv.v)};
-	var targetState = '"ct": ct, "hue": hue, "sat": sat';
+	var targetState = `"ct": ct, "hue": hue, "sat": sat`;
 */
 	return hsv;
 }
@@ -391,7 +389,7 @@ function convertcolor(color) {
 // Static function to convert hex to rgb
 function hex2rgb(inHex) {
 	// Remove hash if it exists
-	if (inHex.charAt(0) === '#') {
+	if (inHex.charAt(0) === "#") {
 		inHex = inHex.substr(1);
 	}
 	// Split hex into RGB components
@@ -400,7 +398,7 @@ function hex2rgb(inHex) {
 	var red = parseInt(rgbArray[0], 16);
 	var green = parseInt(rgbArray[1], 16);
 	var blue = parseInt(rgbArray[2], 16);
-	return { 'r': red, 'g': green, 'b': blue };
+	return { "r": red, "g": green, "b": blue };
 }
 
 // Static function to convert hex to hsv
@@ -448,7 +446,7 @@ function rgb2hsv(inRGB) {
 	} else if (v < 1200) {
 		v = 1200;
 	}
-	return { 'h': h, 's': s, 'v': v };
+	return { "h": h, "s": s, "v": v };
 }
 
 /*
@@ -534,11 +532,11 @@ function hsv2rgb(inHSV) {
 	var red = Math.round(r * 255);
 	var green = Math.round(g * 255);
 	var blue = Math.round(b * 255);
-	return { 'r': red, 'g': green, 'b': blue };
+	return { "r": red, "g": green, "b": blue };
 }
 
 // Static function to convert rgb to hex
 function rgb2hex(inRGB) {
-	return '#' + ((1 << 24) + (inRGB.r << 16) + (inRGB.g << 8) + inRGB.b).toString(16).slice(1);
+	return `#${((1 << 24) + (inRGB.r << 16) + (inRGB.g << 8) + inRGB.b).toString(16).slice(1)}`;
 }
 */

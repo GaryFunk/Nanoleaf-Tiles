@@ -17,7 +17,7 @@ function PowerPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	// Before overwriting parent method, save a copy of it
 	var piLocalize = this.localize;
 
-	window.settings.command = 'power';
+	window.settings.command = "power";
 
 	// Localize the UI
 	this.localize = function () {
@@ -31,9 +31,9 @@ function PowerPI(inContext, inLanguage, inStreamDeckVersion, inPluginVersion) {
 	// Power changed
 	function valueChanged(inEvent) {
 		// Save the new power settings
-		window.settings.value = inEvent.target.value;
+		window.settings.on = inEvent.target.on;
 		instance.saveSettings();
 		// Inform the plugin that a new power is set
-		instance.sendToPlugin({'piEvent': 'valueChanged'});
+		instance.sendToPlugin({"piEvent": "valueChanged"});
 	}
 }

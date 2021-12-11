@@ -9,31 +9,31 @@
 
 // Load the localizations
 function getLocalization(inLanguage, inCallback) {
-	var URL = '../' + inLanguage + '.json';
+	var URL = "../" + inLanguage + ".json";
 	var XHR = new XMLHttpRequest();
-	XHR.open('GET', URL, true);
+	XHR.open("GET", URL, true);
 
 	XHR.onload = function () {
 		if (XHR.readyState === XMLHttpRequest.DONE) {
 			try {
 				data = JSON.parse(XHR.responseText);
-				var localization = data['Localization'];
+				var localization = data["Localization"];
 				inCallback(true, localization);
 			} catch (e) {
 				log(e);
-				inCallback(false, 'Localizations is not a valid json.');
+				inCallback(false, "Localizations is not a valid json.");
 			}
 		} else {
-			inCallback(false, 'Could not load the localizations.');
+			inCallback(false, "Could not load the localizations.");
 		}
 	};
 
 	XHR.onerror = function () {
-		inCallback(false, 'An error occurred while loading the localizations.');
+		inCallback(false, "An error occurred while loading the localizations.");
 	};
 
 	XHR.ontimeout = function () {
-		inCallback(false, 'Localization timed out.');
+		inCallback(false, "Localization timed out.");
 	};
 
 	XHR.send();
@@ -43,15 +43,15 @@ function getLocalization(inLanguage, inCallback) {
 function log(inMessage) {
     // Log to the developer console
     var time = new Date();
-    var timeString = time.toLocaleDateString() + ' ' + time.toLocaleTimeString();
+    var timeString = time.toLocaleDateString() + " " + time.toLocaleTimeString();
     console.log(timeString, inMessage);
 
     // Log to the Stream Deck log file
     if (websocket) {
         var json = {
-            'event': 'logMessage',
-            'payload': {
-                'message': inMessage
+            "event": "logMessage",
+            "payload": {
+                "message": inMessage
             }
         };
         websocket.send(JSON.stringify(json));
@@ -62,44 +62,44 @@ function log(inMessage) {
 function registerPluginOrPI(inEvent, inUUID) {
 	if (websocket) {
 		var json = {
-			'event': inEvent,
-			'uuid': inUUID
+			"event": inEvent,
+			"uuid": inUUID
 		};
 		websocket.send(JSON.stringify(json));
 	}
 }
 
 // Request global settings for the plugin
-function requestGlobalSettings(inUUID) {
+function requestGlobalSettings(inContext) {
 	if (websocket) {
 		var json = {
-			'context': inUUID,
-			'event': 'getGlobalSettings'
+			"context": inContext,
+			"event": "getGlobalSettings"
 		};
 		websocket.send(JSON.stringify(json));
 	}
 }
 
 // Save global settings
-function saveGlobalSettings(inUUID) {
+function saveGlobalSettings(inContext) {
 	if (websocket) {
 		const json = {
-			'context': inUUID,
-			'event': 'setGlobalSettings',
-			'payload': globalSettings
+			"context": inContext,
+			"event": "setGlobalSettings",
+			"payload": globalSettings
 		};
 		websocket.send(JSON.stringify(json));
 	}
 }
 
 // Save settings
-function saveSettings(inAction, inUUID, inSettings) {
+function saveSettings(inAction, inContext, inSettings) {
 	if (websocket) {
 		const json = {
-			'action': inAction,
-			'context': inUUID,
-			'event': 'setSettings',
-			'payload': inSettings
+			"action": inAction,
+			"context": inContext,
+			"event": "setSettings",
+			"payload": inSettings
 		};
 		websocket.send(JSON.stringify(json));
 	}
@@ -109,10 +109,10 @@ function saveSettings(inAction, inUUID, inSettings) {
 function sendToPlugin(inAction, inContext, inData) {
 	if (websocket) {
 		var json = {
-			'action': inAction,
-			'context': inContext,
-			'event': 'sendToPlugin',
-			'payload': inData
+			"action": inAction,
+			"context": inContext,
+			"event": "sendToPlugin",
+			"payload": inData
 		};
 		websocket.send(JSON.stringify(json));
 	}
@@ -122,38 +122,68 @@ function sendToPlugin(inAction, inContext, inData) {
 function sendToPropertyInspector(inAction, inContext, inData) {
 	if (websocket) {
 		var json = {
-			'action': inAction,
-			'context': inContext,
-			'event': 'sendToPropertyInspector',
-			'payload': inData
+			"action": inAction,
+			"context": inContext,
+			"event": "sendToPropertyInspector",
+			"payload": inData
 		};
 		websocket.send(JSON.stringify(json));
 	}
 }
+
+// Set the icon of a key
+function setImage(inContext, inImage, inState) {
+	if (websocket) {
+		var json = {
+			"context": inContext,
+			"event": "setImage",
+			"payload": {
+				"image": inImage,
+				"state": inState,
+				"target": 0
+			}
+		};
+		websocket.send(JSON.stringify(json));
+	}
+};
 
 // Set the state of a key
 function setState(inContext, inState) {
 	if (websocket) {
 		var json = {
-			'context': inContext,
-			'event': 'setState',
-			'payload': {
-				'state': inState
+			"context": inContext,
+			"event": "setState",
+			"payload": {
+				"state": inState
 			}
 		};
 		websocket.send(JSON.stringify(json));
 	}
-}
+};
+
+// Clear the title of a key
+function clearTitle(inContext, inTitle) {
+	if (websocket) {
+		var json = {
+			"context": inContext,
+			"event": "setTitle",
+			"payload": {
+				"target": 0
+			}
+		};
+		websocket.send(JSON.stringify(json));
+	}
+};
 
 // Set the title of a key
 function setTitle(inContext, inTitle) {
 	if (websocket) {
 		var json = {
-			'context': inContext,
-			'event': 'setTitle',
-			'payload': {
-				'title': '' + inTitle,
-				'target': 0
+			"context": inContext,
+			"event": "setTitle",
+			"payload": {
+				"title": "" + inTitle,
+				"target": 0
 			}
 		};
 		websocket.send(JSON.stringify(json));
@@ -164,10 +194,10 @@ function setTitle(inContext, inTitle) {
 function sendValueToPlugin(inAction, inContext, value, param) {
 	if (websocket) {
 		const json = {
-			'action': inAction,
-			'context': inContext,
-			'event': 'sendToPlugin',
-			'payload': {
+			"action": inAction,
+			"context": inContext,
+			"event": "sendToPlugin",
+			"payload": {
 				[param]: value
 			}
 		};
@@ -176,11 +206,11 @@ function sendValueToPlugin(inAction, inContext, value, param) {
 }
 
 // Show alert icon on the key
-function showAlert(inUUID) {
+function showAlert(inContext) {
 	if (websocket) {
 		var json = {
-			'context': inUUID,
-			'event': 'showAlert'
+			"context": inContext,
+			"event": "showAlert"
 		};
 		websocket.send(JSON.stringify(json));
 	}
@@ -192,11 +222,11 @@ function WebsocketError(evt) {
 	if (evt.code === 1000) {
 		reason = "Normal Closure. The purpose for which the connection was established has been fulfilled.";
 	} else if (evt.code === 1001) {
-		reason = "Going Away. An endpoint is 'going away,' such as a server going down or a browser having navigated away from a page.";
+		reason = "Going Away. An endpoint is [going away], such as a server going down or a browser having navigated away from a page.";
 	} else if (evt.code === 1002) {
 		reason = "Protocol error. An endpoint is terminating the connection due to a protocol error";
 	} else if (evt.code === 1003) {
-		reason = "Unsupported Data. An endpoint received a type of data it doesn't support.";
+		reason = "Unsupported Data. An endpoint received a type of data it does not support.";
 	} else if (evt.code === 1004) {
 		reason = "--Reserved--. The specific meaning might be defined in the future.";
 	} else if (evt.code === 1005) {
@@ -206,15 +236,15 @@ function WebsocketError(evt) {
 	} else if (evt.code === 1007) {
 		reason = "Invalid frame payload data. The connection was closed, because the received data was not consistent with the type of the message (e.g., non-UTF-8 [http://tools.ietf.org/html/rfc3629]).";
 	} else if (evt.code === 1008) {
-		reason = "Policy Violation. The connection was closed, because current message data 'violates its policy.' This reason is given either if there is no other suitable reason, or if there is a need to hide specific details about the policy.";
+		reason = "Policy Violation. The connection was closed, because current message data [violates its policy]. This reason is given either if there is no other suitable reason, or if there is a need to hide specific details about the policy.";
 	} else if (evt.code === 1009) {
 		reason = "Message Too Big. Connection closed because the message is too big for it to process.";
 	} else if (evt.code === 1010) { // Note that this status code is not used by the server, because it can fail the WebSocket handshake instead.
-		reason = "Mandatory Ext. Connection is terminated the connection because the server didn't negotiate one or more extensions in the WebSocket handshake. <br /> Mandatory extensions were: " + evt.reason;
+		reason = `Mandatory Ext. Connection is terminated the connection because the server did not negotiate one or more extensions in the WebSocket handshake. <br /> Mandatory extensions were: ${evt.reason}`;
 	} else if (evt.code === 1011) {
 		reason = "Internl Server Error. Connection closed because it encountered an unexpected condition that prevented it from fulfilling the request.";
 	} else if (evt.code === 1015) {
-		reason = "TLS Handshake. The connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can't be verified).";
+		reason = "TLS Handshake. The connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can not be verified).";
 	} else {
 		reason = "Unknown reason";
 	}

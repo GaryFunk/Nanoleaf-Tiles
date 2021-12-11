@@ -1,19 +1,19 @@
 //==============================================================================
 /**
-@file		colorAction.js
+@file		brightAction.js
 @brief		Nanoleaf Plugin
 @copyright	(c) 2021, fSoft, Ltd.
 			This source code is licensed under the MIT-style license found in the LICENSE file.
 **/
 //==============================================================================
 
-// Prototype which represents a color action
-function ColorAction(inContext, inSettings, inState) {
-	// Init ColorAction
+// Prototype which represents a brightness action
+function BrightAction(inContext, inSettings, inState) {
+	// Init BrightAction
 	var instance = this;
 	// Inherit from Action
 	Action.call(this, inContext, inSettings, inState);
-	// Set the default values
+	// Update the state
 	getCurrentState();
 	// Public function called on key up event
 	this.onKeyUp = function (inContext, inSettings, inCoordinates, inUserDesiredState, inState) {
@@ -24,12 +24,12 @@ function ColorAction(inContext, inSettings, inState) {
 
 		// Check if any controller is configured
 		if (!("nanoController" in inSettings)) {
-			log("plugin/colorAction.js: No controller configured");
+			log("plugin/brightAction.js: No controller configured");
 			showAlert(inContext);
 			return;
 		}
 		if (window.nanoControllerCache == null) {
-			log("plugin/colorAction.js: No controller in cache");
+			log("plugin/brightAction.js: No controller in cache");
 			showAlert(inContext);
 			return;
 		}
@@ -46,13 +46,14 @@ function ColorAction(inContext, inSettings, inState) {
 			if (inUserDesiredState !== undefined) {
 				keyState = inUserDesiredState;
 			}
-			let keyTitle;
+			let keyTitle = setTargetValue(NF, inSettings);
 
 			// Set the value to send to the Nanoleaf controller
-			setValues["color"] = inSettings.color;
+			setValues["brightness"] = keyTitle;
+			setValues["duration"] = 0;
 
 			// Set state
-			NF.setColor(setValues, (success, message, result) => {
+			NF.setBrightness(setValues, (success, message, result) => {
 				if (success) {
 					// Update the cache
 					window.nanoControllerCache[nanoKey].setInfo(result, function (success) {});
@@ -61,28 +62,37 @@ function ColorAction(inContext, inSettings, inState) {
 					let nanoInfo = NF.getInfo();
 
 					// Get the Buttons that need the update
-					var theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === "color" || x.command === "effect");
+					let theButtons = window.buttons[inSettings.nanoController].filter(x => x.command === "brightness");
 
 					// Update the Buttons and Keys that need the new value
-					for (let button of theButtons) {
-						setActionState(button.context, 1);
+					for (let [index, button] of theButtons.entries()) {
+						if (button.transition === "set") {
+							setActionState(button.context, 1);
+						} else {
+//							window.buttons[inSettings.nanoController][index].brightness = nanoInfo.state.brightness.value;
+							setActionState(button.context, 1, keyTitle);
+						}
 					}
 
 					// Set the state of the button pressed
-					setActionState(inContext, 0);
-					instance.updateCrap("brightness", inSettings.nanoController, 0, NF.getInfo());
+					if (inSettings.transition === "set") {
+						setActionState(inContext, 0);
+					} else {
+						setActionState(inContext, 0, keyTitle);
+					}
+					instance.updateCrap("power", inSettings.nanoController, 0, NF.getInfo());
 				} else {
-					log(`plugin/colorAction.js NF.setColor: ${message}`);
+					log(`plugin/brightAction.js NF.setBrightness: ${message}`);
 					setActionState(inContext, keyState, keyTitle);
 					showAlert(inContext);
 				}
 			});
 		} catch(e) {
-			log(`plugin/colorAction.js onKeyUp: ${e}`);
+			log(`plugin/brightAction.js onKeyUp: ${e}`);
 		}
 	};
 
-	// Private function to set the defaults
+	// Private function to set current values
 	function getCurrentState() {
 		// Check if any controller is configured
 		if (!("nanoController" in inSettings)) {
@@ -93,8 +103,8 @@ function ColorAction(inContext, inSettings, inState) {
 		}
 
 		// To be removed in the future
-		if (inSettings.color === undefined) {
-			inSettings.color = inSettings.value;
+		if (inSettings.brightness === undefined) {
+			inSettings.brightness = inSettings.value;
 			delete inSettings.value;
 			instance.saveSettings(inSettings);
 		}
@@ -113,14 +123,18 @@ function ColorAction(inContext, inSettings, inState) {
 
 			// Set the Key values
 			let keyState = inState;
-			let keyTitle; // = `${inSettings.color}`;
+			let keyTitle;
+			if (inSettings.transition === "set") {
+				keyTitle = `-${inSettings.brightness}-`;
+			} else {
+				keyTitle = nanoInfo.state.brightness.value;
+			}
 
 			// Set the new action state
-			buildImage(inContext, inSettings.color);
 			setActionState(inContext, keyState, keyTitle);
 			return keyState;
 		} catch(e) {
-			log(`plugin/colorAction.js getCurrentState(): ${e}`);
+			log(`plugin/brightAction.js getCurrentState(): ${e}`);
 		}
 	}
 
@@ -134,36 +148,26 @@ function ColorAction(inContext, inSettings, inState) {
 		}
 	}
 
-	// Private function to set the button icon
-	function buildImage(inContext, inColor) {
-		let canvas = null;
-		let img = null;
-		let ctx = null;
-		let inImage = null;
-		canvas = document.getElementById("iconCanvas0");
-		img = document.getElementById("icon0");
-		ctx = canvas.getContext("2d");
-		ctx.canvas.width = 72;
-		ctx.canvas.height = 72;
-		ctx.drawImage(img, 0, 0);
-		ctx.fillStyle = inColor;
-		ctx.fillRect(0, 53, 72, 17);
-		inImage = canvas.toDataURL();
-		setImage(inContext, inImage, 0);
-
-		canvas = null;
-		img = null;
-		ctx = null;
-		inImage = null;
-		canvas = document.getElementById("iconCanvas1");
-		img = document.getElementById("icon1");
-		ctx = canvas.getContext("2d");
-		ctx.canvas.width = 72;
-		ctx.canvas.height = 72;
-		ctx.drawImage(img, 0, 0);
-		ctx.fillStyle = inColor;
-		ctx.fillRect(0, 60, 72, 10);
-		inImage = canvas.toDataURL();
-		setImage(inContext, inImage, 1);
+	// Set the targetValue
+	function setTargetValue(NF, inSettings, inUserDesiredValue) {
+		let setValue = parseInt(inSettings.brightness);
+		let nanoInfo = NF.getInfo();
+		let currentValue = parseInt(nanoInfo.state.brightness.value);
+		if (inSettings.transition == "increase") {
+			if (currentValue == 100) {
+				//targetValue = setValue;
+			} else {
+				targetValue = (currentValue + setValue > 100 ? 100 : currentValue + setValue);
+			}
+		} else if (inSettings.transition == "decrease") {
+			if (currentValue == 0) {
+				//targetValue = setValue;
+			} else {
+				targetValue = (currentValue - setValue < 0 ? 0 : currentValue - setValue);
+			}
+		} else {
+			targetValue = setValue;
+		}
+		return targetValue;
 	}
 }

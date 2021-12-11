@@ -12,20 +12,20 @@ function loadSaveView(detail) {
 	// Init loadSaveView
 	var content = "";
 	// Set the status bar
-	setStatusBar('save');
+	setStatusBar("save");
 	// Fill the header
-	document.getElementById('header').innerHTML = localization['Header'];
+	document.getElementById("header").innerHTML = localization["Header"];
 	// Fill the title
-	document.getElementById('title').innerHTML = localization['Save']['Title'];
+	document.getElementById("title").innerHTML = localization["Save"]["Title"];
 	// Fill the content area
-	content = "<p>" + localization['Save']['Description'] + "</p><div class='button' id='exit'>" + localization['Save']['Exit'] + "</div>";
-	document.getElementById('content').innerHTML = content;
+	content = `<p>${localization["Save"]["Description"]}</p><div class="button" id="exit">${localization["Save"]["Exit"]}</div>`;
+	document.getElementById("content").innerHTML = content;
 	// Add event listener exit
-	document.getElementById('exit').addEventListener('click', exit);
-	document.addEventListener('enterPressed', exit);
+	document.getElementById("exit").addEventListener("click", exit);
+	document.addEventListener("enterPressed", exit);
 	// Save the controller
 	var details = { detail };
-	var event = new CustomEvent('saveNanoController', details);
+	var event = new CustomEvent("saveNanoController", details);
 	window.opener.document.dispatchEvent(event);
 
 	// Close this window

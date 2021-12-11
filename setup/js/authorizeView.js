@@ -7,6 +7,7 @@
 **/
 //==============================================================================
 
+const newLocal = `<div class="button" id="retry">`;
 // Load the Authorize View
 function loadAuthorizeView() {
 	// Time used to automatically authorize controllers
@@ -17,14 +18,14 @@ function loadAuthorizeView() {
 	// Set a global variable
 	var detail = {};
 	// Set the status bar
-	setStatusBar('authorize');
+	setStatusBar("authorize");
 	// Fill the header
-	document.getElementById('header').innerHTML = localization['Header'];
+	document.getElementById("header").innerHTML = localization["Header"];
 	// Fill the title
-	document.getElementById('title').innerHTML = localization['Authorize']['Title'];
+	document.getElementById("title").innerHTML = localization["Authorize"]["Title"];
 	// Fill the content area
-	var content = "<p>" + localization['Authorize']['Description'] + "</p></div><div id='controls'></div>";
-	document.getElementById('content').innerHTML = content;
+	var content = `<p>${localization["Authorize"]["Description"]}</p></div><div id="controls"></div>`;
+	document.getElementById("content").innerHTML = content;
 
 	// Start the authorization
 	autoCycle();
@@ -35,7 +36,7 @@ function loadAuthorizeView() {
 		// Start a new timer to auto connect to the controller
 		if (cycleCounter < autoCycleCount) { // Try to connect for n seconds
 			await getAuthToken();
-			if ('nanoIP' in detail) {
+			if ("nanoIP" in detail) {
 				autoCycleCount = 0;
 				clearInterval(timer);
 			}
@@ -44,15 +45,15 @@ function loadAuthorizeView() {
 			// Stop the timer
 			clearInterval(timer);
 			// Show manual user controls instead
-			content = "<br><br><p style='color: yellow;'>" + localization['Authorize']['NoControllerAuth'] + "</p>";
-			content += "<div class='button button-blue' id='retry'>" + localization['Authorize']['Retry'] + "</div><div class='button button-red' id='exit'>" + localization['Authorize']['Exit'] + "</div>";
-			document.getElementById('content').innerHTML = content;
+			content = `<br><br><p style="color: yellow;">${localization["Authorize"]["NoControllerAuth"]}</p>`;
+			content += `<div class="button button-blue" id="retry">${localization["Authorize"]["Retry"]}</div><div class="button button-red" id="exit">${localization["Authorize"]["Exit"]}</div>`;
+			document.getElementById("content").innerHTML = content;
 			// Add event listener retry
-			document.getElementById('retry').addEventListener('click', retry);
-			document.addEventListener('enterPressed', retry);
+			document.getElementById("retry").addEventListener("click", retry);
+			document.addEventListener("enterPressed", retry);
 			// Add event listener exit
-			document.getElementById('exit').addEventListener('click', exit);
-			document.addEventListener('escPressed', exit);
+			document.getElementById("exit").addEventListener("click", exit);
+			document.addEventListener("escPressed", exit);
 		}
 	}
 
@@ -82,19 +83,18 @@ function loadAuthorizeView() {
 						clearInterval(timer);
 						timer = null;
 						var data = result[1];
-						detail['nanoIP'] = nanoIP;
-						detail['nanoName'] = data['name'];
-						detail['nanoSN'] = data['serialNo'];
-						detail['nanoToken'] = nanoToken;
+						detail["nanoIP"] = nanoIP;
+						detail["nanoName"] = data["name"];
+						detail["nanoSN"] = data["serialNo"];
+						detail["nanoToken"] = nanoToken;
 						object.splice(index, 1);
 						// Show the save view
 						wait();
 					}
 				} else {
-					//log('failed to get item: ' + index);
 					let temp = {};
-					temp['piEvent'] = 'log';
-					temp['message'] = 'failed to get item: ' + index;
+					temp["piEvent"] = "log";
+					temp["message"] = `failed to get item: ${index}`;
 					instance.sendToPlugin(temp);
 				}
 				if (theCount == window.nanoNeedIPs.length) {
@@ -116,26 +116,26 @@ function loadAuthorizeView() {
 		clearInterval(timer);
 		timer = null;
 		// Remove event listener
-		document.removeEventListener('escPressed', retry);
-		document.removeEventListener('enterPressed', exit);
-		document.getElementById('contentHaveIPs').innerHTML = '';
-		document.getElementById('contentNeedIPs').innerHTML = '';
+		document.removeEventListener("escPressed", retry);
+		document.removeEventListener("enterPressed", exit);
+		document.getElementById("contentHaveIPs").innerHTML = "";
+		document.getElementById("contentNeedIPs").innerHTML = "";
 	}
 
 	// Wait for input
 	function wait() {
 		// Show user controls
-		var controls = "<div class='button' id='retry'>" + localization['Authorize']['Retry'] + "</div><div class='button-transparent' id='exit'>" + localization['Authorize']['Exit'] + "</div>";
-		var contentHaveIPs = "<p>" + localization['Authorize']['ControllerIP'] + ": <span style='color: yellow;'>" + detail['nanoIP'] +"</span></p>";
-		contentHaveIPs += "<p>" + localization['Authorize']['ControllerSN'] + ": <span style='color: yellow;'>" + detail['nanoSN'] +"</span></p>";
-		var contentNeedIPs = "<p>" + localization['Authorize']['ControllerName'] + ": <span style='color: yellow;'>" + detail['nanoName'] +"<span /></p>";
-		contentNeedIPs += "<p>" + localization['Authorize']['ControllerAuth'] + ": <span style='color: yellow;'>" + detail['nanoToken'] +"<span /></p>";
-		var content = "<div class='button button-green' id='continue'>" + localization['Authorize']['Continue'] + "</div>";
-		document.getElementById('contentHaveIPs').innerHTML = contentHaveIPs;
-		document.getElementById('contentNeedIPs').innerHTML = contentNeedIPs;
-		document.getElementById('content').innerHTML = content;
+		var controls = `${newLocal + localization["Authorize"]["Retry"]}</div><div class="button-transparent" id="exit">${localization["Authorize"]["Exit"]}</div>`;
+		var contentHaveIPs = `<p>${localization["Authorize"]["ControllerIP"]}: <span style="color: yellow;">${detail["nanoIP"]}</span></p>`;
+		contentHaveIPs += `<p>${localization["Authorize"]["ControllerSN"]}: <span style="color: yellow;">${detail["nanoSN"]}</span></p>`;
+		var contentNeedIPs = `<p>${localization["Authorize"]["ControllerName"]}: <span style="color: yellow;">${detail["nanoName"]}<span /></p>`;
+		contentNeedIPs += `<p>${localization["Authorize"]["ControllerAuth"]}: <span style="color: yellow;">${detail["nanoToken"]}<span /></p>`;
+		var content = `<div class="button button-green" id="continue">${localization["Authorize"]["Continue"]}</div>`;
+		document.getElementById("contentHaveIPs").innerHTML = contentHaveIPs;
+		document.getElementById("contentNeedIPs").innerHTML = contentNeedIPs;
+		document.getElementById("content").innerHTML = content;
 		// Add event listener continueSave
-		document.getElementById('continue').addEventListener('click', continueSave);
-		document.addEventListener('enterPressed', continueSave);
+		document.getElementById("continue").addEventListener("click", continueSave);
+		document.addEventListener("enterPressed", continueSave);
 	}
 }
