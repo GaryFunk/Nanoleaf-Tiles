@@ -25,6 +25,10 @@ Pay attention as to how the button icons update.<br />
 <ul>
 README: <a href="https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md">https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README</a><br />
 </ul>
+<h3>Helpful Links</h3>
+<ul>
+README: https://github.com/GaryFunk/Nanoleaf-Tiles/blob/main/README.md<br />
+</ul>
 <h3>Information</h3>
 <ul>
 Compatibility: Stream Deck 5.0.0 and later, Windows 10 and later, macOS 10.11 and later.<br />
