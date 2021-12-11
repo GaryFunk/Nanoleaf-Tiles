@@ -5,21 +5,22 @@
 		<meta charset="UTF-8">
 		<!-- Import style sheets -->
 		<link rel="stylesheet" type="text/css" href="css/sdpi.css">
-		<link rel="stylesheet" type="text/css" href="css/colorPI.css">
 		<link rel="stylesheet" type="text/css" href="css/pi.css">
+		<link rel="stylesheet" type="text/css" href="css/colorPI.css">
 		<style>.last_center{text-align:center;text-align-last:center;}</style>
 		<!-- Import scripts -->
 		<script src="../plugin/js/utils.js"></script>
 		<script src="../plugin/js/nanoleaf.js"></script>
 		<script src="js/tooltips.js"></script>
 		<script src="js/pi.js"></script>
-		<script src="js/powerPI.js"></script>
-		<script src="js/brightnessPI.js"></script>
+		<script src="js/brightPI.js"></script>
 		<script src="js/colorPI.js"></script>
 		<script src="js/effectPI.js"></script>
+		<script src="js/powerPI.js"></script>
 		<script src="js/main.js"></script>
 	</head>
 	<body>
+
 		<!-- Property Inspector -->
 		<div class="sdpi-wrapper" id="pi">
 			<!-- Controller select -->
@@ -41,5 +42,12 @@
 		</div>
 		<!-- Floating tooltips element -->
 		<div class="sdpi-info-label hidden" style="top: -1000px;" value=""></div>
+		<!-- Hidden Canvas to build images -->
+		<div class="sdpi-info-label hidden" style="top: -1000px;" value="">
+			<img id="icon0" width="0" height="0" src="../plugin/images/icons/color.png">
+			<img id="icon1" width="0" height="0" src="../plugin/images/icons/coloroff.png">
+			<canvas id="iconCanvas0" width="72" height="72"></canvas>
+			<canvas id="iconCanvas1" width="72" height="72"></canvas>
+		</div>
 	</body>
 </html>

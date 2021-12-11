@@ -23,7 +23,7 @@
     font-size: 0;
 }
 
-#color-input-container input[type='color'] {
+#color-input-container input[type="color"] {
     margin: 0 4px 0 0;
     padding: 0;
     width: 40px;
@@ -34,6 +34,6 @@
 }
 
 #color-input-container span:nth-child(5n):after {
-    content: ' ';
+    content: " ";
     display: block;
 }

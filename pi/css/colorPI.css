@@ -14,3 +14,8 @@
 .temperature::-webkit-slider-thumb {
     background-color: #86c6e8 !important;
 }
+
+textarea {
+	min-width: 100px;
+	resize: vertical;
+}
