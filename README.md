@@ -37,7 +37,7 @@ Languages: English, German. Translation needed for: Chinese, French, Japanese, K
 <h3>Support Links</h3>
 <ul>
 Issues:  <a href="https://github.com/GaryFunk/Nanoleaf-Tiles/issues">https://github.com/GaryFunk/Nanoleaf-Tiles/issues</a><br />
-Discord: <a href="https://discord.gg/gQ4kKVCc">https://discord.gg/gQ4kKVCc</a><br />
+Discord: <a href=https://discord.gg/eqytHfddHt">https://discord.gg/eqytHfddHt</a><br />
 </ul>
 <h3>Known Issues</h3>
 <ul>
